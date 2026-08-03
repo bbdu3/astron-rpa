@@ -276,7 +276,7 @@
         <profile>
             <id>opensource</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <dependencies>
                 <!-- 使用 stub 依赖替代闭源 SDK（jar 文件放在项目 lib 目录下） -->
@@ -318,7 +318,7 @@
         <profile>
             <id>closed-source</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <dependencies>
                 <!-- 真实的 UAP Starter -->
