@@ -1,4 +1,6 @@
 import unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 
 from astronverse.script.script import Script
 
@@ -33,6 +35,21 @@ def main(param1, param2):
         # 验证结果
         expected = {"result": "value1_value2", "status": "success"}
         self.assertEqual(result, expected)
+
+    def test_module_call_v2_returns_main_result(self):
+        """V2 modules should return main(args), not the input argument mapping."""
+        process_module = SimpleNamespace(main=lambda args: {"result": args["value"].upper()})
+
+        with patch("astronverse.script.script.importlib.import_module", return_value=process_module):
+            result = Script._module_call(
+                ".example",
+                package="test_package",
+                out_kwargs={"value": "input"},
+                out_param_meta=[],
+                inn_kwargs={},
+            )
+
+        assert result == {"result": "INPUT"}
 
     def test_module_without_main_function(self):
         """测试不包含main函数的脚本执行"""
