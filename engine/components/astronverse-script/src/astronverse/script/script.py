@@ -68,7 +68,7 @@ class Script:
                 )
 
             res = main_func(out_kwargs)
-            return out_kwargs
+            return res
         else:
             report.warning(ReportTip(msg_str=MSG_MODULE_VERSION_WARRING))
 
