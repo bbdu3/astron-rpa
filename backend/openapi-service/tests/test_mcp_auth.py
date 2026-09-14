@@ -28,6 +28,12 @@ class AsyncSessionAdapter:
     def __init__(self, session):
         self.session = session
 
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *args):
+        await self.close()
+
     async def execute(self, statement):
         return self.session.execute(statement)
 

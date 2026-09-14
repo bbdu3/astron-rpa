@@ -1,5 +1,7 @@
 # RPA OpenAPI Service - RPA 工作流管理服务
 
+See [external integration security, key rotation and Credentials design](EXTERNAL_INTEGRATION_SECURITY.md) for the current authentication contract and migration requirements.
+
 ## 📖 项目介绍
 
 RPA OpenAPI Service 是一个基于 FastAPI 构建的 RPA 工作流管理服务，提供工作流创建、执行、监控和 API 密钥管理等功能。该服务集成了 WebSocket 实时通信、MCP (Model Context Protocol) 支持、Redis 缓存、请求链路追踪等现代化技术栈，为 RPA 平台提供完整的 API 服务能力。

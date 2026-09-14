@@ -13,16 +13,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.workflow import Execution, Workflow
 from app.schemas.workflow import ExecutionCreate
+from app.security.workflow_authorization import WorkflowAccessError
 from app.services.execution import ExecutionService
 from app.services.workflow import WorkflowService
 
-
-class WorkflowControlError(Exception):
-    """An error whose code and message may be returned to an external caller."""
-
-    def __init__(self, code: str, message: str):
-        super().__init__(message)
-        self.code = code
+WorkflowControlError = WorkflowAccessError
 
 
 def validate_arguments(arguments: dict, schema: dict) -> None:
@@ -119,20 +114,7 @@ class WorkflowControlService:
         self.executions = ExecutionService(db)
 
     async def _authorized_workflow(self, project_id: str, user_id: str, version: int | None = None) -> Workflow:
-        workflow = await self.workflows.get_workflow(project_id, user_id)
-        # A stable project ID must not resolve through the legacy example alias.
-        if (
-            workflow is None
-            or workflow.project_id != project_id
-            or workflow.user_id != user_id
-            or workflow.status != 1
-            or not isinstance(workflow.version, int)
-            or workflow.version < 1
-        ):
-            raise WorkflowControlError("WORKFLOW_NOT_FOUND", "Workflow not found or external access is disabled")
-        if version is not None and version != workflow.version:
-            raise WorkflowControlError("VERSION_NOT_ALLOWED", "Requested version is not enabled for external access")
-        return workflow
+        return await self.workflows.get_external_workflow(project_id, user_id, version)
 
     @staticmethod
     def _workflow_summary(workflow: Workflow) -> dict:
@@ -144,7 +126,7 @@ class WorkflowControlService:
         }
 
     async def list_workflows(self, user_id: str, offset: int = 0, limit: int = 100) -> dict:
-        workflows = await self.workflows.get_workflows(user_id, skip=offset, limit=limit + 1)
+        workflows = await self.workflows.get_external_workflows(user_id, skip=offset, limit=limit + 1)
         return {
             "workflows": [self._workflow_summary(workflow) for workflow in workflows[:limit]],
             "nextOffset": offset + limit if len(workflows) > limit else None,
@@ -161,7 +143,7 @@ class WorkflowControlService:
     async def execute_workflow(self, project_id: str, user_id: str, params: dict, version: int | None = None) -> dict:
         workflow = await self._authorized_workflow(project_id, user_id, version)
         validate_arguments(params, workflow_input_schema(workflow))
-        execution = await self.executions.execute_workflow(
+        execution = await self.executions.execute_authorized_workflow(
             ExecutionCreate(project_id=workflow.project_id, version=workflow.version, params=params),
             user_id,
             wait=False,
@@ -169,15 +151,9 @@ class WorkflowControlService:
         return self.execution_result(execution)
 
     async def get_execution(self, execution_id: str, user_id: str) -> dict:
-        execution = await self.executions.get_execution(execution_id, user_id)
+        execution = await self.executions.get_authorized_execution(execution_id, user_id)
         if execution is None:
             raise WorkflowControlError("EXECUTION_NOT_FOUND", "Execution not found or access is disabled")
-        try:
-            if execution.version is None:
-                raise WorkflowControlError("VERSION_NOT_ALLOWED", "Execution has no authorized release version")
-            await self._authorized_workflow(execution.project_id, user_id, execution.version)
-        except WorkflowControlError:
-            raise WorkflowControlError("EXECUTION_NOT_FOUND", "Execution not found or access is disabled") from None
         return self.execution_result(execution)
 
     @staticmethod

@@ -37,6 +37,9 @@ class AsyncSessionAdapter:
     async def __aexit__(self, *args):
         self.session.close()
 
+    async def close(self):
+        self.session.close()
+
     def add(self, item):
         self.session.add(item)
 
@@ -109,11 +112,11 @@ async def test_list_get_and_query_use_real_user_and_release_filters(database):
 async def test_unauthorized_start_does_not_create_or_dispatch(database, project, version, error_code):
     with Session(database) as db:
         service = WorkflowControlService(AsyncSessionAdapter(db))
-        service.executions.execute_workflow = AsyncMock()
+        service.executions.execute_authorized_workflow = AsyncMock()
         with pytest.raises(WorkflowControlError) as error:
             await service.execute_workflow(project, "owner", {}, version)
         assert error.value.code == error_code
-        service.executions.execute_workflow.assert_not_awaited()
+        service.executions.execute_authorized_workflow.assert_not_awaited()
         assert len(db.execute(select(Execution)).scalars().all()) == 1
 
 

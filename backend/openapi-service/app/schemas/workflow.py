@@ -50,6 +50,8 @@ class WorkflowListResponse(BaseModel):
 class ExecutionCreate(BaseModel):
     """创建工作流执行记录请求模型"""
 
+    model_config = {"extra": "forbid"}
+
     project_id: str = Field(..., description="项目ID")
     params: Optional[dict[str, Any]] = Field(None, description="执行参数")
     exec_position: str = Field("EXECUTOR", description="执行位置")

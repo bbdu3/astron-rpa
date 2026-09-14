@@ -1,5 +1,7 @@
 # RPA OpenAPI Service - RPA Workflow Management Service
 
+See [external integration security, key rotation and Credentials design](EXTERNAL_INTEGRATION_SECURITY.md) for the current authentication contract and migration requirements.
+
 ## 📖 Project Introduction
 
 RPA OpenAPI Service is an RPA workflow management service built on FastAPI, providing workflow creation, execution, monitoring, and API key management functions. The service integrates WebSocket real-time communication, MCP (Model Context Protocol) support, Redis caching, request tracing and other modern technology stacks, providing complete API service capabilities for the RPA platform.

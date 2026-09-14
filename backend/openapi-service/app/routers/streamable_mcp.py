@@ -121,17 +121,9 @@ async def call_tool(name: str, arguments: dict) -> list[types.ContentBlock] | di
         if result["message"]["code"] == "0000":
             return [types.TextContent(type="text", text=json.dumps(result["message"], indent=2, ensure_ascii=False))]
         else:
-            raise Exception(f"客户端运行失败：{result['message']['msg']}")
+            return control_error("EXECUTION_FAILED", "Workflow execution failed")
     else:
-        # 记录失败信息
-        await ctx.session.send_log_message(
-            level="warning",
-            data=f"Failed to execute workflow: {result['error']}",
-            logger="workflow_execution",
-            related_request_id=ctx.request_id,
-        )
-
-        raise Exception(f"服务端运行失败：{result['error']}")
+        return control_error("EXECUTION_UNAVAILABLE", "Workflow unavailable or execution failed")
 
 
 @app.list_tools()
