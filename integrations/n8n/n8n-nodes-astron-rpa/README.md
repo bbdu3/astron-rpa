@@ -6,8 +6,8 @@ Control published AstronRPA workflows through authenticated HTTPS MCP: discover 
 
 - This development package provides the common execution framework for individually approved workflows with `supportScope: controlled-validation`. An approved workflow does not establish support for an entire RPA capability family.
 - The verified host configuration is self-hosted n8n `2.36.9`, Node.js `24+`, one OpenAPI connection owner and one Windows client matching the repository, with managed client protocol `1`. The package declares `n8n-workflow >=2.36.4 <3`; other host versions, queue mode, multiple replicas or terminals, n8n Cloud and older clients are not covered by this validation.
-- OpenAPI must provide integration contract `1`, profile schema `1` and MCP `2025-11-25`. All node business operations use MCP with the existing API key authentication.
-- The first classified capability is `json-data`: its declaration must include `capabilityClass: "json-data"` and `capabilities: ["json-data"]`, and must explicitly declare no file transfer or GUI requirement. A declaration describes a workflow; it does not add an adapter for its capabilities.
+- OpenAPI must provide integration contract `1`, profile schema `1` and MCP `2025-11-25`. MCP is the primary channel. A published capability may explicitly allow the REST auxiliary transport; the node never switches transports after an uncertain start.
+- Capability declarations include a stable `capabilityClass`, `capabilities`, `componentOperations` and `allowedTransports`. Current controlled validation includes `json-data` plus reviewed service/browser-read classes. A declaration describes a workflow; it does not add an adapter for unsupported Engine operations.
 - Inputs and outputs use bounded JSON. File/binary transfer, runtime object adaptation, desktop/UI work and arbitrary local paths are unsupported in this capability. The current limits are 1 MiB encoded JSON, depth 12, 200 object properties, 1,000 array items and 100,000 characters per string. The server profile is authoritative; the node rejects a mismatched limit contract.
 
 ## Build, install and connect
@@ -56,11 +56,51 @@ Execution inputs preserve zero, false, null, arrays and objects. n8n expressions
 
 A workflow with secret inputs suppresses the entire RPA result: `resultVisibility: suppressed-for-secret-inputs` explains a null result. n8n's normal execution storage can still contain supplied inputs; apply its access and retention controls. Store API keys in credentials, not workflow inputs.
 
+### Capability boundary
+
+Use **Get Workflow** before execution and verify `profile.capabilityClass`, `profile.componentOperations`, `profile.allowedTransports` and `profile.admission.allowed`. The node does not infer a capability from a workflow name or component name. Browser, HTTP, database, mail and shared-service reads require a complete operation-level declaration. Mixed workflows must satisfy every applicable constraint; approval for one category never grants another. The reserved `service-openapi-read` identifier has no approved operations: current Engine OpenAPI operations require files and belong to the Office/file category.
+
+Select **MCP (Primary)** unless the published declaration explicitly includes `rest` in `allowedTransports` and the operation has a documented REST auxiliary route. REST is never an automatic fallback for an uncertain MCP request.
+
 ### JSON data workflow boundary
 
 Use **Get Workflow** before execution and verify `profile.capabilityClass` is `json-data`, `profile.admission.allowed` is `true`, and the returned `inputSchema` matches the data being sent. JSON values preserve `0`, `false`, `null`, arrays and nested objects. Unknown fields, non-finite numbers, runtime objects, file values and values over the published limits are rejected before dispatch.
 
-The result remains one JSON value under `result`; arrays are not expanded into n8n items. An optional declared `outputSchema` documents the result shape, but it does not enable file, GUI or runtime-object capabilities. Other RPA capability classes are outside this release's node contract.
+The result remains one JSON value under `result`; arrays are not expanded into n8n items. An optional declared `outputSchema` documents the result shape, but it does not enable file, GUI or runtime-object capabilities. Browser/service reads use their own peer capability module and declaration.
+
+## Capability layout and plan mapping
+
+Stage 4 consists of a common framework and five peer capability groups. Sections 4.1-4.5 in `Implement.md` specify delivery order, not inheritance or nesting. The node invokes published workflows through the common transport and execution framework; capability modules validate their declarations rather than calling Engine components directly.
+
+```text
+n8n-nodes-astron-rpa/
+|-- credentials/                 # Shared credential handling
+|-- nodes/                       # Shared n8n entry point
+|-- transport/                  # MCP primary / explicit REST auxiliary
+|-- execution/                  # Shared lifecycle, idempotency and recovery
+|-- mapping/                    # Shared JSON values, snapshots and errors
+|-- capabilities/
+|   |-- json-data.ts             # 4.1-specific declaration checks
+|   |-- browser-service.ts       # 4.2-specific declaration checks
+|   `-- shared/
+|       |-- types.ts             # Wire identifiers and profile types
+|       |-- catalog.ts           # 25 components -> five peer plan groups
+|       `-- registry.ts           # Dispatch to the matching capability module
+|-- tests/
+`-- examples/
+```
+
+`shared/catalog.ts` maps component operations to categories, not 25 components to 25 nodes or mutually exclusive categories. A component may span several groups. `CAPABILITY_GROUPS` records the exact plan section; group names describe source organization, while existing `capabilityClass` values remain unchanged on the wire.
+
+| Plan | Peer group / module            | Component coverage by operation                                                                                           |
+| ---- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| 4.1  | `json-data.ts`                 | dataprocess, datatable, encrypt, report, reviewed script                                                                  |
+| 4.2  | `browser-service.ts`           | browser, network, database, email, enterprise reads                                                                       |
+| 4.3  | `office-file.ts` (planned)     | datatable, browser, enterprise, excel, network, openapi, pdf, system, word file operations                                |
+| 4.4  | `desktop-ui.ts` (planned)      | browser, cua, dialog, input, software, system, verifycode, vision, window, winelement interaction                         |
+| 4.5  | `ai-dynamic-risk.ts` (planned) | ai, browser, cua, database, email, enterprise, network, script, smart, verifycode, vision dynamic or high-risk operations |
+
+Future modules belong beside `json-data.ts` and `browser-service.ts`, use the shared registry and common framework, and do not import a previous category's implementation. Planned names are documentation only; no empty modules or unsupported handlers are registered. Catalog coverage is an inventory, not a claim that every listed operation has been implemented or verified. Shared utilities should stay neutral; server/client defects belong in their original modules.
 
 ## Execution behavior and limits
 
