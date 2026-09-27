@@ -24,7 +24,6 @@ async def chat_completions(
     params: ChatCompletionParam, key: str = API_KEY, endpoint: str = API_ENDPOINT
 ):
     logger.info("Processing chat completion request...")
-    logger.info(f"Request params: {params}")
     # 构造请求参数
     headers = {
         "Authorization": f"Bearer {key}",
@@ -36,11 +35,10 @@ async def chat_completions(
         for message in data["messages"]:
             if not message.get("content"):
                 message["content"] = "You are a helpful assistant."
-        logger.info(f"Request data: {data}")
     except KeyError:
         raise HTTPException(status_code=400, detail="Invalid request body")
 
-    logger.info(f"Request headers: {headers}")
+    # 不记录 headers / 请求体，避免上游凭证（Authorization）与用户对话内容进入日志
     logger.info(f"Request params.stream: {params.stream}")
     # 处理请求
     try:
