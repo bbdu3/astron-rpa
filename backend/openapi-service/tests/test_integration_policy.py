@@ -1,4 +1,6 @@
 import json
+import os
+from pathlib import Path
 from unittest.mock import AsyncMock
 
 import pytest
@@ -11,7 +13,7 @@ from app.schemas.workflow import ExecutionCreate
 from app.security.workflow_authorization import WorkflowAccessError
 from app.services.execution import ExecutionService
 from app.services.execution_management import digest
-from app.services.integration_policy import require_admission, workflow_profile
+from app.services.integration_policy import Policy, load_policy, require_admission, workflow_profile
 from app.services.workflow_control import WorkflowControlService
 from app.services.workflow_schema import workflow_input_schema
 from tests.test_workflow_control import AsyncSessionAdapter, database  # noqa: F401
@@ -78,6 +80,116 @@ def test_corrupt_policy_does_not_revert_to_legacy(tmp_path, monkeypatch):
     with pytest.raises(WorkflowAccessError) as error:
         require_admission(workflow, "owner")
     assert error.value.code == "INTEGRATION_POLICY_UNAVAILABLE"
+
+
+def test_unchanged_policy_is_read_and_parsed_once(policy, monkeypatch):
+    workflow = Workflow(project_id="p", user_id="owner", version=1, parameters="[]")
+    policy(workflow)
+    reads = []
+    parses = []
+    read_text = Path.read_text
+    validate_json = Policy.model_validate_json
+
+    def read(path, *args, **kwargs):
+        reads.append(path)
+        return read_text(path, *args, **kwargs)
+
+    def validate(data):
+        parses.append(data)
+        return validate_json(data)
+
+    monkeypatch.setattr(Path, "read_text", read)
+    monkeypatch.setattr(Policy, "model_validate_json", validate)
+    for _ in range(3):
+        assert workflow_profile(workflow, "owner")["admission"]["allowed"]
+    assert len(reads) == len(parses) == 1
+
+
+def test_policy_cache_invalidates_on_mtime_change(tmp_path, monkeypatch):
+    path = tmp_path / "policy.json"
+    path.write_text('{"enforcedUsers":["owner"]}', encoding="utf-8")
+    monkeypatch.setattr(get_settings(), "INTEGRATION_POLICY_FILE", str(path))
+    assert load_policy().enforcedUsers == ["owner"]
+    previous = path.stat()
+    path.write_text('{"enforcedUsers":["other"]}', encoding="utf-8")
+    os.utime(path, ns=(previous.st_atime_ns, previous.st_mtime_ns + 1_000_000_000))
+    assert load_policy().enforcedUsers == ["other"]
+
+
+def test_policy_cache_invalidates_on_atomic_replacement(policy):
+    workflow = Workflow(project_id="p", user_id="owner", version=1, parameters="[]")
+    policy(workflow)
+    path = Path(get_settings().INTEGRATION_POLICY_FILE)
+    assert workflow_profile(workflow, "owner")["admission"]["allowed"]
+    previous = path.stat()
+    replacement = path.with_suffix(".new")
+    # Keep both length and mtime unchanged: the file identity must invalidate it.
+    replacement.write_text(
+        path.read_text(encoding="utf-8").replace('"allowed": true', '"allowed":false'), encoding="utf-8"
+    )
+    os.utime(replacement, ns=(previous.st_atime_ns, previous.st_mtime_ns))
+    replacement.replace(path)
+    assert path.stat().st_size == previous.st_size
+    assert workflow_profile(workflow, "owner")["admission"]["reason"] == "PROFILE_DENIED"
+
+
+@pytest.mark.parametrize("failure", ["missing", "malformed", "invalid-schema", "unreadable"])
+def test_policy_cache_does_not_reuse_valid_policy_after_failure(policy, monkeypatch, failure):
+    workflow = Workflow(project_id="p", user_id="owner", version=1, parameters="[]")
+    policy(workflow)
+    path = Path(get_settings().INTEGRATION_POLICY_FILE)
+    assert workflow_profile(workflow, "owner")["admission"]["allowed"]
+    with monkeypatch.context() as patch:
+        if failure == "missing":
+            path.unlink()
+        elif failure in ("malformed", "invalid-schema"):
+            path.write_text("{broken" if failure == "malformed" else '{"enforcedUsers":false}', encoding="utf-8")
+        else:
+            previous = path.stat()
+            os.utime(path, ns=(previous.st_atime_ns, previous.st_mtime_ns + 1_000_000_000))
+
+            def denied(*args, **kwargs):
+                raise PermissionError("private deployment path")
+
+            patch.setattr(Path, "read_text", denied)
+        with pytest.raises(WorkflowAccessError) as error:
+            require_admission(workflow, "owner")
+        assert error.value.code == "INTEGRATION_POLICY_UNAVAILABLE"
+        assert "private deployment path" not in str(error.value)
+    policy(workflow, allowed=False)
+    assert workflow_profile(workflow, "owner")["admission"]["reason"] == "PROFILE_DENIED"
+
+
+def test_policy_cache_isolated_by_path_and_from_caller_mutations(tmp_path, monkeypatch):
+    first = tmp_path / "first.json"
+    second = tmp_path / "second.json"
+    first.write_text('{"enforcedUsers":["owner"]}', encoding="utf-8")
+    second.write_text('{"enforcedUsers":["other"]}', encoding="utf-8")
+    monkeypatch.setattr(get_settings(), "INTEGRATION_POLICY_FILE", str(first))
+    load_policy().enforcedUsers.clear()
+    assert load_policy().enforcedUsers == ["owner"]
+    monkeypatch.setattr(get_settings(), "INTEGRATION_POLICY_FILE", str(second))
+    assert load_policy().enforcedUsers == ["other"]
+    monkeypatch.setattr(get_settings(), "INTEGRATION_POLICY_FILE", "")
+    assert load_policy().enforcedUsers == []
+
+
+def test_policy_update_during_read_is_not_cached(policy, monkeypatch):
+    workflow = Workflow(project_id="p", user_id="owner", version=1, parameters="[]")
+    policy(workflow)
+    read_text = Path.read_text
+
+    def read_then_replace(path, *args, **kwargs):
+        contents = read_text(path, *args, **kwargs)
+        policy(workflow, allowed=False)
+        return contents
+
+    with monkeypatch.context() as patch:
+        patch.setattr(Path, "read_text", read_then_replace)
+        with pytest.raises(WorkflowAccessError) as error:
+            require_admission(workflow, "owner")
+        assert error.value.code == "INTEGRATION_POLICY_UNAVAILABLE"
+    assert workflow_profile(workflow, "owner")["admission"]["reason"] == "PROFILE_DENIED"
 
 
 @pytest.mark.parametrize(

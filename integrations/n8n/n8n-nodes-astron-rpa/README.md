@@ -9,6 +9,8 @@ Control published AstronRPA workflows through authenticated HTTPS MCP: discover 
 - OpenAPI must provide integration contract `1`, profile schema `1` and MCP `2025-11-25`. All node business operations use MCP with the existing API key authentication.
 - Inputs and outputs use JSON. File/binary transfer and runtime object adaptation are unsupported. A declaration describes a workflow; it does not add an adapter for its capabilities.
 
+The package requires Node.js `>=24`. The [official n8n `2.36.9` Dockerfile](https://github.com/n8n-io/n8n/blob/n8n%402.36.9/docker/images/n8n/Dockerfile) pins its runtime base to Node.js `24.18.1`, which meets this requirement. Before installation, check the Node version **inside your n8n container**, for example with `docker exec YOUR_N8N_CONTAINER node --version`; the host machine's Node version does not determine the container runtime. Older images with Node.js 20 or 22 do not meet this package's requirement.
+
 ## Build, install and connect
 
 From this package directory, independently of the frontend workspace:
@@ -32,6 +34,8 @@ Install the generated tarball in your self-hosted n8n community package director
 
 TLS verification remains enabled. URL credentials, query strings and redirects are rejected. The connection test performs discovery and readiness reads only; an empty workflow list or an offline desktop does not invalidate authentication.
 
+If your AstronRPA deployment exposes only HTTP, such as `http://IP:32742`, configure TLS termination at the gateway or a reverse proxy first and use its HTTPS `/mcp/` endpoint. The certificate must be trusted by the n8n runtime; an HTTP endpoint cannot be used directly. See the repository's [HTTPS deployment guide](../../../docker/HTTPS_DEPLOYMENT.md).
+
 Start the Windows client through its desktop application. Starting Scheduler separately can leave desktop-dependent workflows unable to run.
 
 ## Run a workflow
@@ -53,7 +57,21 @@ Start the Windows client through its desktop application. Starting Scheduler sep
 
 Execution inputs preserve zero, false, null, arrays and objects. n8n expressions are evaluated when preparing the request; the resulting JSON values are fixed for that execution. Results stay in `result`; arrays are not expanded into additional items. Output includes execution/project/version identity, state, terminal flag, timestamps and cancellation state.
 
-A workflow with secret inputs suppresses the entire RPA result: `resultVisibility: suppressed-for-secret-inputs` explains a null result. n8n's normal execution storage can still contain supplied inputs; apply its access and retention controls. Store API keys in credentials, not workflow inputs.
+A workflow with secret inputs suppresses the entire RPA result: `resultVisibility: suppressed-for-secret-inputs` explains a null result. This does **not** redact inputs from n8n's execution storage. Store API keys in credentials, not workflow inputs.
+
+### Execution data retention
+
+Wait and Sync create a child execution with `saveDataSuccessExecution: "all"` and `saveDataErrorExecution: "all"`. Its input and waiting checkpoints contain the prepared request, including parameters marked as secret in AstronRPA. These values can remain in n8n execution records after completion; disabling successful execution storage only on the parent workflow does not disable the child's explicit setting. Async inputs can also be retained under the parent workflow's settings.
+
+Restrict access to n8n execution records and backups, and enable execution-data pruning on the n8n host. For example, adjust these settings to your retention requirements:
+
+```env
+EXECUTIONS_DATA_PRUNE=true
+EXECUTIONS_DATA_MAX_AGE=168
+EXECUTIONS_DATA_PRUNE_MAX_COUNT=10000
+```
+
+`EXECUTIONS_DATA_MAX_AGE` is measured in hours. Pruning eligible finished executions limits retention; it is not immediate secret redaction and does not remove copies in backups. Keep waiting checkpoints available until their executions are resolved, since durable recovery needs the saved request and execution identity. See [n8n execution-data configuration](https://docs.n8n.io/hosting/configuration/environment-variables/executions/).
 
 ## Execution behavior and limits
 
@@ -86,6 +104,8 @@ An `unknown` state does not confirm that a task stopped. Recover through the ori
 Execute failures follow Stop/Continue/error-output settings. Query and Cancel return snapshots as data. On the error branch, `$json.error` contains a JSON envelope with the safe execution identity; read a known ID with `JSON.parse($json.error).executionId`. Errors before acceptance may have no ID.
 
 Ordinary republication preserves management of accepted executions. Workflow deletion, ownership changes, external-access disablement and API key revocation still deny access.
+
+This also changes the existing REST behavior: after a workflow is republished, `GET /executions/{execution_id}` can still return a previously accepted execution with its original version, instead of rejecting it solely because the published version changed. `GET /executions/get` likewise includes eligible executions from earlier published versions. Ownership, external-access and API-key checks remain in force. Starting a new execution still requires the current published version; querying an old execution does not authorize a new start of that old version.
 
 ## Repository documentation
 

@@ -10,7 +10,7 @@
 - 实现[持久等待编排](n8n-nodes-astron-rpa/execution/workflow.ts)与[执行状态观察](n8n-nodes-astron-rpa/execution/runner.ts)：使用 n8n 公开接口创建子执行、保存等待检查点；派发前保存固定请求和幂等键，响应丢失时有界恢复，取得执行 ID 后查询原执行。
 - 实现批量顺序等待、输入项关联和错误路由；前项状态未确认时阻止后项派发。区分网络请求超时、调用方等待预算与 RPA 执行期限。
 - 新增服务端[声明与准入策略](../../backend/openapi-service/app/services/integration_policy.py)，由管理员维护声明并绑定工作流版本、输入 Schema 和完整声明摘要。在纳入管理的范围内，固定 MCP、动态 MCP 与 REST 共用准入校验，拒绝未知、失效或不完整的声明。
-- 修复[已受理执行的管理契约](../../backend/openapi-service/app/services/workflow_control.py)：普通重新发布后仍可查询、同键恢复和取消原执行，同时保留所有权、工作流开放状态及鉴权检查。
+- 调整[已受理执行的管理契约](../../backend/openapi-service/app/services/workflow_control.py)：普通重新发布后仍可查询、同键恢复和取消原执行，同时保留所有权、工作流开放状态及鉴权检查。这也改变了既有 REST 行为：详情接口 `GET /executions/{execution_id}` 不再仅因当前发布版本变化而拒绝原执行查询，列表接口 `GET /executions/get` 同样保留符合授权条件的旧版本执行；返回的仍是原执行版本，新执行仍须使用当前发布版本。
 - 增加秘密输入对应的 `resultVisibility`，明确结果被抑制的原因；通过 JSON 错误封装保留 n8n 错误路由中的执行 ID，并为查询和取消增加 UUID 校验。
 
 ## 验证环境
@@ -44,6 +44,8 @@
 OpenAPI 回归覆盖声明与准入、执行管理、工作流 Schema、MCP 鉴权、外部接口安全、用户隔离及敏感信息日志。节点测试覆盖幂等恢复、等待预算、批量关联、错误中的执行身份、唤醒回调及 MCP 传输约束；[传输测试](n8n-nodes-astron-rpa/tests/transport.test.cjs)验证了跨源重定向拒绝、请求超时，以及未支持协议和空 Key 的前置拒绝。
 
 Ruff 的 3 项问题为 `schemas/workflow.py` 的 `UP042`，以及 `services/execution.py` 中 `pageNo`、`pageSize` 的两项 `N803`；使用相同环境对照确认这些问题已存在。
+
+PR 审阅修订回归（2026-09-30）：在最新 main 上变基后，OpenAPI 定向测试 212 项、节点测试 19 项通过。新增策略缓存测试覆盖未变更文件只读取/解析一次、mtime 变化、同 mtime 原子替换、文件缺失/损坏/不可读、读取期间更新、配置路径变化和调用方修改隔离；错误时仍拒绝使用旧策略。修改涉及的 Python 文件 Ruff 与格式检查、节点构建、类型检查、ESLint、README 格式及差异检查通过。本轮未重做真实联调；全仓 `make check` 仍停在下文记录的 frontend 根目录缺少 `tsconfig.json` 问题。目标 n8n `2.36.9` 的官方 Dockerfile 固定 Node.js `24.18.1`，满足包的 `>=24` 声明；此项为镜像构建文件核对，不代表本轮运行了 Docker 镜像。
 
 ## 实际联调结果
 

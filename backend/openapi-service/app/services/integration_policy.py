@@ -5,6 +5,7 @@ the policy explicitly; unclassified releases in that scope fail closed. Other
 users retain legacy entry points, but cannot claim framework admission.
 """
 
+from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
@@ -56,12 +57,30 @@ class Policy(BaseModel):
         return self
 
 
+def _policy_file_version(path: Path) -> tuple[int, ...]:
+    stat = path.stat()
+    # Identity and ctime also invalidate atomic replacements that preserve mtime.
+    return stat.st_dev, stat.st_ino, stat.st_mtime_ns, stat.st_ctime_ns, stat.st_size, stat.st_mode
+
+
+@lru_cache(maxsize=1)
+def _read_policy(path: Path, version: tuple[int, ...]) -> Policy:
+    policy = Policy.model_validate_json(path.read_text(encoding="utf-8"))
+    if _policy_file_version(path) != version:
+        # Do not cache a read that raced with a deployment update.
+        raise OSError("Integration policy changed while being read")
+    return policy
+
+
 def load_policy() -> Policy:
     path = get_settings().INTEGRATION_POLICY_FILE
     if not path:
         return Policy()
     try:
-        return Policy.model_validate_json(Path(path).read_text(encoding="utf-8"))
+        policy_path = Path(path).resolve()
+        policy = _read_policy(policy_path, _policy_file_version(policy_path))
+        # Callers must not be able to change admission for subsequent requests.
+        return policy.model_copy(deep=True)
     except (OSError, ValueError):
         # Never silently revert to legacy admission on a broken deployment file.
         raise WorkflowAccessError("INTEGRATION_POLICY_UNAVAILABLE", "Integration policy is unavailable") from None

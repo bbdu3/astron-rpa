@@ -172,6 +172,13 @@ Project IDs are strings. Starts require the authenticated user's current externa
 Omitting `version` selects that release. Queries recheck execution ownership, current workflow ownership and external
 access. Ordinary republication preserves management of accepted executions; disabling external access, deleting
 the workflow or revoking the API key denies access.
+
+**REST compatibility change:** `GET /executions/{execution_id}` now retains access to an accepted execution
+after ordinary workflow republication, returning that execution's original version. Previously, the
+current-publication version check could reject this query. `GET /executions/get` likewise includes eligible
+executions from earlier published versions. Execution ownership, current workflow ownership,
+external access and API-key authorization are still checked; a new start still requires the current release.
+
 Control tool names are reserved; colliding dynamic workflows remain callable by project ID. Other dynamic tools retain
 their synchronous behavior.
 
@@ -214,6 +221,12 @@ Within the enrolled user scope, fixed MCP, dynamic MCP and REST starts share adm
 incomplete, stale or denied declarations are rejected. Users outside this scope retain their existing entry
 points but have no community-node admission. A malformed configured file rejects new starts instead of
 silently disabling policy enforcement.
+
+Each OpenAPI process caches the last successfully parsed policy by resolved path and file metadata,
+including nanosecond mtime, size and file identity. Unchanged files are not reread or reparsed for every
+workflow in a list. Metadata is checked on each access; file changes or atomic replacement invalidate the
+cache. Publish updates by atomically replacing the file. Missing, unreadable, malformed or concurrently
+changed files fail closed with `INTEGRATION_POLICY_UNAVAILABLE`, without reusing an earlier valid policy.
 
 The public revision is a digest of the complete declaration. Changing any declaration content changes that
 revision even when its human label is unchanged. `profileRevision` binds a prepared request to it.
