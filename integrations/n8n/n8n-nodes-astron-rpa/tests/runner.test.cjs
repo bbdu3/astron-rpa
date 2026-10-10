@@ -8,6 +8,8 @@ const {
 } = require("../dist/execution/runner");
 const {
   AstronError,
+  checkWorkflow,
+  JSON_LIMITS,
   jsonObject,
   snapshot,
 } = require("../dist/mapping/contracts");
@@ -225,11 +227,128 @@ test("invalid context/identity/state and non-JSON parameters fail closed", () =>
     "{broken",
   ])
     assert.throws(() => jsonObject(value));
+  const cyclic = {};
+  cyclic.self = cyclic;
+  assert.throws(
+    () => jsonObject(cyclic),
+    (error) => error.code === "INVALID_ARGUMENTS",
+  );
   assert.deepEqual(
     jsonObject({ zero: 0, false: false, value: null, arr: [] }),
     { zero: 0, false: false, value: null, arr: [] },
   );
   assert.equal(hash({ b: 2, a: 1 }), hash({ a: 1, b: 2 }));
+});
+test("JSON data limits reject oversized values while preserving JSON scalars", () => {
+  assert.deepEqual(jsonObject({ zero: 0, false: false, value: null }), {
+    zero: 0,
+    false: false,
+    value: null,
+  });
+  for (const value of [
+    { values: Array.from({ length: JSON_LIMITS.maxArrayItems + 1 }, () => 0) },
+    { value: "x".repeat(JSON_LIMITS.maxStringLength + 1) },
+  ])
+    assert.throws(
+      () => jsonObject(value),
+      (error) => error.code === "JSON_LIMIT_EXCEEDED",
+    );
+  const nested = {};
+  let current = nested;
+  for (let index = 0; index <= JSON_LIMITS.maxDepth; index++) {
+    current.next = {};
+    current = current.next;
+  }
+  assert.throws(
+    () => jsonObject(nested),
+    (error) => error.code === "JSON_LIMIT_EXCEEDED",
+  );
+});
+for (const character of ["x", "界"]) {
+  test(`execution result byte limit excludes metadata (${character})`, () => {
+    const chunk = character.repeat(10_000);
+    const value = {
+      items: Array.from(
+        {
+          length: Math.floor(
+            (JSON_LIMITS.maxBytes - 50_000) / Buffer.byteLength(chunk),
+          ),
+        },
+        () => chunk,
+      ).concat(""),
+    };
+    const padding =
+      JSON_LIMITS.maxBytes - Buffer.byteLength(JSON.stringify(value));
+    value.items[value.items.length - 1] = "x".repeat(padding);
+    const response = receipt("succeeded", { result: value });
+    assert.equal(
+      Buffer.byteLength(JSON.stringify(value)),
+      JSON_LIMITS.maxBytes,
+    );
+    assert(Buffer.byteLength(JSON.stringify(response)) > JSON_LIMITS.maxBytes);
+    assert.deepEqual(snapshot(response).result, value);
+    value.items[value.items.length - 1] += "x";
+    assert.throws(
+      () => snapshot(response),
+      (error) => error.code === "JSON_LIMIT_EXCEEDED",
+    );
+  });
+}
+test("result nesting and properties are bounded independently from metadata", () => {
+  const result = {};
+  let current = result;
+  for (let index = 0; index < JSON_LIMITS.maxDepth; index++) {
+    current.next = {};
+    current = current.next;
+  }
+  assert.deepEqual(snapshot(receipt("succeeded", { result })).result, result);
+  current.next = {};
+  assert.throws(
+    () => snapshot(receipt("succeeded", { result })),
+    (error) => error.code === "JSON_LIMIT_EXCEEDED",
+  );
+  const properties = Object.fromEntries(
+    Array.from({ length: JSON_LIMITS.maxObjectProperties }, (_, i) => [
+      i,
+      null,
+    ]),
+  );
+  assert.deepEqual(
+    snapshot(receipt("succeeded", { result: properties })).result,
+    properties,
+  );
+  properties.extra = null;
+  assert.throws(
+    () => snapshot(receipt("succeeded", { result: properties })),
+    (error) => error.code === "JSON_LIMIT_EXCEEDED",
+  );
+  for (const value of [0, false, null, "", [0, false, null]])
+    assert.deepEqual(
+      snapshot(receipt("succeeded", { result: value })).result,
+      value,
+    );
+});
+test("json-data workflow profiles must advertise the same bounded contract", () => {
+  const value = {
+    projectId: "p",
+    version: 1,
+    profile: {
+      projectId: "p",
+      version: 1,
+      schemaVersion: 1,
+      admission: { allowed: true },
+      revision: "r1",
+      capabilityClass: "json-data",
+      capabilities: ["json-data"],
+      jsonLimits: { ...JSON_LIMITS },
+    },
+  };
+  assert.equal(checkWorkflow(value, "p", 1).capabilityClass, "json-data");
+  value.profile.jsonLimits.maxDepth++;
+  assert.throws(
+    () => checkWorkflow(value, "p", 1),
+    (error) => error.code === "CAPABILITY_UNSUPPORTED",
+  );
 });
 test("endpoint refuses URL secrets, ambiguous paths, HTTP, query and fragment", () => {
   assert.equal(
