@@ -255,22 +255,28 @@ def check_chrome_plugin(preferences_path_list, extension_id):
     """
     for file in preferences_path_list:
         if os.path.exists(file):
-            with open(file, encoding="utf-8") as f:
-                content = f.read()
-                dict_msg = json.loads(content)
-                try:
-                    extension_info = dict_msg.get("extensions", {}).get("settings")
-                    if extension_id in extension_info:
-                        version = extension_info[extension_id].get("manifest", {}).get("version", "")
-                        return True, version
-                except Exception:
-                    # new chrome version use install_signature to manage extensions
-                    version = get_install_signature_extension_version(preferences_path_list, extension_id)
-                    if version:
-                        return True, version
-                    return False, ""
+            try:
+                with open(file, encoding="utf-8") as f:
+                    dict_msg = json.loads(f.read())
+            except (OSError, json.JSONDecodeError):
+                continue
+
+            if not isinstance(dict_msg, dict):
+                continue
+
+            extensions = dict_msg.get("extensions") or {}
+            extension_info = extensions.get("settings") or {}
+            if extension_id in extension_info:
+                version = extension_info[extension_id].get("manifest", {}).get("version", "")
+                return True, version
         else:
             logger.info(f"{file} does not exist")
+
+    # New Chrome versions use install_signature to manage extensions.
+    version = get_install_signature_extension_version(preferences_path_list, extension_id)
+    if version:
+        return True, version
+
     return False, ""
 
 
@@ -281,10 +287,18 @@ def get_install_signature_extension_version(preferences_path_list, extension_id)
     versions = []
     for preferences_path in preferences_path_list:
         extensions_path = preferences_path.replace("Preferences", "Extensions")
+        if not os.path.isdir(extensions_path):
+            continue
+
         for item in os.listdir(extensions_path):
             if item == extension_id:
                 item_path = os.path.join(extensions_path, item)
-                version = max(os.listdir(item_path), key=lambda v: [int(x) for x in v.split(".")])
+                if not os.path.isdir(item_path):
+                    continue
+                versions_path = os.listdir(item_path)
+                if not versions_path:
+                    continue
+                version = max(versions_path, key=lambda v: [int(x) for x in v.split(".")])
                 version = version.split("_")[0] if "_" in version else version
                 logger.info(f"{extensions_path}, {version}")
                 versions.append(version)
