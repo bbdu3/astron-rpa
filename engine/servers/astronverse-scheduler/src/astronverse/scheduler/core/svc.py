@@ -30,6 +30,9 @@ class Svc:
         self.rpa_route_port: int = self.get_validate_port(ComponentType.ROUTE)
         # 调度器端口[随机分配]
         self.scheduler_port: int = self.get_validate_port(ComponentType.SCHEDULER)
+        # Keep the legacy /core gateway prefix for frontend clients while the
+        # implementation now lives in the scheduler service.
+        self.port_dict["core"] = self.scheduler_port
         # trigger端口[随机分配]
         self.trigger_port: int = self.get_validate_port(ComponentType.TRIGGER)
         # 浏览器通信端口[固定分配]
