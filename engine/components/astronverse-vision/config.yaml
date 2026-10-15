@@ -1,27 +1,22 @@
 atomic:
   CV.cv_click:
     icon: click-image
-    helpManual: 在当前(激活)窗口检索目标图片，并在窗口界面中点击该图片
     path:
     - /atomicTree/cv
   CV.hover_image:
     icon: mouse-hover-image
-    helpManual: 在当前(激活)窗口检索图像，并将鼠标移动到该图像的指定位置上
     path:
     - /atomicTree/cv
   CV.is_image_exist:
     icon: if-image-exists
-    helpManual: 在当前(激活)窗口检索图像，判断是否存在
     path:
     - /atomicTree/code/if
     - /atomicTree/cv
   CV.wait_image:
     icon: wait-image
-    helpManual: 等待目标图像出现或消失，再继续执行流程
     path:
     - /atomicTree/cv
   CV.image_input:
     icon: image-input-box
-    helpManual: 点击目标输入框的图像，并输入内容
     path:
     - /atomicTree/cv

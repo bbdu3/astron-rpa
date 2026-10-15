@@ -92,5 +92,30 @@
         "tip": "包含任务执行状态、步数、耗时、截图目录和错误信息的字典"
       }
     }
+  },
+  "ComputerUse.run": {
+    "title": "计算机使用代理",
+    "comment": "使用视觉大模型分析屏幕并执行GUI自动化任务：@{instruction}",
+    "inputList": {
+      "instruction": {
+        "title": "用户指令",
+        "tip": "描述要执行的GUI自动化任务，例如\"打开计算器并计算123+456\""
+      },
+      "max_steps": {
+        "title": "最大执行步数",
+        "tip": "任务执行的最大步数限制，防止无限循环"
+      },
+      "temperature": {
+        "title": "模型温度",
+        "tip": "模型生成时的温度参数，控制输出的随机性，默认0"
+      }
+    },
+    "outputList": {
+      "computer_use_res": {
+        "title": "执行结果",
+        "subTitle": "AI生成",
+        "tip": "包含任务执行状态、步数、耗时、截图目录和错误信息的字典"
+      }
+    }
   }
 }

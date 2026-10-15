@@ -52,6 +52,8 @@ atomic:
     path:
     - /atomicTree/code/for
     - /atomicTree/web
+    sort: 
+    - /atomicTree/code/for/100
   BrowserElement.element_text:
     icon: get-element-text-web
     path:

@@ -1,27 +1,22 @@
 atomic:
   Dialog.message_box:
     icon: message-dialog
-    helpManual: 打开消息提示对话框，可设定消息提示的内容和标题
     path:
     - /atomicTree/dialog
   Dialog.input_box:
     icon: input-dialog
-    helpManual: 打开输入对话框，需用户进行信息输入并确定提交，返回用户在对话框中输入的内容
     path:
     - /atomicTree/dialog
   Dialog.select_box:
     icon: select-dialog
-    helpManual: 打开选择对话框，保存用户从选择列表中选择的一个或多个选项
     path:
     - /atomicTree/dialog
   Dialog.select_time_box:
     icon: datetime-picker
-    helpManual: 打开日期时间选择框，保存用户选择的日期或时间
     path:
     - /atomicTree/dialog
   Dialog.select_file_box:
     icon: file-select-dialog
-    helpManual: 打开系统选择文件对话框，保存用户选择的对应的文件/文件夹路径
     path:
     - /atomicTree/dialog
   Dialog.custom_box:

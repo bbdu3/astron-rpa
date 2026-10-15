@@ -901,6 +901,44 @@
       }
     }
   },
+  "System.screen_lock": {
+    "title": "屏幕锁定",
+    "comment": "系统屏幕锁屏，并将操作结果输出至变量 @{screen_lock_result}",
+    "outputList": {
+      "screen_lock_result": {
+        "title": "锁屏执行结果",
+        "tip": "输出锁屏操作的执行结果并保存至变量，变量类型为布尔值"
+      }
+    }
+  },
+  "System.screen_unlock": {
+    "title": "屏幕解锁",
+    "comment": "通过用户名 @{user_name} 和 @{pwd_type}  @{password_text||password_rsa} 进行系统屏幕解锁，并将操作结果输出至变量 @{screen_unlock_result}",
+    "inputList": {
+      "user_name": {
+        "title": "用户名",
+        "tip": "待解锁屏幕用户名"
+      },
+      "pwd_type": {
+        "title": "解锁类型",
+        "tip": "待解锁屏幕解锁类型"
+      },
+      "password_text": {
+        "title": "密码",
+        "tip": "待解锁屏幕解锁密码"
+      },
+      "password_rsa": {
+        "title": "密钥",
+        "tip": "待解锁屏幕解锁密钥"
+      }
+    },
+    "outputList": {
+      "screen_unlock_result": {
+        "title": "执行结果",
+        "tip": "输出屏幕解锁的执行结果并保存至变量，数据类型为布尔值"
+      }
+    }
+  },
   "options": {
     "ContentType": {
       "msg": "文本内容",

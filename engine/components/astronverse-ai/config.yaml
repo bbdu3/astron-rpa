@@ -35,6 +35,16 @@ atomic:
     icon: call-dify-workflow
     path:
     - /atomicTreeExtend/ai/ai_workflow
+  ChatAI.single_turn_chat:
+    icon: single-chat
+    inputList:
+    - key: query
+    - key: model
+    - key: custom_model
+    outputList:
+    - key: single_chat_res
+    path:
+    - /atomicTreeExtend/ai/llm_capability
   ChatAI.chat:
     icon: multi-chat
     path:
@@ -67,25 +77,3 @@ atomic:
     icon: resume-scoring
     path:
     - /atomicTreeExtend/ai/business_ai
-  ChatAI.single_turn_chat:
-    title: 单轮会话
-    comment: 大模型将对你提出的问题： @{query} 进行回答。
-    icon: single-chat
-    helpManual: ''
-    inputList:
-    - key: query
-      title: 用户输入
-      tip: 用户输入的问题。
-    - key: model
-      title: 模型选择
-      tip: 可以选择使用的模型。
-    - key: custom_model
-      title: 自定义模型ID
-      tip: ''
-    outputList:
-    - key: single_chat_res
-      title: 答案输出
-      subTitle: AI生成
-      tip: 将大模型生成的答案输出为变量。
-    path:
-    - /atomicTreeExtend/ai/ai_workflow

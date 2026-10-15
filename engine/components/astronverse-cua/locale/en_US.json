@@ -92,5 +92,30 @@
         "tip": "A dict containing task execution status, steps, elapsed time, screenshot directory, and error info"
       }
     }
+  },
+  "ComputerUse.run": {
+    "title": "Computer Use Agent",
+    "comment": "Use a vision model to analyze the screen and execute GUI automation tasks: @{instruction}",
+    "inputList": {
+      "instruction": {
+        "title": "User Instruction",
+        "tip": "Describe the GUI automation task to execute, e.g. \"Open calculator and calculate 123+456\""
+      },
+      "max_steps": {
+        "title": "Max Execution Steps",
+        "tip": "Maximum number of steps for task execution, prevents infinite loops"
+      },
+      "temperature": {
+        "title": "Model Temperature",
+        "tip": "Controls the randomness of model generation; default is 0"
+      }
+    },
+    "outputList": {
+      "computer_use_res": {
+        "title": "Execution Result",
+        "subTitle": "AI Generated",
+        "tip": "A dict containing task execution status, steps, elapsed time, screenshot directory, and error info"
+      }
+    }
   }
 }

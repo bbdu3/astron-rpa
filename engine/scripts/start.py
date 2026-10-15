@@ -3,7 +3,6 @@
 
 import argparse
 import os
-import signal
 import subprocess
 import sys
 from pathlib import Path
@@ -28,75 +27,84 @@ def resolve_conf(path: str) -> Path:
     return conf
 
 
-def build_scheduler_cmd(conf: Path) -> list[str]:
-    return [sys.executable, "-m", "astronverse.scheduler", "--conf", str(conf)]
-
-
 def stop_engine_processes() -> None:
-    """Reuse the scheduler's Windows-aware process cleanup implementation."""
-    from astronverse.scheduler.core.setup.setup import Process
-
-    Process.kill_all_zombie()
+    """Stop Engine processes without waiting indefinitely on one stale process."""
+    _terminate_processes(_find_engine_processes())
 
 
-def start_scheduler(command: list[str]) -> subprocess.Popen:
-    """Start the scheduler in a process group that can be stopped as a unit."""
-    popen_kwargs = {"cwd": ENGINE_DIR}
-    if sys.platform == "win32":
-        # Keep Ctrl+C in this launcher. The scheduler receives an explicit tree
-        # termination below, instead of leaving shell-spawned services behind.
-        popen_kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
-    else:
-        popen_kwargs["start_new_session"] = True
-    return subprocess.Popen(command, **popen_kwargs)
+def _protected_process_ids() -> set[int]:
+    """Return this launcher and its ancestors, which must never be terminated."""
+    import psutil
 
-
-def stop_scheduler(process: subprocess.Popen) -> None:
-    """Terminate the scheduler and every process it started."""
-    if sys.platform == "win32":
-        # Popen.terminate() only terminates the scheduler executable on Windows;
-        # taskkill /T is needed for services started through cmd.exe as well.
-        subprocess.run(
-            ["taskkill", "/PID", str(process.pid), "/T", "/F"],
-            check=False,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-    else:
-        try:
-            os.killpg(os.getpgid(process.pid), signal.SIGTERM)
-        except ProcessLookupError:
-            pass
-
+    protected: set[int] = set()
     try:
-        process.wait(timeout=5)
-    except subprocess.TimeoutExpired:
-        if sys.platform == "win32":
-            subprocess.run(
-                ["taskkill", "/PID", str(process.pid), "/T", "/F"],
-                check=False,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        else:
-            process.kill()
-        process.wait()
+        process = psutil.Process(os.getpid())
+        while process:
+            protected.add(process.pid)
+            process = process.parent()
+    except psutil.Error:
+        protected.add(os.getpid())
+    return protected
+
+
+def _find_engine_processes() -> list:
+    """Find Engine executables, including children re-parented after shutdown."""
+    import psutil
+
+    protected = _protected_process_ids()
+    processes = []
+    for process in psutil.process_iter(["pid", "exe"]):
+        if process.pid in protected:
+            continue
+        try:
+            executable = (process.info.get("exe") or "").lower()
+        except psutil.Error:
+            continue
+        if "astron-rpa" in executable:
+            processes.append(process)
+    return processes
+
+
+def _terminate_processes(processes: list) -> int:
+    """Terminate processes with a bounded Windows command and return the count."""
+    import psutil
+
+    unique_processes = {process.pid: process for process in processes}
+    if sys.platform == "win32":
+        for process in unique_processes.values():
+            try:
+                subprocess.run(
+                    ["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                    check=False,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    timeout=5,
+                )
+            except (OSError, subprocess.TimeoutExpired):
+                pass
+    else:
+        for process in unique_processes.values():
+            try:
+                process.kill()
+            except psutil.Error:
+                pass
+        if unique_processes:
+            psutil.wait_procs(list(unique_processes.values()), timeout=5)
+    return len(unique_processes)
 
 
 def run_scheduler(conf: Path) -> int:
-    command = build_scheduler_cmd(conf)
-    sys.stdout.write(f"[dev] Starting scheduler: {' '.join(command)}\n")
-
-    process = start_scheduler(command)
+    sys.stdout.write(f"[dev] Starting scheduler in launcher: {sys.executable} -m astronverse.scheduler --conf {conf}\n")
     try:
-        return process.wait()
+        from astronverse.scheduler.start import start
+
+        start(argparse.Namespace(conf=str(conf), venv=None, stop=False))
     except KeyboardInterrupt:
         sys.stdout.write("\n[dev] Stopping scheduler...\n")
         return 0
     finally:
-        if process.poll() is None:
-            stop_scheduler(process)
-        stop_engine_processes()
+        sys.stdout.write("[dev] Scheduler stopped.\n")
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:

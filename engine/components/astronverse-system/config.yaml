@@ -1,199 +1,149 @@
 atomic:
   System.copy_clip:
     icon: copy-to-clipboard
-    helpManual: 支持将文本内容/文件/文件夹复制到剪贴板
     path:
     - /atomicTree/os/os.clipboard
   System.clear_clip:
     icon: clear-clipboard
-    helpManual: 清空剪贴板中的内容
     path:
     - /atomicTree/os/os.clipboard
   System.paste_clip:
     icon: get-clipboard
-    helpManual: 支持获取剪贴板中的文本内容/文件/文件夹，并将文本内容/文件文件夹保存路径保存到指定路径中
     path:
     - /atomicTree/os/os.clipboard
   System.compress:
     icon: compress
-    helpManual: 压缩选择文件与文件夹到指定目录，支持单个或多个文件文件夹同时压缩为一个压缩包(压缩后文件格式为zip格式)
     path:
     - /atomicTree/os/os.zip
   System.uncompress:
     icon: decompress
-    helpManual: 将压缩文件解压至指定路径
     path:
     - /atomicTree/os/os.zip
   File.file_exist:
     icon: check-file-exists
-    helpManual: 判断文件是否存在并将判断结果输出至变量
     path:
     - /atomicTree/code/if
     - /atomicTree/os/os.file
   File.file_create:
     icon: create-new-file
-    helpManual: 在指定目录下创建文件
     path:
     - /atomicTree/os/os.file
   File.file_delete:
     icon: delete-file
-    helpManual: 删除指定文件，并将执行结果输出至变量
     path:
     - /atomicTree/os/os.file
   File.file_copy:
     icon: copy-file
-    helpManual: 复制目标文件到指定目录
     path:
     - /atomicTree/os/os.file
   File.file_write:
     icon: write-file
-    helpManual: 向指定文件中写入内容，并输出写入后的文件路径至变量
     path:
     - /atomicTree/os/os.file
   File.get_file_encoding_type:
     icon: get-file-encoding
-    helpManual: 获取指定文件的编码类型，并输出编码类型至变量
     path:
     - /atomicTree/os/os.file
   File.file_read:
     icon: read-file
-    helpManual: 读取指定文件内容，并将读取内容输出保存至变量
     path:
     - /atomicTree/os/os.file
   File.file_move:
     icon: move-file
-    helpManual: 将指定文件移动到目标目录，并输出移动后的文件路径至变量
     path:
     - /atomicTree/os/os.file
   File.file_rename:
     icon: rename-file
-    helpManual: 将指定文件重命名，并输出重命名后的文件路径至变量
     path:
     - /atomicTree/os/os.file
   File.file_search:
     icon: find-file
-    helpManual: 在指定目录中查找文件名包含指定内容的文件，并输出文件列表至变量
     path:
     - /atomicTree/os/os.file
   File.file_wait_status:
     icon: wait-file
-    helpManual: 等待文件状态为指定状态时执行下一步，并输出等待结果至变量
     path:
     - /atomicTree/os/os.file
   File.file_info:
     icon: get-file-info
-    helpManual: 获取文件的全部信息/大小/文件路径/大小(字节)/根目录/文件夹目录/名称与扩展名/名称/扩展名/创建时间/修改时间，并保存到输出变量
     path:
     - /atomicTree/os/os.file
   File.get_file_list:
     icon: get-file-list
-    helpManual: 获取指定目录中的文件列表，并保存至输出变量
     path:
     - /atomicTree/os/os.file
   Folder.folder_exist:
     icon: check-folder-exists
-    helpManual: 判断文件夹是否存在
     path:
     - /atomicTree/code/if
     - /atomicTree/os/os.path
   Folder.folder_open:
     icon: open-folder
-    helpManual: 打开指定文件夹
     path:
     - /atomicTree/os/os.path
   Folder.folder_create:
     icon: create-folder
-    helpManual: 在指定目录下创建文件夹，并保存创建文件夹路径到输出变量
     path:
     - /atomicTree/os/os.path
   Folder.folder_delete:
     icon: delete-folder-ftp
-    helpManual: 删除文件夹
     path:
     - /atomicTree/os/os.path
   Folder.folder_copy:
     icon: copy-folder
-    helpManual: 复制文件夹到指定目录，并保存复制后的文件夹路径到输出变量
     path:
     - /atomicTree/os/os.path
   Folder.folder_move:
     icon: move-folder
-    helpManual: 移动文件夹到指定目录，并保存移动后的文件夹路径到输出变量
     path:
     - /atomicTree/os/os.path
   Folder.folder_rename:
     icon: rename-folder
-    helpManual: 重命名文件夹，并保存重命名后的文件夹路径到输出变量
     path:
     - /atomicTree/os/os.path
   Folder.folder_clear:
     icon: clear-folder
-    helpManual: 清空指定文件夹，并保存操作结果到输出变量
     path:
     - /atomicTree/os/os.path
   Folder.get_folder_list:
     icon: get-folder-list
-    helpManual: 获取文件夹列表，并保存到输出变量
     path:
     - /atomicTree/os/os.path
   System.run_command:
     icon: run-or-open
-    helpManual: 运行cmd命令或打开可执行.exe文件，并将执行结果保存到输出变量
     path:
     - /atomicTree/os/os.system
   System.get_pid:
     icon: get-process-pid
-    helpManual: 输入待匹配进程名称，支持精确匹配/模糊匹配/正则表达式匹配，可获取单个匹配进程PID或全部匹配进程PID，并输出至变量列表
     path:
     - /atomicTree/os/os.system
   System.terminate_process:
     icon: terminate-process
-    helpManual: 终止指定PID/名称的进程程序
     path:
     - /atomicTree/os/os.system
   System.screen_shot:
     icon: screen-screenshot
-    helpManual: 选择屏幕或指定区域进行截屏，并保存到指定路径
     path:
     - /atomicTree/os/os.screenshot
   System.printer:
     icon: printer-print
-    helpManual: 连接指定打印机进行文档打印
     path:
     - /atomicTree/os/os.printer
-  System.screen_lock:
-    title: 屏幕锁定
-    comment: 系统屏幕锁屏，并将操作结果输出至变量 @{screen_lock_result}
-    icon: screen-lock
-    helpManual: 系统屏幕锁屏
-    inputList: []
-    outputList:
-    - key: screen_lock_result
-      title: 锁屏执行结果
-      tip: 输出锁屏操作的执行结果并保存至变量，变量类型为布尔值
-    path:
-    - /atomicTree/os
-  System.screen_unlock:
-    title: 屏幕解锁
-    comment: 通过用户名 @{user_name} 和 @{pwd_type}  @{password_text||password_rsa} 进行系统屏幕解锁，并将操作结果输出至变量 @{screen_unlock_result}
-    icon: screen-unlock
-    helpManual: 输入用户名和密码进行系统屏幕解锁
-    inputList:
-    - key: user_name
-      title: 用户名
-      tip: 待解锁屏幕用户名
-    - key: pwd_type
-      title: 解锁类型
-      tip: 待解锁屏幕解锁类型
-    - key: password_text
-      title: 密码
-      tip: 待解锁屏幕解锁密码
-    - key: password_rsa
-      title: 密钥
-      tip: 待解锁屏幕解锁密钥
-    outputList:
-    - key: screen_unlock_result
-      title: 执行结果
-      tip: 输出屏幕解锁的执行结果并保存至变量，数据类型为布尔值
-    path:
-    - /atomicTree/os
+  # System.screen_lock:
+  #   icon: screen-lock
+  #   inputList: []
+  #   outputList:
+  #   - key: screen_lock_result
+  #   path:
+  #   - /atomicTree/os/os.system
+  # System.screen_unlock:
+  #   icon: screen-unlock
+  #   inputList:
+  #   - key: user_name
+  #   - key: pwd_type
+  #   - key: password_text
+  #   - key: password_rsa
+  #   outputList:
+  #   - key: screen_unlock_result
+  #   path:
+  #   - /atomicTree/os/os.system

@@ -51,7 +51,7 @@ def apply_locale(meta: dict, locale: dict) -> dict:
             action["comment"] = loc["comment"]
 
         # 叠加 inputList + outputList 字段文本
-        # locale 格式: loc["inputList"] / loc["outputList"] 为 {field_key: {title, tip}}
+        # locale 格式: loc["inputList"] / loc["outputList"] 为 {field_key: {title, tip, subTitle}}
         for list_key in ("inputList", "outputList"):
             list_loc: dict = loc.get(list_key, {})
             for field in (action.get(list_key) or []):
@@ -60,6 +60,8 @@ def apply_locale(meta: dict, locale: dict) -> dict:
                     field["title"] = fl["title"]
                 if "tip" in fl:
                     field["tip"] = fl["tip"]
+                if "subTitle" in fl:
+                    field["subTitle"] = fl["subTitle"]
 
                 # 按 types 类型名全局复用 options label
                 type_opts: dict = options_loc.get(field.get("types") or "", {})

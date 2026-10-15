@@ -121,6 +121,10 @@ class Svc:
         for k, v in self.port_dict.items():
             register_component(k, v)
 
+    def stop(self):
+        self.picker.stop()
+        self.executor_mg.close_all()
+
 
 _svc = Svc()
 

@@ -28,5 +28,21 @@
         "tip": "Path of the application to close"
       }
     }
+  },
+  "Software.cmd": {
+    "title": "Cmd Command",
+    "comment": "Execute the configured cmd string @{cmd} and save the result to @{exec_cmd}",
+    "inputList": {
+      "cmd": {
+        "title": "Cmd String",
+        "tip": "Enter a cmd string"
+      }
+    },
+    "outputList": {
+      "exec_cmd": {
+        "title": "Execution Result",
+        "tip": "Output the object returned by the custom cmd command"
+      }
+    }
   }
 }

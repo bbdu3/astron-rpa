@@ -901,6 +901,44 @@
       }
     }
   },
+  "System.screen_lock": {
+    "title": "Screen Lock",
+    "comment": "Lock the system screen and output the result to variable @{screen_lock_result}",
+    "outputList": {
+      "screen_lock_result": {
+        "title": "Screen Lock Result",
+        "tip": "Output the screen lock result to a variable, data type is boolean"
+      }
+    }
+  },
+  "System.screen_unlock": {
+    "title": "Screen Unlock",
+    "comment": "Unlock the system screen using username @{user_name} and @{pwd_type} @{password_text||password_rsa}, then output the result to variable @{screen_unlock_result}",
+    "inputList": {
+      "user_name": {
+        "title": "Username",
+        "tip": "Username for unlocking the screen"
+      },
+      "pwd_type": {
+        "title": "Unlock Type",
+        "tip": "Unlock type for the screen"
+      },
+      "password_text": {
+        "title": "Password",
+        "tip": "Password for unlocking the screen"
+      },
+      "password_rsa": {
+        "title": "Key",
+        "tip": "Key for unlocking the screen"
+      }
+    },
+    "outputList": {
+      "screen_unlock_result": {
+        "title": "Execution Result",
+        "tip": "Output the screen unlock result to a variable, data type is boolean"
+      }
+    }
+  },
   "options": {
     "ContentType": {
       "msg": "Text Content",

@@ -28,35 +28,16 @@ atomic:
     path:
     - /atomicTree/document/document.PDF
   PDF.convert_img_to_pdf:
-    title: 图片转PDF页面
-    comment: 转换路径为 @{image_files} 的图片为PDF文件，并保存到 @{save_dir} 文件夹
     icon: pdf-page-to-image
-    helpManual: ''
     inputList:
     - key: image_files
-      title: 图片文件
-      tip: ''
     - key: save_dir
-      title: 保存PDF文件路径
-      tip: ''
     - key: new_file_name
-      title: PDF文件名
-      tip: ''
     - key: layout_type
-      title: PDF文件布局
-      tip: ''
     - key: new_pwd_flag
-      title: 是否设置密码
-      tip: ''
     - key: new_pwd
-      title: 密码
-      tip: ''
     - key: exist_handle_type
-      title: 存在同名文件处理方式
-      tip: ''
     outputList:
     - key: pdf_file_path
-      title: PDF文件路径
-      tip: ''
     path:
-    - /atomicTreeExtend/local
+    - /atomicTree/document/document.PDF

@@ -1,4 +1,33 @@
 {
+  "Gui.mouse_move": {
+    "title": "Mouse Move",
+    "comment": "Simulate mouse move to (@{position_x}, @{position_y}) on (@{window_type})",
+    "inputList": {
+      "window_type": {
+        "title": "Window Type",
+        "tip": "Full Screen: coordinates relative to the top-left corner of the screen; Active Window: coordinates relative to the top-left corner of the active window"
+      },
+      "window_position": {
+        "title": "Top-Left Window Position"
+      },
+      "get_mouse_position": {
+        "title": "Get Mouse Position"
+      },
+      "position_x": {
+        "title": "Mouse X Position"
+      },
+      "position_y": {
+        "title": "Mouse Y Position"
+      },
+      "move_type": {
+        "title": "Mouse Move Type",
+        "tip": "Select the mouse movement type"
+      },
+      "move_speed": {
+        "title": "Mouse Move Speed"
+      }
+    }
+  },
   "Gui.keyboard": {
     "title": "Keyboard Input",
     "comment": "Simulate keyboard input of @{message} using @{keyboard_type} method",

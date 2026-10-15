@@ -565,6 +565,30 @@
       }
     }
   },
+  "ChatAI.single_turn_chat": {
+    "title": "单轮会话",
+    "comment": "大模型将对你提出的问题： @{query} 进行回答。",
+    "inputList": {
+      "query": {
+        "title": "用户输入",
+        "tip": "用户输入的问题。"
+      },
+      "model": {
+        "title": "模型选择",
+        "tip": "可以选择使用的模型。"
+      },
+      "custom_model": {
+        "title": "自定义模型ID"
+      }
+    },
+    "outputList": {
+      "single_chat_res": {
+        "title": "答案输出",
+        "subTitle": "AI生成",
+        "tip": "将大模型生成的答案输出为变量。"
+      }
+    }
+  },
   "options": {
     "Bool": {
       "True": "是",

@@ -270,6 +270,38 @@
       }
     }
   },
+  "PDF.convert_img_to_pdf": {
+    "title": "Convert Images to PDF",
+    "comment": "Convert images at @{image_files} to a PDF file and save it in the @{save_dir} folder",
+    "inputList": {
+      "image_files": {
+        "title": "Image Files"
+      },
+      "save_dir": {
+        "title": "PDF Save Path"
+      },
+      "new_file_name": {
+        "title": "PDF File Name"
+      },
+      "layout_type": {
+        "title": "PDF Layout"
+      },
+      "new_pwd_flag": {
+        "title": "Set Password"
+      },
+      "new_pwd": {
+        "title": "Password"
+      },
+      "exist_handle_type": {
+        "title": "Duplicate File Name Handling"
+      }
+    },
+    "outputList": {
+      "pdf_file_path": {
+        "title": "PDF File Path"
+      }
+    }
+  },
   "options": {
     "SelectRangeType": {
       "all": "All Pages",

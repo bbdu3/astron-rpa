@@ -1,61 +1,49 @@
 atomic:
   Network.ftp_create:
     icon: ftp-create-connection
-    helpManual: 建立一个文件服务器的FTP连接，并返回连接对象
     path:
     - /atomicTree/network/ftp
   Network.ftp_close:
     icon: ftp-close-connection
-    helpManual: 断开一个FTP连接，并返回断开结果
     path:
     - /atomicTree/network/ftp
   Network.get_work_dir:
     icon: get-work-directory
-    helpManual: 获取FTP对象当前工作目录
     path:
     - /atomicTree/network/ftp
   Network.change_working_dir:
     icon: change-work-directory
-    helpManual: 切换FTP连接当前工作目录到指定路径
     path:
     - /atomicTree/network/ftp
   Network.create_folder:
     icon: create-folder
-    helpManual: 在指定FTP连接下创建文件夹
     path:
     - /atomicTree/network/ftp
   Network.get_ftp_list:
     icon: get-folder
-    helpManual: 获取指定FTP连接下的全部文件/文件夹列表
     path:
     - /atomicTree/network/ftp
   Network.ftp_rename:
     icon: rename-folder
-    helpManual: 重命名FTP服务器上文件/文件夹
     path:
     - /atomicTree/network/ftp
   Network.ftp_upload:
     icon: upload-folder
-    helpManual: 将本地一个或多个文件/文件夹上传到至FTP指定目录下
     path:
     - /atomicTree/network/ftp
   Network.ftp_download:
     icon: download-folder
-    helpManual: 将FTP服务器上的多个文件/文件夹下载至本地
     path:
     - /atomicTree/network/ftp
   Network.ftp_delete:
     icon: delete-folder-ftp
-    helpManual: 删除FTP服务器中指定文件/文件夹
     path:
     - /atomicTree/network/ftp
   Network.http_request:
     icon: http-request
-    helpManual: 向指定url发送HTTP请求
     path:
     - /atomicTree/network/http
   Network.http_download:
     icon: http-download
-    helpManual: 下载指定URL@{url}的文件保存到指定目录@{dst_dir},并保存下载路径到变量@{http_download_path}
     path:
     - /atomicTree/network/http

@@ -12,13 +12,19 @@ class TreeNode:
         self.atomics = []
         self.children = {}
 
-    def add_atomic(self, atomic_data: dict[str, any]):
-        """添加原子能力"""
+    def add_atomic(self, atomic_data: dict[str, any], sort: int = 0):
+        """添加原子能力
+
+        Args:
+            atomic_data: 原子能力数据
+            sort: 排序权重，数值越小越靠前，默认为 0
+        """
         self.atomics.append(
             {
                 "key": atomic_data.get("key", ""),
-                "title": atomic_data.get("title", ""),
-                "icon": atomic_data.get("icon", ""),
+                "title": atomic_data.get("title", atomic_data.get("key", "")),
+                "icon": atomic_data.get("icon", atomic_data.get("key", "")),
+                "sort": sort,
             }
         )
 
@@ -28,8 +34,8 @@ class TreeNode:
 
     def to_dict(self) -> dict[str, any]:
         """转换为字典，叶子节点排在子树节点之前"""
-        # 排序 self.atomics，如果是原子能力，不包含子节点， 则排在子树节点之前
-        atomics = list(self.atomics)
+        # sort 稳定排序，相同权重时保留 config.yaml 中的声明顺序。
+        atomics = [dict(atomic) for atomic in sorted(self.atomics, key=lambda item: item.get("sort", 0))]
         for child in self.children.values():
             atomics.append(child.to_dict())
 
@@ -202,9 +208,25 @@ class TreeManager:
         # 准备原子能力数据
         atomic_data = {
             "key": atomic_key,
-            "title": config_data.get("title", atomic_meta.get("title", "")),
-            "icon": config_data.get("icon", atomic_meta.get("icon", "")),
+            "title": config_data.get("title", atomic_meta.get("title", atomic_key)),
+            "icon": config_data.get("icon", atomic_meta.get("icon", atomic_key)),
         }
+
+        # sort 配置格式为 "/tree/path/weight"，同一个 atomic 在不同 path 下
+        # 可以使用不同的排序权重，例如 "/atomicTree/code/for/100"。
+        sort_map: dict[str, int] = {}
+        for sort_item in config_data.get("sort", []) or []:
+            if not sort_item:
+                continue
+            parts = sort_item.rstrip("/").rsplit("/", 1)
+            if len(parts) != 2:
+                continue
+
+            node_path, weight = parts
+            try:
+                sort_map[node_path] = int(weight)
+            except ValueError:
+                continue
 
         # 添加到每个路径
         for path in path_list:
@@ -213,7 +235,7 @@ class TreeManager:
 
             node = self._get_or_create_node(path)
             if node:
-                node.add_atomic(atomic_data)
+                node.add_atomic(atomic_data, sort=sort_map.get(path, 0))
 
     def build_from_meta_and_config(self, meta_file: str = "meta.json", config_file: str = "config.yaml"):
         """
@@ -232,17 +254,19 @@ class TreeManager:
 
         # 读取 config.yaml
         from astronverse.actionlib.config import config
+        from astronverse.baseline.config.config import load_config
 
+        raw_config = load_config(config_file)
         config.set_config_file(config_file)
 
-        # 遍历所有原子能力
-        for atomic_key, atomic_meta in meta_data.items():
-            # 获取配置
-            config_data_dict = config.get("atomic", atomic_key)
-            if not config_data_dict:
+        # 按 config.yaml 中 atomic 的声明顺序遍历，避免继承 meta.json 的注册顺序。
+        config_atomics = (raw_config or {}).get("atomic") or {}
+        for atomic_key, config_data_dict in config_atomics.items():
+            atomic_meta = meta_data.get(atomic_key)
+            if atomic_meta is None:
                 continue
 
-            self.add_atomic_from_config(atomic_key, atomic_meta, config_data_dict)
+            self.add_atomic_from_config(atomic_key, atomic_meta, config_data_dict or {})
 
     def to_dict(self) -> dict[str, any]:
         """转换为字典，根据 path 中的根节点名称区分 atomicTree 和 atomicTreeExtend"""
