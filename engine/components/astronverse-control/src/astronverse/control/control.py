@@ -52,7 +52,9 @@ class Code:
         noAdvanced=True,
         inputList=[
             atomicMg.param("args1"),
-            atomicMg.param("condition", ),
+            atomicMg.param(
+                "condition",
+            ),
             atomicMg.param("args2", dynamics=_ARGS2_DYNAMICS),
         ],
     )
@@ -66,7 +68,9 @@ class Code:
         noAdvanced=True,
         inputList=[
             atomicMg.param("args1"),
-            atomicMg.param("condition", ),
+            atomicMg.param(
+                "condition",
+            ),
             atomicMg.param("args2", dynamics=_ARGS2_DYNAMICS),
         ],
     )
@@ -119,7 +123,9 @@ class Code:
         pass
 
     @staticmethod
-    @atomicMg.atomic("Code", noAdvanced=True, outputList=[atomicMg.param("index", types="Int"), atomicMg.param("item", types="Any")])
+    @atomicMg.atomic(
+        "Code", noAdvanced=True, outputList=[atomicMg.param("index", types="Int"), atomicMg.param("item", types="Any")]
+    )
     def ForList(list_obj: list):
         """列表For循环。"""
         pass
@@ -131,7 +137,9 @@ class Code:
         pass
 
     @staticmethod
-    @atomicMg.atomic("Code", noAdvanced=True, outputList=[atomicMg.param("key", types="Any"), atomicMg.param("value", types="Any")])
+    @atomicMg.atomic(
+        "Code", noAdvanced=True, outputList=[atomicMg.param("key", types="Any"), atomicMg.param("value", types="Any")]
+    )
     def ForDict(dicts: dict):
         """字典For循环。"""
         pass

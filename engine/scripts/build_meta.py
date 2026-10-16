@@ -64,7 +64,7 @@ def parse_pyproject() -> list[str]:
             # 仅处理 sys_platform == '...' 形式
             m = re.search(r"sys_platform\s*==\s*['\"](\w+)['\"]", marker)
             if m:
-                platform_allowed[pkg_name] = (m.group(1) == current_platform)
+                platform_allowed[pkg_name] = m.group(1) == current_platform
         else:
             pkg_name = dep.strip().rstrip()
             platform_allowed[pkg_name] = True
@@ -234,13 +234,11 @@ class LocalManager:
         # 若节点存在 sort 字段，优先使用节点的sort值进行排序，按数值大小从小到大排序
         merged = list(target_dict.values())
         order_index = self._get_frame_order_index()
-        merged = [
-            (idx, node) for idx, node in enumerate(merged)
-        ]
+        merged = [(idx, node) for idx, node in enumerate(merged)]
         merged.sort(
             key=lambda item: (
                 0 if item[1].get("sort") is not None else 1,
-                item[1].get("sort", float('inf')),
+                item[1].get("sort", float("inf")),
                 0 if item[1].get("key") not in order_index else 1,
                 order_index.get(item[1].get("key"), item[0]),
             )
@@ -385,7 +383,7 @@ class LocalManager:
             "types": types_config,
             "commonAdvancedParameter": common_advanced,
         }
-        
+
 
 class JsonUtils:
     """Utility class for JSON file operations and data processing"""

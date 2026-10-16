@@ -15,6 +15,7 @@ options 区段（全局复用枚举标签）:
         "TypeName": { "value1": "label1", ... }
     }
 """
+
 import copy
 import json
 import pathlib
@@ -54,7 +55,7 @@ def apply_locale(meta: dict, locale: dict) -> dict:
         # locale 格式: loc["inputList"] / loc["outputList"] 为 {field_key: {title, tip, subTitle}}
         for list_key in ("inputList", "outputList"):
             list_loc: dict = loc.get(list_key, {})
-            for field in (action.get(list_key) or []):
+            for field in action.get(list_key) or []:
                 fl: dict = list_loc.get(field["key"], {})
                 if "title" in fl:
                     field["title"] = fl["title"]
@@ -65,7 +66,7 @@ def apply_locale(meta: dict, locale: dict) -> dict:
 
                 # 按 types 类型名全局复用 options label
                 type_opts: dict = options_loc.get(field.get("types") or "", {})
-                for opt in (field.get("options") or []):
+                for opt in field.get("options") or []:
                     if opt["value"] in type_opts:
                         opt["label"] = type_opts[opt["value"]]
 
@@ -92,7 +93,7 @@ def apply_types_locale(types_data: dict, locale: dict) -> dict:
             type_entry["desc"] = loc["desc"]
         if "template" in loc:
             type_entry["template"] = loc["template"]
-        for func in (type_entry.get("funcList") or []):
+        for func in type_entry.get("funcList") or []:
             func_key = func.get("key", "")
             func_loc: dict = loc.get(func_key, {})
             if "funcDesc" in func_loc:
