@@ -4,7 +4,7 @@ import copy
 # 类型（types）骨架：只含结构和非可译字段
 #   - key, src, version, channel
 #   - template（仅对语言无关的字面量保留，如数字、路径、日期、URL）
-#   - funclist 中只含 key、resType、useSrc（均非可译）
+#   - funcList 中只含 key、resType、useSrc（均非可译）
 # 可译文本（desc、locale 相关 template、funcDesc、resDesc）
 # 统一通过 TRANSLATIONS 按 locale 查表注入
 # -------------------------------------------------------------------
@@ -14,7 +14,7 @@ TYPES_FRAME: dict[str, any] = {
         "src": "",
         "version": "1",
         "channel": "global",
-        "funclist": [],
+        "funcList": [],
     },
     "Float": {
         "key": "Float",
@@ -22,7 +22,7 @@ TYPES_FRAME: dict[str, any] = {
         "version": "1",
         "channel": "global,main",
         "template": "10.1",
-        "funclist": [
+        "funcList": [
             {"key": "Float.toStr", "resType": "Str", "useSrc": "str(@{self:self})"},
             {"key": "Float.toInt", "resType": "Int", "useSrc": "int(@{self:self})"},
         ],
@@ -33,7 +33,7 @@ TYPES_FRAME: dict[str, any] = {
         "version": "1",
         "channel": "global,main",
         "template": "10",
-        "funclist": [
+        "funcList": [
             {"key": "Int.toStr", "resType": "Str", "useSrc": "str(@{self:self})"},
         ],
     },
@@ -42,41 +42,41 @@ TYPES_FRAME: dict[str, any] = {
         "src": "",
         "version": "1",
         "channel": "global,main",
-        "funclist": [],
+        "funcList": [],
     },
     "Str": {
         "key": "Str",
         "src": "",
         "version": "1",
         "channel": "global,main",
-        "funclist": [
+        "funcList": [
             {"key": "Str.strip", "resType": "Str", "useSrc": "@{self:self}.strip()"},
             {"key": "Str.toInt", "resType": "Int", "useSrc": "int(@{self:self})"},
             {"key": "Str.toFloat", "resType": "Float", "useSrc": "float(@{self:self})"},
         ],
     },
-    "list": {
-        "key": "list",
+    "List": {
+        "key": "List",
         "src": "",
         "version": "1",
         "channel": "global",
         "template": "[1,2,3]",
-        "funclist": [
-            {"key": "list.get", "resType": "Any", "useSrc": "@{self:self}[@(p1:int)]"},
-            {"key": "list.getEnd", "resType": "Any", "useSrc": "@{self:self}[-@(p1:int)]"},
-            {"key": "list.getLen", "resType": "Int", "useSrc": "len(@{self:self})"},
-            {"key": "list.getSlice", "resType": "list", "useSrc": "@{self:self}[@(p1:int):@(p2:int)]"},
+        "funcList": [
+            {"key": "List.get", "resType": "Any", "useSrc": "@{self:self}[@(p1:int)]"},
+            {"key": "List.getEnd", "resType": "Any", "useSrc": "@{self:self}[-@(p1:int)]"},
+            {"key": "List.getLen", "resType": "Int", "useSrc": "len(@{self:self})"},
+            {"key": "List.getSlice", "resType": "List", "useSrc": "@{self:self}[@(p1:int):@(p2:int)]"},
         ],
     },
-    "dict": {
-        "key": "dict",
+    "Dict": {
+        "key": "Dict",
         "src": "",
         "version": "1",
         "channel": "global",
-        "funclist": [
-            {"key": "dict.get", "resType": "Any", "useSrc": '@{self:self}["@(p1:str)"]'},
-            # 注意：此条 key 与 list.getLen 相同，与原 tree_frame.json 保持一致
-            {"key": "list.getLen", "resType": "Int", "useSrc": "len(@{self:self})"},
+        "funcList": [
+            {"key": "Dict.get", "resType": "Any", "useSrc": '@{self:self}["@(p1:str)"]'},
+            # 注意：此条 key 与 List.getLen 相同，与原 tree_frame.json 保持一致
+            {"key": "List.getLen", "resType": "Int", "useSrc": "len(@{self:self})"},
         ],
     },
     "PATH": {
@@ -85,7 +85,7 @@ TYPES_FRAME: dict[str, any] = {
         "version": "1",
         "channel": "global,main",
         "template": "C://Users",
-        "funclist": [
+        "funcList": [
             {"key": "PATH.root", "resType": "Str", "useSrc": "@{self:self}.root()"},
             {"key": "PATH.directory", "resType": "Str", "useSrc": "@{self:self}.directory()"},
             {"key": "PATH.file_name", "resType": "Str", "useSrc": "@{self:self}.file_name()"},
@@ -103,7 +103,7 @@ TYPES_FRAME: dict[str, any] = {
         "version": "1",
         "channel": "global,main",
         "template": "C://Users",
-        "funclist": [
+        "funcList": [
             {"key": "DIRPATH.root", "resType": "Str", "useSrc": "@{self:self}.root()"},
             {"key": "DIRPATH.directory", "resType": "Str", "useSrc": "@{self:self}.directory()"},
         ],
@@ -114,7 +114,7 @@ TYPES_FRAME: dict[str, any] = {
         "version": "1",
         "channel": "global,main",
         "template": "2025-01-10 17:00:00",
-        "funclist": [
+        "funcList": [
             {"key": "Date.get_time_year", "resType": "Int", "useSrc": "@{self:self}.get_time_year()"},
             {"key": "Date.get_time_month", "resType": "Int", "useSrc": "@{self:self}.get_time_month()"},
             {"key": "Date.get_time_day", "resType": "Int", "useSrc": "@{self:self}.get_time_day()"},
@@ -131,35 +131,35 @@ TYPES_FRAME: dict[str, any] = {
         "version": "1",
         "channel": "global",
         "template": "https://www.iflytek.com/",
-        "funclist": [],
+        "funcList": [],
     },
     "Pick": {
         "key": "Pick",
         "src": "",
         "version": "1",
         "channel": "",
-        "funclist": [],
+        "funcList": [],
     },
     "WebPick": {
         "key": "WebPick",
         "src": "",
         "version": "1",
         "channel": "global",
-        "funclist": [],
+        "funcList": [],
     },
     "WinPick": {
         "key": "WinPick",
         "src": "",
         "version": "1",
         "channel": "global",
-        "funclist": [],
+        "funcList": [],
     },
     "IMGPick": {
         "key": "IMGPick",
         "src": "",
         "version": "1",
         "channel": "global",
-        "funclist": [],
+        "funcList": [],
     },
     "Password": {
         "key": "Password",
@@ -167,28 +167,28 @@ TYPES_FRAME: dict[str, any] = {
         "version": "1",
         "channel": "global,main",
         "template": "******",
-        "funclist": [],
+        "funcList": [],
     },
     "FeishuBaseInstance": {
         "key": "FeishuBaseInstance",
         "src": "",
         "version": "1",
         "channel": "",
-        "funclist": [],
+        "funcList": [],
     },
     "DialogResult": {
         "key": "DialogResult",
         "src": "",
         "version": "1",
         "channel": "",
-        "funclist": [],
+        "funcList": [],
     },
     "Browser": {
         "key": "Browser",
         "src": "rpabrowser.browser.Browser()",
         "version": "1.0.1",
         "channel": "global",
-        "funclist": [
+        "funcList": [
             {"key": "Browser.get_url", "resType": "Str", "useSrc": "@{self:self}.get_url()"},
             {"key": "Browser.get_title", "resType": "Str", "useSrc": "@{self:self}.get_title()"},
         ],
@@ -198,14 +198,14 @@ TYPES_FRAME: dict[str, any] = {
         "src": "astronverse.word.docx_obj.DocumentObject()",
         "version": "1.0.1",
         "channel": "global",
-        "funclist": [],
+        "funcList": [],
     },
     "ExcelObj": {
         "key": "ExcelObj",
         "src": "astronverse.excel.excel_obj.ExcelObj()",
         "version": "1.0.1",
         "channel": "global",
-        "funclist": [
+        "funcList": [
             {"key": "ExcelObj.get_full_name", "resType": "Str", "useSrc": "@{self:self}.get_full_name()"},
             {"key": "ExcelObj.get_first_free_row", "resType": "Int", "useSrc": "@{self:self}.get_first_free_row()"},
         ],
@@ -219,7 +219,7 @@ TYPES_FRAME: dict[str, any] = {
 #   type_key  → {"desc": ..., "template": ...}      # 类型级翻译
 #   func_key  → {"funcDesc": ..., "resDesc": ...}   # 方法级翻译
 #
-# func_key 格式：{TypeKey}.{method_name}，与 TYPES_FRAME.funclist[].key 对应
+# func_key 格式：{TypeKey}.{method_name}，与 TYPES_FRAME.funcList[].key 对应
 # -------------------------------------------------------------------
 TRANSLATIONS: dict[str, dict[str, any]] = {
     "zh_CN": {
@@ -229,8 +229,8 @@ TRANSLATIONS: dict[str, dict[str, any]] = {
         "Int": {"desc": "整数"},
         "Bool": {"desc": "布尔值", "template": "true或者false"},
         "Str": {"desc": "字符串", "template": "\u201c你好\u201d"},
-        "list": {"desc": "列表"},
-        "dict": {"desc": "字典", "template": {"name": "小明"}},
+        "List": {"desc": "列表"},
+        "Dict": {"desc": "字典", "template": {"name": "小明"}},
         "PATH": {"desc": "文件路径"},
         "DIRPATH": {"desc": "文件夹路径"},
         "Date": {"desc": "日期时间"},
@@ -252,11 +252,11 @@ TRANSLATIONS: dict[str, dict[str, any]] = {
         "Str.strip": {"funcDesc": "删除两端空格", "resDesc": "字符串"},
         "Str.toInt": {"funcDesc": "转整数", "resDesc": "整数"},
         "Str.toFloat": {"funcDesc": "转数值", "resDesc": "数值"},
-        "list.get": {"funcDesc": "列表第@{p1:int}项", "resDesc": "任意值"},
-        "list.getEnd": {"funcDesc": "列表倒数第@{p1:int}项", "resDesc": "任意值"},
-        "list.getLen": {"funcDesc": "列表长度", "resDesc": "整数"},
-        "list.getSlice": {"funcDesc": "列表第@{p1:int}项到第@{p2:int}项", "resDesc": "列表"},
-        "dict.get": {"funcDesc": "字典键@{p1:str}的值", "resDesc": "任意值"},
+        "List.get": {"funcDesc": "列表第@{p1:int}项", "resDesc": "任意值"},
+        "List.getEnd": {"funcDesc": "列表倒数第@{p1:int}项", "resDesc": "任意值"},
+        "List.getLen": {"funcDesc": "列表长度", "resDesc": "整数"},
+        "List.getSlice": {"funcDesc": "列表第@{p1:int}项到第@{p2:int}项", "resDesc": "列表"},
+        "Dict.get": {"funcDesc": "字典键@{p1:str}的值", "resDesc": "任意值"},
         "PATH.root": {"funcDesc": "根目录", "resDesc": "字符串"},
         "PATH.directory": {"funcDesc": "父目录", "resDesc": "字符串"},
         "PATH.file_name": {"funcDesc": "文件名称", "resDesc": "字符串"},
@@ -284,8 +284,8 @@ TRANSLATIONS: dict[str, dict[str, any]] = {
         "Int": {"desc": "Integer"},
         "Bool": {"desc": "Boolean", "template": "true or false"},
         "Str": {"desc": "String", "template": '"Hello"'},
-        "list": {"desc": "list"},
-        "dict": {"desc": "dictionary", "template": {"name": "John"}},
+        "List": {"desc": "list"},
+        "Dict": {"desc": "dictionary", "template": {"name": "John"}},
         "PATH": {"desc": "File Path"},
         "DIRPATH": {"desc": "Folder Path"},
         "Date": {"desc": "Date & Time"},
@@ -307,11 +307,11 @@ TRANSLATIONS: dict[str, dict[str, any]] = {
         "Str.strip": {"funcDesc": "Strip Whitespace", "resDesc": "String"},
         "Str.toInt": {"funcDesc": "To Integer", "resDesc": "Integer"},
         "Str.toFloat": {"funcDesc": "To Number", "resDesc": "Number"},
-        "list.get": {"funcDesc": "Item @{p1:int}", "resDesc": "any Value"},
-        "list.getEnd": {"funcDesc": "Last @{p1:int}th Item", "resDesc": "any Value"},
-        "list.getLen": {"funcDesc": "list Length", "resDesc": "Integer"},
-        "list.getSlice": {"funcDesc": "Items @{p1:int} to @{p2:int}", "resDesc": "list"},
-        "dict.get": {"funcDesc": "Value of Key @{p1:str}", "resDesc": "any Value"},
+        "List.get": {"funcDesc": "Item @{p1:int}", "resDesc": "any Value"},
+        "List.getEnd": {"funcDesc": "Last @{p1:int}th Item", "resDesc": "any Value"},
+        "List.getLen": {"funcDesc": "list Length", "resDesc": "Integer"},
+        "List.getSlice": {"funcDesc": "Items @{p1:int} to @{p2:int}", "resDesc": "list"},
+        "Dict.get": {"funcDesc": "Value of Key @{p1:str}", "resDesc": "any Value"},
         "PATH.root": {"funcDesc": "Root Directory", "resDesc": "String"},
         "PATH.directory": {"funcDesc": "Parent Directory", "resDesc": "String"},
         "PATH.file_name": {"funcDesc": "File Name", "resDesc": "String"},
@@ -361,7 +361,7 @@ def get_types_config(locale: str = "zh_CN") -> dict[str, any]:
             item["template"] = type_trans["template"]
 
         # 注入方法级翻译
-        for func in item.get("funclist", []):
+        for func in item.get("funcList", []):
             func_key = func.get("key", "")
             func_trans = t.get(func_key, {})
             if "funcDesc" in func_trans:

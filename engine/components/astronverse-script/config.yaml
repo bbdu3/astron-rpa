@@ -12,3 +12,4 @@ atomic:
     icon: custom-component
     path:
     - /atomicTree/process
+    hidden: true
