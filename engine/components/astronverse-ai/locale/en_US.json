@@ -1,4 +1,29 @@
 {
+  "SemanticAI.choose": {
+    "title": "Semantic Choice",
+    "comment": "Classify text according to the instruction @{instruction} and output the selected option or abstain.",
+    "inputList": {
+      "instruction": {
+        "title": "Instruction",
+        "tip": "Describe the classification criteria; return abstain when the choice cannot be determined."
+      },
+      "text": {
+        "title": "Text to Classify",
+        "tip": "Enter text or reference text extracted from a web page."
+      },
+      "options": {
+        "title": "Candidate List",
+        "tip": "Reference a List variable. Each item must be a dictionary containing id and label; ids must be unique and cannot be __abstain__."
+      }
+    },
+    "outputList": {
+      "semantic_result": {
+        "title": "Semantic Choice Result",
+        "subTitle": "AI Generated",
+        "tip": "The dictionary contains status, selected_id, and confidence; network or service errors are handled as node errors."
+      }
+    }
+  },
   "Agent.call_dify": {
     "title": "Call Dify Workflow",
     "comment": "Call Dify workflow @{app_token} to complete your specified task",
