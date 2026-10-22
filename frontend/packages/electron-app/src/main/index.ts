@@ -38,15 +38,26 @@ protocol.registerSchemesAsPrivileged([
 function createMainWindow() {
   const mainWindow = createWindow()
   const url = windowBaseUrl + 'boot.html'
+  const maxRetryCount = 5
+  let retryCount = 0
   logger.info(`app load url: ${url}`)
 
-  mainWindow.loadURL(url).then(() => electronInfo(mainWindow)).catch(() => {
-    logger.error('Failed to load URL')
-    logger.info('Retry loading URL after 10 seconds...')
-    setTimeout(() => {
-      mainWindow.loadURL(url).then(() => electronInfo(mainWindow))
-    }, 10 * 1000)
-  })
+  function loadMainWindow() {
+    if (mainWindow.isDestroyed()) return
+
+    mainWindow.loadURL(url).then(() => electronInfo(mainWindow)).catch(() => {
+      if (app.isPackaged || retryCount >= maxRetryCount) {
+        logger.error('Failed to load URL')
+        return
+      }
+
+      retryCount++
+      logger.error(`Failed to load URL, retrying in 10 seconds (${retryCount}/${maxRetryCount})`)
+      setTimeout(loadMainWindow, 10 * 1000)
+    })
+  }
+
+  loadMainWindow()
   mainWindow.once('ready-to-show', () => {
     WindowStack.set('main', mainWindow)
     mainWindow.show()

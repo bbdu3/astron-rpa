@@ -1,0 +1,294 @@
+name: Build and Release Astron RPA Desktop
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing Release to upload to (leave empty to only build and store workflow artifacts)'
+        required: false
+        default: ''
+        type: string
+      edition:
+        description: 'Frontend version configuration (maps to web-app/.env.<edition>)'
+        required: false
+        default: 'saas'
+        type: choice
+        options:
+          - opensource
+          - saas
+          - enterprise
+      remote_addr:
+        description: 'SaaS service base URL override (repository variable SAAS_REMOTE_ADDR is preferred)'
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: release-desktop-${{ github.event.release.tag_name || inputs.tag || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write # Required to upload Release assets
+
+env:
+  UV_VERSION: '0.8.18'
+  PYTHON_VERSION: '3.13.2'
+  NODE_VERSION: '24.21.0'
+  PNPM_VERSION: '12.3.4'
+  SWIG_VERSION: '4.1.1'
+  SEVENZ_EXE: 'C:\Program Files\7-Zip\7z.exe' # Preinstalled on windows-latest
+
+jobs:
+  build-windows:
+    name: 🪟 Build Windows Installer
+    runs-on: windows-latest
+    timeout-minutes: 120
+    env:
+      # Pass external inputs through environment variables instead of embedding expressions in scripts.
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      EDITION: ${{ inputs.edition || 'saas' }}
+      # Configure the repository or environment variable SAAS_REMOTE_ADDR for release-triggered builds.
+      # workflow_dispatch.remote_addr can override it for a one-off manual build.
+      RPA_REMOTE_ADDR: ${{ inputs.remote_addr || vars.SAAS_REMOTE_ADDR || secrets.SAAS_REMOTE_ADDR }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      # ------------------------------------------------------------------
+      # Resolve the version and override electron-app/package.json when triggered by a Release.
+      # ------------------------------------------------------------------
+      - name: Resolve version
+        id: version
+        shell: pwsh
+        run: |
+          $pkg = Get-Content frontend/packages/electron-app/package.json -Raw | ConvertFrom-Json
+          $version = $pkg.version
+          if ($env:RELEASE_TAG) {
+            $version = $env:RELEASE_TAG -replace '^v', ''
+            if ($version -notmatch '^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') {
+              Write-Error "Tag '$env:RELEASE_TAG' is not valid semver (for example, v1.2.0 or v1.2.0-beta.1)"
+              exit 1
+            }
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "🏷️ Version: $version  Edition: $env:EDITION  Tag: $env:RELEASE_TAG"
+
+      - name: Validate SaaS service address
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:RPA_REMOTE_ADDR)) {
+            Write-Error "RPA_REMOTE_ADDR is empty. Configure the SAAS_REMOTE_ADDR repository variable or secret, or provide workflow_dispatch.remote_addr."
+            exit 1
+          }
+
+      # ------------------------------------------------------------------
+      # Build the engine with build.bat and produce resources/python_core.7z.
+      # ------------------------------------------------------------------
+      - name: Setup Python
+        id: python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          architecture: x64
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: engine/uv.lock
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup MSVC developer environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Install SWIG
+        shell: pwsh
+        env:
+          SWIG_VERSION: ${{ env.SWIG_VERSION }}
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP "swigwin-$env:SWIG_VERSION.zip"
+          $extractRoot = Join-Path $env:RUNNER_TEMP "swig-$env:SWIG_VERSION"
+          $uri = "https://sourceforge.net/projects/swig/files/swigwin/swigwin-$env:SWIG_VERSION/swigwin-$env:SWIG_VERSION.zip/download"
+
+          New-Item -ItemType Directory -Path $extractRoot -Force | Out-Null
+          if (-not (Test-Path -LiteralPath $env:SEVENZ_EXE)) {
+            Write-Error "7-Zip was not found: $env:SEVENZ_EXE"
+            exit 1
+          }
+
+          & curl.exe --fail --location --retry 3 --retry-delay 2 --output $archive $uri
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "Failed to download SWIG archive: $uri"
+            exit $LASTEXITCODE
+          }
+
+          $signature = [System.IO.File]::ReadAllBytes($archive)
+          if ($signature.Count -lt 4 -or $signature[0] -ne 0x50 -or $signature[1] -ne 0x4B -or $signature[2] -ne 0x03 -or $signature[3] -ne 0x04) {
+            Write-Error "Downloaded SWIG file is not a valid ZIP archive: $archive"
+            exit 1
+          }
+
+          & $env:SEVENZ_EXE x $archive "-o$extractRoot" -y
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "Failed to extract SWIG archive: $archive"
+            exit $LASTEXITCODE
+          }
+
+          $swigExe = Get-ChildItem -LiteralPath $extractRoot -Filter 'swig.exe' -File -Recurse | Select-Object -First 1
+          if ($null -eq $swigExe) {
+            Write-Error "SWIG executable was not found under: $extractRoot"
+            exit 1
+          }
+
+          $swigHome = $swigExe.DirectoryName
+          $swigHome | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          & $swigExe.FullName -version
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Verify native build toolchain
+        shell: pwsh
+        run: |
+          foreach ($command in @('swig', 'msbuild', 'cl')) {
+            if (-not (Get-Command $command -ErrorAction SilentlyContinue)) {
+              Write-Error "Required native build tool was not found: $command"
+              exit 1
+            }
+          }
+          swig -version
+          msbuild -version
+
+      - name: Build engine (build.bat --skip-frontend)
+        shell: pwsh
+        env:
+          PYTHON_EXE: ${{ steps.python.outputs.python-path }}
+        run: |
+          & .\build.bat --skip-frontend --python-exe "$env:PYTHON_EXE" --sevenz-exe "$env:SEVENZ_EXE"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if (-not (Test-Path resources/python_core.7z)) {
+            Write-Error "resources/python_core.7z was not generated"
+            exit 1
+          }
+          Get-Item resources/python_core.7z | Format-Table Name, Length
+
+      # ------------------------------------------------------------------
+      # Run frontend build steps explicitly so electron-builder receives --publish never.
+      # ------------------------------------------------------------------
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Apply edition config (.env + resources/conf.yaml)
+        working-directory: frontend/packages/web-app
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:RPA_REMOTE_ADDR)) {
+            Write-Error "RPA_REMOTE_ADDR is empty. Configure the SAAS_REMOTE_ADDR GitHub variable or provide workflow_dispatch.remote_addr."
+            exit 1
+          }
+          node ./env.js "$env:EDITION"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Set app version
+        working-directory: frontend/packages/electron-app
+        shell: pwsh
+        env:
+          APP_VERSION: ${{ steps.version.outputs.version }}
+        run: npm pkg set "version=$env:APP_VERSION"
+
+      - name: Build electron app (sdk + typecheck + main + web-app)
+        working-directory: frontend/packages/electron-app
+        run: pnpm run build
+
+      - name: Package Windows installer
+        working-directory: frontend/packages/electron-app
+        shell: pwsh
+        # Do not pass GH_TOKEN, and explicitly use --publish never to prevent automatic publishing during tag builds.
+        # Use ASCII artifact names because GitHub Release can rewrite non-ASCII attachment names and break latest.yml paths.
+        run: |
+          pnpm exec electron-builder --win --x64 --publish never '-c.artifactName=astron-rpa-${version}-${arch}.${ext}'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Collect artifacts and checksums
+        id: collect
+        working-directory: frontend/packages/electron-app/dist
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem -File | Where-Object {
+            $_.Name -like '*.exe' -or $_.Name -like '*.blockmap' -or $_.Name -eq 'latest.yml'
+          }
+          if (-not ($files | Where-Object { $_.Name -like '*.exe' })) {
+            Write-Error "No installer was found in the dist directory"
+            exit 1
+          }
+          $files | ForEach-Object {
+            "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
+          } | Set-Content -Encoding utf8NoBOM SHA256SUMS.txt
+          Get-Content SHA256SUMS.txt
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: astron-rpa-windows-${{ steps.version.outputs.version }}
+          path: |
+            frontend/packages/electron-app/dist/*.exe
+            frontend/packages/electron-app/dist/*.blockmap
+            frontend/packages/electron-app/dist/latest.yml
+            frontend/packages/electron-app/dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload to GitHub Release
+        if: env.RELEASE_TAG != ''
+        working-directory: frontend/packages/electron-app/dist
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $files = @(Get-ChildItem -File | Where-Object {
+            $_.Name -like '*.exe' -or $_.Name -like '*.blockmap' -or
+            $_.Name -eq 'latest.yml' -or $_.Name -eq 'SHA256SUMS.txt'
+          } | ForEach-Object { $_.Name })
+          gh release upload "$env:RELEASE_TAG" @files --clobber --repo "$env:GITHUB_REPOSITORY"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Summary
+        if: always()
+        shell: pwsh
+        env:
+          APP_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          $sums = if (Test-Path frontend/packages/electron-app/dist/SHA256SUMS.txt) {
+            Get-Content frontend/packages/electron-app/dist/SHA256SUMS.txt -Raw
+          } else { '(no artifacts)' }
+          @"
+          ## 🖥️ Desktop Build
+          - Version: ``$env:APP_VERSION``
+          - Edition: ``$env:EDITION``
+          - Release: ``$(if ($env:RELEASE_TAG) { $env:RELEASE_TAG } else { 'not uploaded (workflow artifact only)' })``
+
+          ``````
+          $sums
+          ``````
+          "@ >> $env:GITHUB_STEP_SUMMARY

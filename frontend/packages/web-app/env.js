@@ -84,6 +84,28 @@ function writeYaml(path, obj) {
   writeFileSync(path, YAML.stringify(obj), 'utf-8');
 }
 
+function getRemoteAddrOverride() {
+  const value = (process.env.RPA_REMOTE_ADDR || '').trim();
+  if (!value) return undefined;
+
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch (e) {
+    throw new Error(`RPA_REMOTE_ADDR is not a valid URL: ${e.message}`);
+  }
+
+  if (!['http:', 'https:'].includes(parsed.protocol) ||
+      !parsed.hostname || parsed.username || parsed.password ||
+      parsed.search || parsed.hash) {
+    throw new Error(
+      'RPA_REMOTE_ADDR must be an HTTP or HTTPS server address without credentials, query parameters, or fragments',
+    );
+  }
+
+  return value.endsWith('/') ? value : `${value}/`;
+}
+
 function main() {
   const [, , mode = 'opensource'] = process.argv;
   const ENV_FILE = join(__dirname, '.env');
@@ -106,9 +128,15 @@ function main() {
 
   const confFromEnv = envLinesToObj(tplLines);
   const existingConf = readYamlOrEmpty(CONF_YAML);
-  const mergedConf = { ...existingConf, ...confFromEnv };
+  const remoteAddr = getRemoteAddrOverride();
+  const mergedConf = {
+    ...existingConf,
+    ...confFromEnv,
+    ...(remoteAddr ? { remote_addr: remoteAddr } : {}),
+  };
   writeYaml(CONF_YAML, mergedConf);
   console.log(`✅  ${CONF_YAML} 已更新`);
+  if (remoteAddr) console.log(`✅  remote_addr 已使用 RPA_REMOTE_ADDR 覆盖`);
 }
 
 try {
