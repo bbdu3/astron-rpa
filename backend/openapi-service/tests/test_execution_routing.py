@@ -134,6 +134,176 @@ async def test_new_connection_fences_old_disconnect_and_stale_messages(broker):
 
 
 @pytest.mark.asyncio
+async def test_same_worker_replacement_closes_old_socket_without_losing_new_route(broker):
+    router = await start(broker)
+    old_conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    new_conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    try:
+        old = await router.register("owner", old_conn)
+        new = await router.register("owner", new_conn)
+        old_conn.ws.close.assert_awaited_once()
+        new_conn.ws.close.assert_not_awaited()
+        await router.unregister("owner", old)
+        assert broker.values[route_key("owner")] == new
+        assert router.local["owner"] == (new, new_conn)
+        await router._handle(
+            {"owner": "owner", "generation": old, "deadline": time.time() + 1, "data": {"action": "start"}}
+        )
+        router.manager.local_execution_request.assert_not_awaited()
+        await router.request("owner", {"action": "capabilities"}, 1)
+        assert router.manager.local_execution_request.call_args.kwargs == {"expected": new_conn}
+        await router.unregister("owner", new)
+        assert not router.local
+        assert route_key("owner") not in broker.values
+    finally:
+        await router.stop()
+
+
+@pytest.mark.asyncio
+async def test_same_owner_registration_serializes_broker_replies_without_blocking_other_owners(broker):
+    router = await start(broker)
+    entered, release = asyncio.Event(), asyncio.Event()
+    original_set = router.redis.set
+    calls = []
+
+    async def delayed_set(key, generation, **kwargs):
+        calls.append(key)
+        await original_set(key, generation, **kwargs)
+        if key == route_key("owner") and calls.count(key) == 1:
+            entered.set()
+            await release.wait()
+
+    router.redis.set = delayed_set
+    old_conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    new_conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    tasks = [asyncio.create_task(router.register("owner", old_conn))]
+    try:
+        await asyncio.wait_for(entered.wait(), 1)
+        tasks.append(asyncio.create_task(router.register("owner", new_conn)))
+        await asyncio.sleep(0)
+        assert calls.count(route_key("owner")) == 1
+        await asyncio.wait_for(router.register("other", object()), 1)
+        release.set()
+        old, new = await asyncio.gather(*tasks)
+        await router.unregister("owner", old)
+        assert broker.values[route_key("owner")] == new
+        assert router.local["owner"] == (new, new_conn)
+        assert not router.registration_locks
+        old_conn.ws.close.assert_awaited_once()
+        new_conn.ws.close.assert_not_awaited()
+    finally:
+        release.set()
+        await asyncio.gather(*tasks, return_exceptions=True)
+        await router.stop()
+
+
+@pytest.mark.asyncio
+async def test_failed_replacement_keeps_existing_socket_and_route(broker):
+    router = await start(broker)
+    conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    try:
+        old = await router.register("owner", conn)
+        router.redis.set = AsyncMock(side_effect=ConnectionError("broker unavailable"))
+        with pytest.raises(ConnectionError):
+            await router.register("owner", object())
+        assert router.local["owner"] == (old, conn)
+        assert broker.values[route_key("owner")] == old
+        conn.ws.close.assert_not_awaited()
+        assert not router.registration_locks
+    finally:
+        await router.stop()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("close_fails", [False, True])
+async def test_old_socket_cleanup_cannot_unregister_newer_reconnect(broker, close_fails):
+    router = await start(broker)
+    entered, release = asyncio.Event(), asyncio.Event()
+    old_conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    middle = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    latest = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    task = None
+    try:
+        old = await router.register("owner", old_conn)
+
+        async def close():
+            entered.set()
+            await release.wait()
+            await router.unregister("owner", old)
+            if close_fails:
+                raise OSError("already disconnected")
+
+        old_conn.ws.close.side_effect = close
+        task = asyncio.create_task(router.register("owner", middle))
+        await asyncio.wait_for(entered.wait(), 1)
+        new = await router.register("owner", latest)
+        release.set()
+        superseded = await task
+        await router.unregister("owner", superseded)
+        assert router.local["owner"] == (new, latest)
+        assert broker.values[route_key("owner")] == new
+        middle.ws.close.assert_awaited_once()
+        latest.ws.close.assert_not_awaited()
+    finally:
+        release.set()
+        if task:
+            await asyncio.gather(task, return_exceptions=True)
+        await router.stop()
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("reconnect_again", [False, True])
+async def test_cancelled_replacement_releases_only_its_own_route(broker, reconnect_again):
+    router = await start(broker)
+    entered = asyncio.Event()
+
+    async def blocked_close():
+        entered.set()
+        await asyncio.Event().wait()
+
+    old_conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock(side_effect=blocked_close)))
+    new_conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock()))
+    task = None
+    try:
+        await router.register("owner", old_conn)
+        task = asyncio.create_task(router.register("owner", new_conn))
+        await asyncio.wait_for(entered.wait(), 1)
+        if reconnect_again:
+            latest_conn = object()
+            latest = await router.register("owner", latest_conn)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        assert not router.registration_locks
+        if reconnect_again:
+            assert router.local["owner"] == (latest, latest_conn)
+            assert broker.values[route_key("owner")] == latest
+        else:
+            assert not router.local
+            assert route_key("owner") not in broker.values
+    finally:
+        if task:
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+        await router.stop()
+
+
+@pytest.mark.asyncio
+async def test_replacement_close_is_bounded(broker):
+    router = await start(broker)
+    conn = SimpleNamespace(ws=SimpleNamespace(close=AsyncMock(side_effect=asyncio.Event().wait)))
+    try:
+        await router.register("owner", conn)
+        latest = object()
+        new = await asyncio.wait_for(router.register("owner", latest), 3)
+        assert router.local["owner"] == (new, latest)
+        assert broker.values[route_key("owner")] == new
+        conn.ws.close.assert_awaited_once()
+    finally:
+        await router.stop()
+
+
+@pytest.mark.asyncio
 async def test_missing_route_and_lost_worker_never_fall_back_or_replay(broker):
     router = await start(broker)
     try:

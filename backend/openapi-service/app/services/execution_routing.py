@@ -35,6 +35,7 @@ class ExecutionRouter:
         self.instance = uuid.uuid4().hex
         self.channel = PREFIX + "worker:" + self.instance
         self.local = {}  # owner -> (connection generation, connection)
+        self.registration_locks = {}  # owner -> (lock, active/waiting registrations)
         self.pending = {}
         self.tasks = set()
         self.ready = False
@@ -83,11 +84,39 @@ class ExecutionRouter:
         await self.redis.aclose()
 
     async def register(self, owner, conn):
-        if not self.ready:
-            raise ConnectionError("ROUTING_UNAVAILABLE")
-        generation = self.instance + ":" + uuid.uuid4().hex
-        await self.redis.set(route_key(owner), generation, ex=LEASE_SECONDS)
-        self.local[str(owner)] = (generation, conn)
+        owner = str(owner)
+        lock, users = self.registration_locks.get(owner, (asyncio.Lock(), 0))
+        self.registration_locks[owner] = (lock, users + 1)
+        try:
+            # Concurrent Redis replies can arrive out of order. Serialize each
+            # owner's publication and local update, but never another owner's
+            # registration or the old socket's potentially slow close.
+            async with lock:
+                if not self.ready:
+                    raise ConnectionError("ROUTING_UNAVAILABLE")
+                generation = self.instance + ":" + uuid.uuid4().hex
+                await self.redis.set(route_key(owner), generation, ex=LEASE_SECONDS)
+                previous = self.local.get(owner)
+                self.local[owner] = (generation, conn)
+        finally:
+            _, users = self.registration_locks[owner]
+            if users == 1:
+                self.registration_locks.pop(owner)
+            else:
+                self.registration_locks[owner] = (lock, users - 1)
+        try:
+            if previous is not None and previous[1] is not conn:
+                # Publish the new generation first: closing the old socket can run
+                # its unregister callback, which must not remove the new route.
+                # The old socket is no longer in local and will not be lease-swept.
+                with contextlib.suppress(Exception):
+                    async with asyncio.timeout(2):
+                        await previous[1].ws.close()
+        except asyncio.CancelledError:
+            # listen() has not received this generation yet and cannot release
+            # it itself if registration is cancelled during old-peer cleanup.
+            await self.unregister(owner, generation)
+            raise
         return generation
 
     async def unregister(self, owner, generation):

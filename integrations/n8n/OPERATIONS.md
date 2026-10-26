@@ -1,24 +1,72 @@
 # Self-hosted operations
 
-This guide covers the community node's deployment and execution-control path. Capability admission remains per published workflow and approved version. The dated results and unresolved environment checks are in [VALIDATION.md](VALIDATION.md); deployment instructions alone are not acceptance evidence.
+This guide covers the community node's deployment, execution control and package maintenance. Capability admission is configured per published workflow and approved version. Dated test results and pending environment checks are in [VALIDATION.md](VALIDATION.md).
 
 ## Install and upgrade
 
-1. Pin the n8n runtime and node tarball. Check `node --version` in **every executing host/container** (Node 24 or newer), and record `n8n --version`. Build with `npm ci`, typecheck, lint, tests and `npm pack` in `n8n-nodes-astron-rpa`.
+1. Pin the n8n runtime and node tarball using the [compatibility matrix](COMPATIBILITY.md). Check `node --version` in **every executing host/container** (Node 24 or newer), and record `n8n --version`. For a source build, follow the package checks below; for a published version, retain its version and integrity.
 2. Back up the n8n database and encryption key together, the OpenAPI database, private integration policy and file store. Do not export decrypted credentials into a repository or support log.
-3. Follow OpenAPI's `EXECUTION_MANAGEMENT.md` migrations before replacing application code. Startup checks reject missing execution columns before accepting traffic. Preserve execution records, idempotency keys, client receipts and policy revisions.
+3. Follow OpenAPI's [upgrade and rollback steps](../../backend/openapi-service/EXECUTION_MANAGEMENT.md#upgrade-and-rollback), including all required migrations, before replacing application code. Startup checks reject missing execution columns before accepting traffic. Preserve execution records, idempotency keys, client receipts and policy revisions.
 4. Pause new triggers, let active work reach a known state, install the **same tarball** on the n8n main process and every worker, and restart them. A running process does not reload a replaced node package. Compare the installed `dist` hashes with the built tarball.
 5. Test discovery, one approved synthetic execution, query, precise cancellation and a persisted wait across restart. For rollback, restore a compatible application/package version; do not downgrade the database or erase receipts to force a retry. An uncertain execution is queried by its existing ID/key.
 
 For a full Windows Client package, set the deployment's HTTPS origin in the build copy of `resources/conf.yaml` before packaging, and verify the installed `resources/conf.yaml` before starting the Client. The repository's loopback address is a default, not the address of a remote deployment. Keep the previous program and configuration together for rollback; an installer can replace the installed configuration. Keep deployment-specific hostnames outside the shared source defaults. Verify the configured gateway and authentication endpoints, login, Client readiness and an actual synthetic execution after installation.
 
+## Build and release
+
+Run package commands in `integrations/n8n/n8n-nodes-astron-rpa`. Capability validators are peer modules under `capabilities/`; `shared/` holds their common types, catalog and dispatch. Credentials, transports and execution lifecycle are shared. Changes to one category should not duplicate lifecycle code or imply admission of other operations. Server/Engine fixes belong in their owning modules and need their own regressions.
+
+`npm run release:check` runs type checking, ESLint, formatting, node tests/build, the production dependency audit and the package-consumer test. The consumer test installs the tarball independently and exercises its bundled SDK. The repository [integration workflow](../../.github/workflows/integration-regression.yml) also runs the targeted OpenAPI, isolated Engine and AI suites. Keep reports, tarballs, temporary credentials and live fixtures outside the source tree. These checks complement the host-specific acceptance in [VALIDATION.md](VALIDATION.md).
+
+### First manual publication
+
+The public package is `@iflytekopensource/n8n-nodes-astron-rpa`; its node-panel name is **Astron-RPA**. The initial scoped version `0.1.0` is prepared for manual publication. Pushing a branch or merging a PR does not publish it. The [publish workflow](../../.github/workflows/publish-n8n.yml) runs regression for `n8n-v<version>` tags but skips publication for `n8n-v0.1.0`. Later version tags require the tagged commit to be on `main` and all integration regression jobs to pass. The workflow checks the package/tag/repository identity, audits production dependencies and publishes the saved tarball with npm provenance. A failing audit or regression prevents publication.
+
+For the first release, run these commands from the node package directory using Node 24 and an npm account authorised to publish in `iflytekopensource`. Keep the output directory outside the repository. Complete host acceptance and review the full `npm audit` report before the final publish command:
+
+```powershell
+npm ci
+npm run release:check
+npm audit
+$releaseDir = Join-Path $env:LOCALAPPDATA 'astron-rpa-releases/0.1.0'
+New-Item -ItemType Directory -Force -Path $releaseDir
+npm pack --pack-destination $releaseDir
+$releaseFile = Join-Path $releaseDir 'iflytekopensource-n8n-nodes-astron-rpa-0.1.0.tgz'
+Get-FileHash -Algorithm SHA256 -LiteralPath $releaseFile
+npm publish $releaseFile --dry-run --access public --tag latest
+```
+
+`--dry-run` checks the publication contents without uploading them. Install and test this exact tarball, retain its SHA-256, and ensure the intended source commit is reviewed before publication. When the maintainer is ready, authenticate with `npm login --registry=https://registry.npmjs.org/` (including MFA as requested), verify the account with `npm whoami`, and execute `npm publish $releaseFile --access public --tag latest`. Publish the accepted tarball. If any files change, rebuild it and record the new hash, changed files and applicable checks. Verify the published version and integrity with `npm view @iflytekopensource/n8n-nodes-astron-rpa@0.1.0 version dist.integrity`, then install that version on a clean supported host.
+
+### Subsequent automated publication
+
+Before enabling automatic publication for later versions, an npm organisation member with package-publish permission must configure the repository's `npm` GitHub Environment with release reviewers and tag restrictions. After the manual first publication, configure npm Trusted Publishing for the actual publishing GitHub repository, workflow filename `publish-n8n.yml`, and environment `npm`. Use a current Node 24/npm toolchain with OIDC support. A short-lived, package-scoped granular token in the environment secret `NPM_TOKEN` is an alternative if Trusted Publishing is unavailable; remove it once OIDC is enabled. These GitHub settings are not prerequisites for the manual first release. Do not store tokens in source or workflow inputs. The package's `repository` metadata must match the publishing repository for provenance.
+
+Before tagging, update the package and lockfile version, complete acceptance for the supported host/software combinations, review the full dependency audit (including the n8n host), and resolve or explicitly approve outstanding release gates. A failed publish must be investigated; an already published version cannot be overwritten. Confirm npm version/integrity/provenance and install that exact version on a clean supported host before rollout.
+
+## Dependency maintenance
+
+The release tarball includes compiled runtime JavaScript, package metadata, the user README/license, three importable example workflows and their instructions, plus the bundled MCP SDK runtime dependency tree and its upstream licenses. The packaged README retains installation and user configuration instructions: n8n credentials, server admission, client prerequisites, file storage and workflow settings. `dist/package.json` provides the SDK client identity at runtime. Project type declarations, TypeScript source, tests, CI/build configuration, test-environment fixtures, private deployment-instance configuration and local credentials are excluded. Server/container deployment manifests and their detailed administration guides remain in the repository, linked from the packaged README. Upstream dependencies retain the files and licenses distributed by their publishers. `VALIDATION.md`, `validation-evidence.json`, `COMPATIBILITY.md` and this operations guide remain repository documentation; excluding those files does not exclude the user configuration instructions in the README and examples.
+
+The package `files` allowlist selects the published paths. `npm run test:package` checks the complete packed project-file list against the runtime source modules and explicit user files, checks that examples are inactive and have no credential bindings, then verifies a clean consumer installation. A new example or runtime asset must be deliberately added to the release list and package check.
+
+The tarball bundles the MCP SDK and its audited runtime dependencies from `npm ci`, including the SDK's own Zod 4 dependency. This preserves the tested runtime tree when consumers install the package; a root-only npm override would not constrain a consumer's dependency resolution. Keep the SDK override and lockfile current, run `npm run test:package`, and inspect a clean tarball installation after dependency changes. Bundling increases artifact size and requires a new package release for dependency fixes. The n8n host and the development `n8n-workflow` fixture have their own dependencies and must be audited separately; do not force the host onto a different Zod major through a global override.
+
+The development `n8n-workflow` fixture uses a scoped Axios 1.x override; it does not change the installed n8n host. Audit the host and full development tree separately and record the date, affected dependency path, advisory and disposition in validation evidence. Production-only package audit success excludes those trees. For unresolved host findings, use a patched compatible host or obtain a documented maintainer risk decision before rollout; a bundled SDK dependency or smoke test does not patch the host.
+
+## Installation and discovery
+
+After npm publication, install `@iflytekopensource/n8n-nodes-astron-rpa` through Community Nodes in a self-hosted n8n deployment with community package installation enabled. After installation, search for **Astron-RPA** in the node panel. The package includes the `n8n-community-node-package` discovery keyword and RPA, data, browser, Office, desktop and AI automation keywords.
+
 ## Queue mode
 
-Use a separate PostgreSQL database and private Redis instance/namespace, with the same database configuration and `N8N_ENCRYPTION_KEY` on main and workers. Do not use SQLite for queue deployment. Configure `EXECUTIONS_MODE=queue`, `DB_TYPE=postgresdb`, `DB_POSTGRESDB_*`, `QUEUE_BULL_REDIS_*`, and `OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=true`. Start the main process with `n8n start`, workers with `n8n worker --concurrency=2` as an initial test setting, then measure your workload before increasing it.
+Use a separate PostgreSQL database and private Redis instance/namespace, with the same database configuration and `N8N_ENCRYPTION_KEY` on main and workers. Do not use SQLite for queue deployment. The tested n8n `2.40.7` recommends PostgreSQL 17 or newer and warns that PostgreSQL 15 is unsupported. Configure `EXECUTIONS_MODE=queue`, `DB_TYPE=postgresdb`, `DB_POSTGRESDB_*`, `QUEUE_BULL_REDIS_*`, and `OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=true`. Start the main process with `n8n start`. For workers, follow the host's concurrency guidance (`n8n worker --concurrency=5` is its recommended minimum), then measure your workload. Worker concurrency does not increase the Client's one-execution capacity; acceptance-fixture settings are not production sizing recommendations.
 
 Install the community package on **all** processes. Set the public `N8N_WEBHOOK_URL` (the current n8n setting; older releases use `WEBHOOK_URL`), appropriate `N8N_PROXY_HOPS`, and the same encryption key. Main/workers must reach PostgreSQL, Redis, the resume webhook and AstronRPA HTTPS. Keep execution pruning enabled and retain unresolved wait checkpoints. The node's timer is only a latency optimization: n8n's persisted `waitTill` recovers waits after a process restart. The parent execution ID is preserved in the child request and sent on subsequent polls.
 
-For Binary Data, use a storage mode supported by your n8n edition in queue mode. Local filesystem Binary Data is not shared across machines; do not claim that copying the node package makes it shared. Validate upload/download on the worker that executes the workflow. The verified n8n 2.40.7 queue topology used its default database Binary Data storage and checked transferred bytes in PostgreSQL; this does not validate filesystem or external object storage configurations. AstronRPA handles do not replace n8n's own Binary Data storage requirements.
+Restart recovery applies to a persisted waiting checkpoint. If the process is killed after the checkpoint has resumed into a running step, n8n can mark that child execution as crashed and leave its parent waiting. Query the original AstronRPA execution before resolving the n8n execution; use the original business key for an explicit replay after checking its receipt. Do not treat an interrupted n8n poll as proof that the RPA task failed or start it with a new key.
+
+For Binary Data, use a storage mode supported by your n8n edition in queue mode and accessible to the executing workers. Validate upload/download on each worker host. The tested n8n 2.40.7 queue topology used `default` mode: inline Binary Data persisted within execution data in PostgreSQL. Filesystem or external object storage configurations require their own transfer and worker-access checks. Configure n8n Binary Data storage separately from AstronRPA file-handle storage.
 
 ## OpenAPI routing and persistent state
 
@@ -51,19 +99,19 @@ Set a **separate random `MONITORING_TOKEN` of at least 32 characters**. Scrape t
 
 Metrics are process-local; scrape each one-worker replica separately and aggregate. Multiple workers behind a randomly routed metrics port cannot provide reliable per-process counters. Counters reset on restart. Labels contain only bounded route/status/outcome/error categories, never owners, execution IDs or arbitrary URLs.
 
-| Metric | Meaning |
-| --- | --- |
-| `astron_http_requests_total` | HTTP request counts by bounded route and status class |
-| `astron_http_duration_seconds_*` | HTTP duration histogram/count/sum, including streaming response lifetime |
-| `astron_mcp_calls_total` | Successful/error control calls; acceptance is not business success |
-| `astron_executions_accepted_total` | Newly committed execution receipts, excluding idempotent replays |
-| `astron_execution_transitions_total` | Confirmed terminal transitions, counted after the SQL update succeeds |
-| `astron_execution_errors_total` | Allowlisted terminal error codes |
-| `astron_execution_duration_seconds_*` | Actual Client run duration when both timestamps are available |
-| `astron_client_busy_total` | Confirmed managed `CLIENT_BUSY` receipts |
-| `astron_rate_limited_total` | Requests rejected by the shared per-owner limit |
-| `astron_clients_online` | Local owned connection count; during lease loss it can lag by at most one lease |
-| `astron_ready` | SQL, Redis and router readiness, checked during private scrapes |
+| Metric                                | Meaning                                                                         |
+| ------------------------------------- | ------------------------------------------------------------------------------- |
+| `astron_http_requests_total`          | HTTP request counts by bounded route and status class                           |
+| `astron_http_duration_seconds_*`      | HTTP duration histogram/count/sum, including streaming response lifetime        |
+| `astron_mcp_calls_total`              | Successful/error control calls; acceptance is not business success              |
+| `astron_executions_accepted_total`    | Newly committed execution receipts, excluding idempotent replays                |
+| `astron_execution_transitions_total`  | Confirmed terminal transitions, counted after the SQL update succeeds           |
+| `astron_execution_errors_total`       | Allowlisted terminal error codes                                                |
+| `astron_execution_duration_seconds_*` | Actual Client run duration when both timestamps are available                   |
+| `astron_client_busy_total`            | Confirmed managed `CLIENT_BUSY` receipts                                        |
+| `astron_rate_limited_total`           | Requests rejected by the shared per-owner limit                                 |
+| `astron_clients_online`               | Local owned connection count; during lease loss it can lag by at most one lease |
+| `astron_ready`                        | SQL, Redis and router readiness, checked during private scrapes                 |
 
 Example alert conditions (tune after measuring): readiness unavailable for 1 minute; expected clients absent for 2 minutes; HTTP 5xx above 5% for 5 minutes with at least 20 calls; confirmed execution failures/timeouts above 5% for 5 minutes; busy receipts above 10%; HTTP p95 above 5 seconds for 5 minutes. Count `UNKNOWN` separately from failure: investigate the original execution before resubmitting. Alert on certificate expiry below 14 days and storage usage above 80% using the deployment's certificate/host monitoring.
 

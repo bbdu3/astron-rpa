@@ -111,6 +111,10 @@ jobs:
           cache: npm
           cache-dependency-path: integrations/n8n/n8n-nodes-astron-rpa/package-lock.json
       - run: npm ci
+      - run: npm audit --omit=dev --audit-level=moderate
+      - name: Test CI summary failure propagation
+        working-directory: .
+        run: python .github/scripts/test-ci-summary.py
       - run: npm run typecheck
       - run: npm run lint
       - name: Check formatting (accept checkout line endings)
@@ -118,6 +122,8 @@ jobs:
       - run: npm run build
       - name: Run node tests
         run: node --test --test-reporter=junit --test-reporter-destination="${{ runner.temp }}/n8n.xml" tests/*.test.cjs
+      - name: Verify published package installation and runtime dependencies
+        run: npm run test:package
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4

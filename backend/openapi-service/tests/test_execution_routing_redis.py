@@ -47,9 +47,6 @@ async def test_real_redis_routes_between_processes_without_start_replay():
     parent, child = context.Pipe()
     process = context.Process(target=peer_process, args=(url, owner, child))
     process.start()
-    assert await asyncio.to_thread(parent.poll, 10), "isolated peer did not become ready"
-    ready = parent.recv()
-    assert ready["ready"]
 
     async def forbidden(*args, **kwargs):
         pytest.fail("request must reach the other process")
@@ -57,6 +54,9 @@ async def test_real_redis_routes_between_processes_without_start_replay():
     router = ExecutionRouter.from_url(SimpleNamespace(local_execution_request=forbidden), url)
     inspector = Redis.from_url(url, decode_responses=True)
     try:
+        assert await asyncio.to_thread(parent.poll, 10), "isolated peer did not become ready"
+        ready = parent.recv()
+        assert ready["ready"]
         await router.start()
         assert router.instance != ready["instance"]
         replies = await asyncio.gather(*(router.request(owner, {"action": "get"}, 2) for _ in range(8)))

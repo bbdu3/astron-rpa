@@ -14,6 +14,33 @@ const connection = {
   protocol: "2025-11-25",
 };
 
+test("MCP initialization advertises the installed package identity and version", async () => {
+  const manifest = require("../package.json");
+  const client = new McpConnection(connection, 1000, async (_url, init) => {
+    const body = init.body ? JSON.parse(init.body) : {};
+    if (body.method !== "initialize")
+      return new Response(null, { status: 202 });
+    assert.deepEqual(body.params.clientInfo, {
+      name: manifest.name,
+      version: manifest.version,
+    });
+    return Response.json({
+      jsonrpc: "2.0",
+      id: body.id,
+      result: {
+        protocolVersion: "2025-11-25",
+        capabilities: { tools: {} },
+        serverInfo: { name: "synthetic", version: "1" },
+      },
+    });
+  });
+  try {
+    await client.connect();
+  } finally {
+    await client.close();
+  }
+});
+
 for (const Transport of [McpConnection, RestConnection]) {
   test(`${Transport.name} preserves only bounded schema diagnostics`, async () => {
     const hint = {

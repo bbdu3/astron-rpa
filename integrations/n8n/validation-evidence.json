@@ -1,12 +1,1045 @@
 {
   "scope": "n8n MCP community node; dated controlled validation of the framework, capabilities and same-host deployment topologies",
+  "recordConvention": "Dated controlled validation only. Historical counts, failures, pending cleanup and support limits apply to their recorded artifact/date, not automatically to a later candidate.",
+  "packageBoundaryReview": {
+    "date": "2026-10-26",
+    "baselineCommit": "9ed2e608",
+    "scope": "Local package-boundary, functional-regression and documentation review of the current worktree; no runtime implementation changes or live deployment in this review",
+    "changes": [
+      "Explicit release allowlist for compiled runtime JavaScript, runtime manifest, user README/license and three examples with instructions",
+      "Complete project-file inventory assertion against the actual tarball, plus inactive/unbound example checks",
+      "Repository validation evidence, compatibility/operations guides, project declarations, sources, tests and deployment-instance files excluded from npm; user configuration instructions remain in the packaged README and examples",
+      "Packaging and historical live artifacts distinguished; development dependency audit scope clarified"
+    ],
+    "checks": {
+      "releaseCheck": "passed: typecheck, ESLint, format, build, node tests, production audit and clean consumer package test",
+      "nodeTests": {
+        "passed": 73,
+        "failed": 0,
+        "skipped": 0
+      },
+      "packageConsumer": "passed: 28 project files, clean installation, runtime dependency audit and actual SDK synthetic handshake",
+      "routingUnitRerun": {
+        "passed": 15,
+        "failed": 0,
+        "skipped": 0,
+        "includedInEarlierOpenapiTotal": true
+      },
+      "ciSummary": {
+        "tests": 3,
+        "schedulingCombinations": 28,
+        "result": "passed"
+      },
+      "productionAudit": {
+        "total": 0
+      },
+      "fullDevelopmentAudit": {
+        "high": 3,
+        "total": 3,
+        "affectedPackages": ["zod", "@n8n/expression-runtime", "n8n-workflow"],
+        "advisory": "GHSA-mrhx-c7xc-m3w5"
+      },
+      "publishDryRun": "passed; no publication; npm warned authentication is required for real publication",
+      "documentationLinksAndEvidence": {
+        "documents": 8,
+        "localAndRepositoryLinks": 62,
+        "evidenceReferences": 18,
+        "xmlReportsMatched": 19,
+        "receiptIdentityChecks": 31,
+        "errors": []
+      },
+      "formatAndDiffCheck": "passed"
+    },
+    "artifact": {
+      "filename": "iflytekopensource-n8n-nodes-astron-rpa-0.1.0.tgz",
+      "sha256": "a4d6b2bd56d32529ddc1c3df9055689422e82fc82bf9a4f7ad4f37a806460f76",
+      "sizeBytes": 3457147,
+      "entryCount": 3673,
+      "projectFileCount": 28,
+      "bundledFileCount": 3645,
+      "bundledPackages": 89,
+      "comparisonDocumentationArtifactSha256": "3623b915e0364e874560fe45256450a5f4de8d4b99251ee04109d75f28773e16",
+      "addedFiles": [],
+      "changedFiles": ["package/dist/package.json", "package/package.json"],
+      "manifestChangedFields": ["files"],
+      "liveArtifactSha256": "109bbeecd3aadea76c11fb4a3064caa562dc7f795172148ec89629d38288d594",
+      "runtimeJavaScriptFilesByteIdenticalToLive": 20,
+      "bundledFilesByteIdenticalToLive": 3645,
+      "newLiveIntegrationPerformed": false,
+      "installedLiveArtifactReplaced": false,
+      "removedProjectTypeDeclarations": 20
+    },
+    "functionalReview": {
+      "peerCapabilityModules": [
+        "json-data",
+        "browser-service",
+        "office-file",
+        "desktop-ui",
+        "ai-dynamic-risk"
+      ],
+      "sharedContracts": [
+        "credentials and transports",
+        "bounded JSON and files",
+        "admission and exact-request approval",
+        "execution identity, waiting, query and cancellation"
+      ],
+      "finding": "No new functional defect established within the implemented controlled-workflow scope; catalog/admission coverage is not per-operation live acceptance"
+    },
+    "sourceSha256": {
+      "integrations/n8n/n8n-nodes-astron-rpa/package.json": "5f4eb994d3cb2f8eeb65f7d6828a5f164cabdf0cf8cb00d9ccc847594859612a",
+      "integrations/n8n/n8n-nodes-astron-rpa/tests/package.cjs": "cced004f922c33813a6d488c7c747e430b5740418d3fca01f33cb71899142cea"
+    },
+    "boundary": [
+      "No npm publication, commit, push or installed-host replacement",
+      "No new GUI, Office, complete EXE, remote database or real model acceptance",
+      "Development n8n-workflow fixture audit does not scan the installed host dependency tree",
+      "Pending hosted CI, supported-host acceptance, full-repository checks, alert delivery and previous local cleanup remain as dated in scopedReleaseValidation"
+    ],
+    "userConfigurationReview": {
+      "date": "2026-10-26",
+      "scope": "Packaged user configuration instructions; documentation only",
+      "checks": {
+        "actualTarballReadmeMatchesSource": true,
+        "essentialConfigurationInstructionsPresent": true,
+        "samePackedFileList": true,
+        "nonReadmeFilesByteIdenticalToPreviousArtifact": true,
+        "packageConsumer": "Passed after the configuration section was added; the subsequent model-provider paragraph changes README text only",
+        "newLiveIntegrationPerformed": false
+      },
+      "artifact": {
+        "filename": "iflytekopensource-n8n-nodes-astron-rpa-0.1.0.tgz",
+        "sha256": "cf60c1d5f6ed9710bbadb926edd6e0cde4dbe63ff0e95ea155b7055580adaeba",
+        "sizeBytes": 3458291,
+        "entryCount": 3673,
+        "projectFileCount": 28,
+        "previousArtifactSha256": "a4d6b2bd56d32529ddc1c3df9055689422e82fc82bf9a4f7ad4f37a806460f76",
+        "changedFiles": ["package/README.md"],
+        "installedLiveArtifactReplaced": false
+      }
+    }
+  },
+  "documentationReview": {
+    "date": "2026-10-26",
+    "scope": "Documentation and evidence organization; no new functional code changes or live deployment in this review",
+    "changes": [
+      "User guide with UI/CLI/archive installation, actual client API-key setup, first execution, expressions/results, operation reference, troubleshooting and update/removal instructions",
+      "Runtime/contract matrix separated from dated validation and operator procedures",
+      "Dated test objects, results, pending checks and historical failures recorded with their source artifacts",
+      "Related server routing, transport and secret-input retention documentation aligned with implementation"
+    ],
+    "checks": {
+      "documentationLinksAndEvidence": {
+        "documents": 8,
+        "localAndRepositoryLinks": 62,
+        "evidenceReferences": 17,
+        "xmlReportsMatched": 19,
+        "receiptIdentityChecks": 31,
+        "errors": []
+      },
+      "format": "Prettier passed for the six integration documentation/evidence files",
+      "package": "Build, clean consumer install, runtime dependency audit and actual SDK synthetic handshake passed",
+      "diffCheck": "passed",
+      "readmeExamples": {
+        "bashBlocks": 3,
+        "powershellBlocks": 1,
+        "jsonBlocks": 1,
+        "syntax": "passed",
+        "installationCommandsExecutedOnExistingHost": false,
+        "nodeFieldsAndClientSettings": "checked against implementation"
+      }
+    },
+    "artifact": {
+      "liveTestedArtifactSha256": "109bbeecd3aadea76c11fb4a3064caa562dc7f795172148ec89629d38288d594",
+      "documentationArtifactSha256": "3623b915e0364e874560fe45256450a5f4de8d4b99251ee04109d75f28773e16",
+      "filename": "iflytekopensource-n8n-nodes-astron-rpa-0.1.0.tgz",
+      "sizeBytes": 3461616,
+      "entryCount": 3693,
+      "changedFiles": ["package/README.md", "package/examples/README.md"],
+      "nonDocumentFilesByteIdentical": true,
+      "newLiveIntegrationPerformed": false,
+      "installedLiveArtifactReplaced": false
+    },
+    "boundary": "Prior live-tested artifact retained. Documentation artifact is not a new live acceptance; runtime contents are byte-identical.",
+    "earlierDocumentationArtifactSha256": [
+      "05cf88e20798858703b1b3bf31ab047fa5d45f692ba31f064d79cd8bbf517c09",
+      "cad2dece2492e2d1e06f9b774518c3571e4e8619bbd75a664feda1a0e82e6315"
+    ]
+  },
+  "scopedReleaseValidation": {
+    "date": "2026-10-26",
+    "baselineCommit": "9ed2e608",
+    "sourceState": "Baseline plus the scoped-release and routing worktree changes present at validation",
+    "scope": "Scoped 0.1.0 package, bounded owner registration, permanent existing-host installation and representative regular/isolated-queue acceptance",
+    "changes": [
+      "Scoped package identity, public metadata, examples and SDK client identity",
+      "Pinned bundled MCP SDK runtime tree and clean-consumer package test",
+      "Same-owner connection registration serialization, bounded old-generation cleanup and cancellation regressions",
+      "CI summary failure/cancellation/unexpected-skip coverage and later-tag publication workflow",
+      "First scoped version explicitly excluded from automatic npm publication"
+    ],
+    "environment": {
+      "n8n": "2.40.7",
+      "node": "24.18.0",
+      "client": "Existing installed Windows full client with checked Engine source",
+      "mcpJsSdk": "1.32.2",
+      "mcpWireProtocol": "2025-11-25",
+      "queue": {
+        "postgresql": "17.11",
+        "redis": "7.0.15",
+        "workerConcurrency": 2,
+        "binaryMode": "default; inline Binary Data persisted in PostgreSQL execution data",
+        "scope": "Isolated local WSL fixture; not production concurrency guidance"
+      },
+      "tls": {
+        "verified": true,
+        "certificateValidUntil": "2026-12-13"
+      }
+    },
+    "tests": {
+      "n8nPassed": 73,
+      "n8nTypecheckLintFormatBuildPack": "passed",
+      "cleanConsumerInstallAuditAndSyntheticSdkHandshake": "passed",
+      "pythonReports": [
+        {
+          "suite": "ai-service.xml",
+          "tests": 68,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-ai.xml",
+          "tests": 42,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-browser.xml",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-database.xml",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-dataprocess.xml",
+          "tests": 217,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-datatable.xml",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-desktop.xml",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-dialog.xml",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-email.xml",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-encrypt.xml",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-enterprise.xml",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-excel.xml",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-files.xml",
+          "tests": 39,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-network.xml",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-risk.xml",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-system.xml",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1
+        },
+        {
+          "suite": "engine-vision.xml",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "engine-word.xml",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "final-reports/openapi.xml",
+          "tests": 408,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "engineTotal": {
+        "groups": 17,
+        "passed": 403,
+        "skipped": 1,
+        "skipReason": "POSIX archive filename compatibility test is inapplicable on Windows"
+      },
+      "openapiFinal": {
+        "passed": 408,
+        "warnings": 4,
+        "warningType": "Existing SQLite datetime adapter deprecation",
+        "report": "final-reports/openapi.xml"
+      },
+      "redisSameServerHost": {
+        "passed": 18,
+        "newRedisCases": 3,
+        "routingUnitCasesRepeated": 15,
+        "report": "redis-final-test-result.json"
+      },
+      "modifiedPythonRuffAndFormat": "passed",
+      "ciSummary": {
+        "tests": 3,
+        "schedulingCombinations": 28,
+        "status": "passed"
+      },
+      "workflowSyntax": {
+        "yamlFiles": 3,
+        "shellBlocks": 21,
+        "manualFirstReleaseGuard": true,
+        "actionlint": false
+      },
+      "wholeRepositoryCheck": "Not passed: Windows make unavailable; WSL encountered existing backend-go path error and the 40-second check bound",
+      "hostedCi": "Not run for this worktree"
+    },
+    "dependencyAudit": {
+      "production": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "fullDevelopmentAndHostFixture": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 3,
+        "critical": 0,
+        "total": 3
+      },
+      "affectedPackages": ["@n8n/expression-runtime", "n8n-workflow", "zod"],
+      "advisory": "GHSA-mrhx-c7xc-m3w5",
+      "boundary": "Full audit ran in the node development workspace, including the n8n-workflow host fixture; it did not scan the deployed n8n dependency tree. Its Zod 3 chain is separate from the bundled SDK Zod 4. Audit and disposition of the installed host remain an operator/maintainer task."
+    },
+    "artifact": {
+      "name": "@iflytekopensource/n8n-nodes-astron-rpa",
+      "version": "0.1.0",
+      "filename": "iflytekopensource-n8n-nodes-astron-rpa-0.1.0.tgz",
+      "sha256": "109bbeecd3aadea76c11fb4a3064caa562dc7f795172148ec89629d38288d594",
+      "integrity": "sha512-N6UflYjT3d6o6fWlS4IV0DRWoYwmLcnBe4/Q/TfU9xv8kFC7oADd9FAKQ4IWCLwJg8YAjh/ZAluVKftxcoXs5w==",
+      "sizeBytes": 3463480,
+      "entryCount": 3693,
+      "bundledRuntimeDependencies": 89,
+      "publishDryRun": true,
+      "published": false,
+      "boundary": "This hash identifies the live-tested tarball before the subsequent documentation-only repack"
+    },
+    "permanentDeployment": {
+      "regularAndQueueMatchedFiles": 3693,
+      "regularAndQueueIdentical": true,
+      "oldUnscopedPackageRemoved": true,
+      "existingInactiveWorkflowsMigrated": 10,
+      "migration": "Official CLI; only saved node type changed; IDs, parameters, connections and credential references retained",
+      "clientEnginePythonFilesMatched": 425,
+      "server": {
+        "relatedOpenapiSourceSynced": true,
+        "sourceFilesCompared": 91,
+        "unrelatedAiDifferencesPreserved": 29,
+        "wholeServerEqualityClaimed": false
+      }
+    },
+    "regularCases": [
+      {
+        "name": "data",
+        "transport": "mcp",
+        "n8nExecutionId": 1058,
+        "executionId": "6d8f550c-daac-4d78-bde9-d508c34522d7",
+        "runId": "2114622930007650304",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "http",
+        "transport": "mcp",
+        "n8nExecutionId": 1062,
+        "executionId": "e6b368c0-4993-406e-b6a4-c041577efd5c",
+        "runId": "2114622994637680640",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "office",
+        "transport": "mcp",
+        "n8nExecutionId": 1066,
+        "executionId": "b673e645-85ed-495e-bee8-1124dee8a252",
+        "runId": "2114623065924071424",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "desktop",
+        "transport": "mcp",
+        "n8nExecutionId": 1070,
+        "executionId": "108c0af7-3619-44e1-8987-b77700a6449b",
+        "runId": "2114623134702268416",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "risk",
+        "transport": "mcp",
+        "n8nExecutionId": 1074,
+        "executionId": "4b3bd6cf-6d8d-4c39-aa7d-13631b0c5553",
+        "runId": "2114623200649310208",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "invalid",
+        "transport": "mcp",
+        "n8nExecutionId": 1078,
+        "code": "INVALID_ARGUMENTS",
+        "verified": true
+      },
+      {
+        "name": "unapproved",
+        "transport": "mcp",
+        "n8nExecutionId": 1081,
+        "code": "RISK_APPROVAL_REQUIRED",
+        "verified": true
+      },
+      {
+        "name": "data",
+        "transport": "rest",
+        "n8nExecutionId": 1085,
+        "executionId": "77e26f68-0172-46f2-8de9-efffa6ae9c76",
+        "runId": "2114623335479406592",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "http",
+        "transport": "rest",
+        "n8nExecutionId": 1089,
+        "executionId": "3153879d-4b9a-46ed-a6a1-4c9c64e23a80",
+        "runId": "2114623390609338368",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "office",
+        "transport": "rest",
+        "n8nExecutionId": 1093,
+        "executionId": "0ffc87ca-5b6c-4a94-9a69-216ef613d0b5",
+        "runId": "2114623443088470016",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "desktop",
+        "transport": "rest",
+        "n8nExecutionId": 1102,
+        "executionId": "85b31478-745f-43da-8e3f-9c9e3e533a3b",
+        "runId": "2114624070736703488",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "risk",
+        "transport": "rest",
+        "n8nExecutionId": 1106,
+        "executionId": "d4a08354-d282-454c-893d-7c7a76c974b6",
+        "runId": "2114624124058890240",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "invalid",
+        "transport": "rest",
+        "n8nExecutionId": 1110,
+        "code": "INVALID_ARGUMENTS",
+        "verified": true
+      },
+      {
+        "name": "unapproved",
+        "transport": "rest",
+        "n8nExecutionId": 1113,
+        "code": "RISK_APPROVAL_REQUIRED",
+        "verified": true
+      }
+    ],
+    "queueCases": [
+      {
+        "name": "data",
+        "transport": "mcp",
+        "n8nExecutionId": 1,
+        "executionId": "add74e4a-1c5f-4178-8305-9177c175b519",
+        "runId": "2114633598555418624",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "office",
+        "transport": "mcp",
+        "n8nExecutionId": 3,
+        "executionId": "808fa431-c089-428e-9f11-29c10afa113a",
+        "runId": "2114633652456419328",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "http",
+        "transport": "mcp",
+        "n8nExecutionId": 5,
+        "executionId": "a77bd067-fb6f-414f-83fc-58f4497a6735",
+        "runId": "2114633707288555520",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "desktop",
+        "transport": "mcp",
+        "n8nExecutionId": 7,
+        "executionId": "6860d5b3-e903-4f25-be6b-93f5589e21bb",
+        "runId": "2114633758614253568",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "data",
+        "transport": "rest",
+        "n8nExecutionId": 9,
+        "executionId": "6ac172fd-7b90-44dc-86c5-c550f8536beb",
+        "runId": "2114633813513498624",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "office",
+        "transport": "rest",
+        "n8nExecutionId": 11,
+        "executionId": "746a3d3d-5890-4ee1-99f1-2197fa284282",
+        "runId": "2114633862549106688",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "http",
+        "transport": "rest",
+        "n8nExecutionId": 13,
+        "executionId": "876a94ab-c774-45c4-8a52-bbab4f48a5c8",
+        "runId": "2114633905888849920",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      },
+      {
+        "name": "desktop",
+        "transport": "rest",
+        "n8nExecutionId": 15,
+        "executionId": "6e50e17e-c12d-4fba-a166-7a4a7dad5dfe",
+        "runId": "2114633948620419072",
+        "status": "succeeded",
+        "terminal": true,
+        "verified": true
+      }
+    ],
+    "caseInterpretation": {
+      "regularSuccesses": 10,
+      "queueSuccesses": 8,
+      "officeFixture": "Text-file write/read, not Office COM",
+      "desktopFixture": "Window.exist for a synthetic nonexistent window, not interactive GUI",
+      "riskFixture": "Administrator-approved HTTP POST to synthetic service, not model inference",
+      "denials": "Invalid input and unapproved requests rejected without an execution ID"
+    },
+    "identity": {
+      "sameExecutionId": "6d8f550c-daac-4d78-bde9-d508c34522d7",
+      "sameRunId": "2114622930007650304",
+      "conflict": {
+        "code": "IDEMPOTENCY_CONFLICT",
+        "message": "IDEMPOTENCY_CONFLICT"
+      }
+    },
+    "binary": [
+      {
+        "executionId": "b673e645-85ed-495e-bee8-1124dee8a252",
+        "transport": "mcp",
+        "bytes": 28,
+        "sha256": "c2b75ef8fcf85ebdea349a0edeed63eafdda443cc7e3cb199062d63778d0513a",
+        "deletedDownloadDenied": true
+      },
+      {
+        "executionId": "0ffc87ca-5b6c-4a94-9a69-216ef613d0b5",
+        "transport": "rest",
+        "bytes": 28,
+        "sha256": "c2b75ef8fcf85ebdea349a0edeed63eafdda443cc7e3cb199062d63778d0513a",
+        "deletedDownloadDenied": true
+      }
+    ],
+    "queueBinary": [
+      {
+        "transport": "mcp",
+        "bytes": 28,
+        "sha256": "c2b75ef8fcf85ebdea349a0edeed63eafdda443cc7e3cb199062d63778d0513a",
+        "inlineBinary": true
+      },
+      {
+        "transport": "rest",
+        "bytes": 28,
+        "sha256": "c2b75ef8fcf85ebdea349a0edeed63eafdda443cc7e3cb199062d63778d0513a",
+        "inlineBinary": true
+      }
+    ],
+    "lifecycle": {
+      "transports": ["mcp", "rest"],
+      "checks": [
+        "confirmed busy",
+        "precise cancel",
+        "deadline timeout",
+        "old cancellation does not stop new execution"
+      ],
+      "cases": [
+        {
+          "name": "start-cancel",
+          "transport": "mcp",
+          "n8nExecutionId": 1125,
+          "executionId": "ff900d68-41e0-4046-b47d-ce06f2e55016",
+          "runId": null,
+          "status": "accepted",
+          "terminal": false
+        },
+        {
+          "name": "busy",
+          "transport": "mcp",
+          "n8nExecutionId": 1128,
+          "executionId": "b58f4316-cce1-4b59-9e81-380743903d57",
+          "runId": null,
+          "status": "failed",
+          "terminal": true,
+          "code": "CLIENT_BUSY"
+        },
+        {
+          "name": "timeout",
+          "transport": "mcp",
+          "n8nExecutionId": 1134,
+          "executionId": "4ab557d7-efb0-4ffc-8154-c743b489c2c6",
+          "runId": "2114625258748145664",
+          "status": "timeout",
+          "terminal": true,
+          "code": "EXECUTION_TIMEOUT"
+        },
+        {
+          "name": "lifecycle",
+          "transport": "mcp",
+          "verified": true
+        },
+        {
+          "name": "start-cancel",
+          "transport": "rest",
+          "n8nExecutionId": 1144,
+          "executionId": "9ef2055f-e1a6-4548-a6e8-f8456d3f7ce1",
+          "runId": null,
+          "status": "accepted",
+          "terminal": false
+        },
+        {
+          "name": "busy",
+          "transport": "rest",
+          "n8nExecutionId": 1147,
+          "executionId": "28c14bd4-af41-49c2-83ee-2aea656dc90f",
+          "runId": null,
+          "status": "failed",
+          "terminal": true,
+          "code": "CLIENT_BUSY"
+        },
+        {
+          "name": "timeout",
+          "transport": "rest",
+          "n8nExecutionId": 1152,
+          "executionId": "1c5681ef-db48-45bd-ba21-f74fadc44293",
+          "runId": "2114625453934276608",
+          "status": "timeout",
+          "terminal": true,
+          "code": "EXECUTION_TIMEOUT"
+        },
+        {
+          "name": "lifecycle",
+          "transport": "rest",
+          "verified": true
+        }
+      ]
+    },
+    "recovery": {
+      "regular": {
+        "checkpointId": 1167,
+        "executionId": "ec0c2988-ffd4-420b-b488-4cd27235969e",
+        "runId": "2114627987860123648",
+        "restored": true,
+        "idempotentReplay": true
+      },
+      "queue": {
+        "executionId": "152a4d61-84b7-4d09-a1fa-ceeeb13b71e5",
+        "runId": "2114635600865816576",
+        "checkpointId": 53,
+        "recovered": true,
+        "idempotentReplay": true
+      },
+      "boundary": "Recovery confirmed from persisted waiting checkpoints only",
+      "initialFailures": "Both initial restart attempts interrupted an active poll after resume; n8n child crashed while original RPA receipt succeeded. Failures retained, original receipts queried, no new-key redispatch"
+    },
+    "receipts": {
+      "count": 31,
+      "statusCounts": {
+        "FAILED": 2,
+        "COMPLETED": 23,
+        "TIMEOUT": 2,
+        "CANCELLED": 4
+      },
+      "items": [
+        {
+          "executionId": "28c14bd4-af41-49c2-83ee-2aea656dc90f",
+          "projectId": "2114621342316785664",
+          "status": "FAILED",
+          "runId": null
+        },
+        {
+          "executionId": "6ac172fd-7b90-44dc-86c5-c550f8536beb",
+          "projectId": "2114621342316785664",
+          "status": "COMPLETED",
+          "runId": "2114633813513498624"
+        },
+        {
+          "executionId": "6d8f550c-daac-4d78-bde9-d508c34522d7",
+          "projectId": "2114621342316785664",
+          "status": "COMPLETED",
+          "runId": "2114622930007650304"
+        },
+        {
+          "executionId": "77e26f68-0172-46f2-8de9-efffa6ae9c76",
+          "projectId": "2114621342316785664",
+          "status": "COMPLETED",
+          "runId": "2114623335479406592"
+        },
+        {
+          "executionId": "add74e4a-1c5f-4178-8305-9177c175b519",
+          "projectId": "2114621342316785664",
+          "status": "COMPLETED",
+          "runId": "2114633598555418624"
+        },
+        {
+          "executionId": "b58f4316-cce1-4b59-9e81-380743903d57",
+          "projectId": "2114621342316785664",
+          "status": "FAILED",
+          "runId": null
+        },
+        {
+          "executionId": "3153879d-4b9a-46ed-a6a1-4c9c64e23a80",
+          "projectId": "2114621345336684544",
+          "status": "COMPLETED",
+          "runId": "2114623390609338368"
+        },
+        {
+          "executionId": "876a94ab-c774-45c4-8a52-bbab4f48a5c8",
+          "projectId": "2114621345336684544",
+          "status": "COMPLETED",
+          "runId": "2114633905888849920"
+        },
+        {
+          "executionId": "a77bd067-fb6f-414f-83fc-58f4497a6735",
+          "projectId": "2114621345336684544",
+          "status": "COMPLETED",
+          "runId": "2114633707288555520"
+        },
+        {
+          "executionId": "e6b368c0-4993-406e-b6a4-c041577efd5c",
+          "projectId": "2114621345336684544",
+          "status": "COMPLETED",
+          "runId": "2114622994637680640"
+        },
+        {
+          "executionId": "0ffc87ca-5b6c-4a94-9a69-216ef613d0b5",
+          "projectId": "2114621347760992256",
+          "status": "COMPLETED",
+          "runId": "2114623443088470016"
+        },
+        {
+          "executionId": "746a3d3d-5890-4ee1-99f1-2197fa284282",
+          "projectId": "2114621347760992256",
+          "status": "COMPLETED",
+          "runId": "2114633862549106688"
+        },
+        {
+          "executionId": "808fa431-c089-428e-9f11-29c10afa113a",
+          "projectId": "2114621347760992256",
+          "status": "COMPLETED",
+          "runId": "2114633652456419328"
+        },
+        {
+          "executionId": "b673e645-85ed-495e-bee8-1124dee8a252",
+          "projectId": "2114621347760992256",
+          "status": "COMPLETED",
+          "runId": "2114623065924071424"
+        },
+        {
+          "executionId": "108c0af7-3619-44e1-8987-b77700a6449b",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114623134702268416"
+        },
+        {
+          "executionId": "152a4d61-84b7-4d09-a1fa-ceeeb13b71e5",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114635600865816576"
+        },
+        {
+          "executionId": "1c5681ef-db48-45bd-ba21-f74fadc44293",
+          "projectId": "2114621350667644928",
+          "status": "TIMEOUT",
+          "runId": "2114625453934276608"
+        },
+        {
+          "executionId": "21d961ad-676d-4292-abfc-4b1e5a835c29",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114625842389741568"
+        },
+        {
+          "executionId": "4ab557d7-efb0-4ffc-8154-c743b489c2c6",
+          "projectId": "2114621350667644928",
+          "status": "TIMEOUT",
+          "runId": "2114625258748145664"
+        },
+        {
+          "executionId": "6860d5b3-e903-4f25-be6b-93f5589e21bb",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114633758614253568"
+        },
+        {
+          "executionId": "6e50e17e-c12d-4fba-a166-7a4a7dad5dfe",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114633948620419072"
+        },
+        {
+          "executionId": "7aa68799-6c02-4a49-bd6d-99a978179a9d",
+          "projectId": "2114621350667644928",
+          "status": "CANCELLED",
+          "runId": "2114625521466765312"
+        },
+        {
+          "executionId": "85b31478-745f-43da-8e3f-9c9e3e533a3b",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114624070736703488"
+        },
+        {
+          "executionId": "87b0c685-97e5-49ca-b9f2-7d9d90a1327e",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114634278405959680"
+        },
+        {
+          "executionId": "9ef2055f-e1a6-4548-a6e8-f8456d3f7ce1",
+          "projectId": "2114621350667644928",
+          "status": "CANCELLED",
+          "runId": "2114625374817120256"
+        },
+        {
+          "executionId": "d02cc9a3-bef0-42d7-adcc-e0ed69ce8d9f",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114627474745749504"
+        },
+        {
+          "executionId": "ec0c2988-ffd4-420b-b488-4cd27235969e",
+          "projectId": "2114621350667644928",
+          "status": "COMPLETED",
+          "runId": "2114627987860123648"
+        },
+        {
+          "executionId": "ed7fa8ca-88eb-47ae-9d63-f336c3cb180e",
+          "projectId": "2114621350667644928",
+          "status": "CANCELLED",
+          "runId": "2114625314389782528"
+        },
+        {
+          "executionId": "ff900d68-41e0-4046-b47d-ce06f2e55016",
+          "projectId": "2114621350667644928",
+          "status": "CANCELLED",
+          "runId": "2114625162908299264"
+        },
+        {
+          "executionId": "4b3bd6cf-6d8d-4c39-aa7d-13631b0c5553",
+          "projectId": "2114621353465245696",
+          "status": "COMPLETED",
+          "runId": "2114623200649310208"
+        },
+        {
+          "executionId": "d4a08354-d282-454c-893d-7c7a76c974b6",
+          "projectId": "2114621353465245696",
+          "status": "COMPLETED",
+          "runId": "2114624124058890240"
+        }
+      ],
+      "terminalServerReceipts": 31,
+      "matchingClientReceipts": 31,
+      "busyReceiptsWithoutRun": 2,
+      "auditRetained": true,
+      "countingRule": "Scenario reports and lifecycle/recovery records overlap these receipts; do not sum as independent operations"
+    },
+    "initialEnvironmentFailures": [
+      "Cross-network Redis attempt hit protected mode, then the 2-second RPC bound; final same-host run passed without relaxing product timeouts",
+      "Initial reports/openapi.xml and static-summary.json are not the final passing OpenAPI reports",
+      "Queue image download, fixture lifetime and port conflicts corrected inside the fixture; not product fixes",
+      "actionlint download unavailable; YAML and shell syntax checks do not substitute for actionlint or hosted CI"
+    ],
+    "cleanup": {
+      "server": {
+        "fileHandlesRemoved": 0,
+        "unrelatedFileHandlesPreserved": 0,
+        "testDeclarationsRemoved": 5,
+        "originalPolicyEquivalent": true,
+        "workflowRowsRemoved": 5,
+        "nonterminalExecutions": 0,
+        "executionAuditRetained": true,
+        "featureStorageConfigurationRetained": true
+      },
+      "fixtures": {
+        "temporaryRobotsRemoved": 5
+      },
+      "n8n": {
+        "testWorkflowsRemoved": 7,
+        "testExecutionsRemoved": 115,
+        "unrelatedDataPreserved": true,
+        "pendingExecutions": 0
+      },
+      "remoteTests": {
+        "testRedisRemoved": true,
+        "testPathsRemoved": 3,
+        "productionRedisUntouched": true
+      },
+      "runtime": {
+        "httpFixtureStopped": true,
+        "queueProcessesStopped": true,
+        "isolatedQueueContainerRemoved": true,
+        "wslForwardPortsRemaining": [],
+        "originalImagesPreserved": true
+      },
+      "localTemporaryPathsPendingManualRemoval": 12,
+      "pendingCategories": {
+        "clientRuntimeDirectories": 5,
+        "n8nBinaryCache": 1,
+        "temporaryTestDirectories": 4,
+        "temporaryConfigAndCredentialCopies": 2
+      },
+      "pendingReason": "Automatic approval rejected deletion; manual cleanup not yet confirmed. Full paths remain in the local cleanup inventory; no credential contents are included here",
+      "permanentInstallationAndExecutionAuditRetained": true
+    },
+    "finalHealth": {
+      "n8nHealthy": true,
+      "clientIdle": true,
+      "pendingN8n": 0
+    },
+    "notValidated": [
+      "New full EXE build, interactive GUI, WPS COM and remote databases not repeated in this round; use their dated 2026-10-23 evidence only",
+      "All 29 read operations not independently rerun on this candidate",
+      "Native Microsoft Office, Access, other host/driver combinations and multi-host file stores remain unverified",
+      "Real model inference skipped at user direction because no configured provider was available",
+      "Hosted CI, actual npm publication, external alert delivery and final maintainer release decision remain outstanding"
+    ],
+    "localEvidenceSource": "astron-manual-release-20261026; only safe selected fields are included, not logs, credentials or private policy exports"
+  },
   "releaseGateValidation": {
     "date": "2026-10-23",
     "branch": "feature/n8n-production-hardening",
     "baseCommit": "c96c40cbaeb3f9a45690737a1c93f8c5b8b84c54",
     "scope": "Full Windows candidate installation, dev.4 queue/regular, WPS Office, existing remote database types and AI log hygiene; controlled workflows only",
     "uncommitted": true,
-    "preExistingIndexPreserved": true,
     "environment": {
       "n8n": "2.40.7",
       "node": "24.18.0",
@@ -29,9 +1062,7 @@
           "pyodbc": true,
           "cx_Oracle": true
         },
-        "odbcDrivers": [
-          "SQL Server"
-        ]
+        "odbcDrivers": ["SQL Server"]
       }
     },
     "tests": {
@@ -52,7 +1083,7 @@
         "windowsInapplicableSkipped": 1,
         "sourceChangedThisSupplement": false
       },
-      "hostedCi": "not run: no commit/push",
+      "hostedCi": "Not run for this validation round",
       "wholeRepositoryCheck": "previous Windows enumeration timeout retained; no claim of full-repository pass"
     },
     "package": {
@@ -519,9 +1550,7 @@
         "bind": "127.0.0.1:19090",
         "restart": "unless-stopped",
         "serverFiles": 65,
-        "openapi": [
-          "astron-rpa-user-openapi-service-2"
-        ]
+        "openapi": ["astron-rpa-user-openapi-service-2"]
       },
       "observedDuring": "2026-10-23 after REST desktop cleanup, before the later interruption"
     },
@@ -559,12 +1588,7 @@
         ],
         "fixture": {
           "textVerified": true,
-          "rect": [
-            80,
-            80,
-            427,
-            300
-          ],
+          "rect": [80, 80, 427, 300],
           "resolution": {
             "width": 1280,
             "height": 800
@@ -605,12 +1629,7 @@
         ],
         "fixture": {
           "textVerified": true,
-          "rect": [
-            80,
-            80,
-            600,
-            410
-          ],
+          "rect": [80, 80, 600, 410],
           "resolution": {
             "width": 1920,
             "height": 1200
@@ -731,7 +1750,7 @@
       "date": "2026-10-24",
       "clientUserDirectoryPresent": false,
       "n8nClientLocalPortsListening": false,
-      "note": "User confirmed intentional removal of the Client user directory. Completed desktop validation remains supported by saved receipts and screenshots; no rebuild is needed to preserve that result. The runtime is currently offline; rebuilding it would not restore deleted login state or local audit history.",
+      "note": "On 2026-10-24 the user confirmed intentional removal of the Client user directory. Earlier controlled results retain their saved evidence summaries/screenshots; deleted login state and local audit originals were not restored. Runtime ports were offline at that observation, not a statement of current runtime health.",
       "userConfirmedIntentionalCleanup": true,
       "rebuildRequiredForCompletedValidation": false,
       "runtimeRestored": false,
@@ -743,7 +1762,7 @@
     "date": "2026-10-23",
     "branch": "feature/n8n-production-hardening",
     "baseCommit": "c96c40cbaeb3f9a45690737a1c93f8c5b8b84c54",
-    "workingTree": "uncommitted and unpushed; pre-existing staged content preserved",
+    "workingTree": "Baseline plus the deployment/diagnostic revisions tested in this record",
     "scope": "Permanent deployment, safe diagnostics, schema error hints, compatibility and prerelease gate audit; controlled-validation only",
     "environment": {
       "n8n": "2.40.7",
@@ -936,7 +1955,7 @@
       "engine": "Unchanged source; same-day prior 403 pass / 1 Windows-inapplicable POSIX skip retained, not rerun here",
       "realRedis": "Three tests from preceding dev.3 run retained, not rerun here",
       "makeCheck": "Timed out after 35 seconds in pre-existing Windows frontend file enumeration; no result",
-      "hostedCI": "Not run; no push"
+      "hostedCI": "Not run for this validation round"
     },
     "permanentDeployment": {
       "server": {
@@ -946,9 +1965,7 @@
         "bind": "127.0.0.1:19090",
         "restart": "unless-stopped",
         "serverFiles": 62,
-        "openapi": [
-          "astron-rpa-user-openapi-service-2"
-        ]
+        "openapi": ["astron-rpa-user-openapi-service-2"]
       },
       "host": {
         "singleOpenapi": true,
@@ -1050,10 +2067,7 @@
         "resultVisibility": "json",
         "result": {
           "value": "fixture",
-          "listResult": [
-            1,
-            3
-          ],
+          "listResult": [1, 3],
           "textResult": "fixturexyx",
           "nullResult": null,
           "encoded": "Zml4dHVyZQ=="
@@ -1128,9 +2142,7 @@
           "validation": {
             "field": "$/value",
             "rule": "type",
-            "expected": [
-              "string"
-            ]
+            "expected": ["string"]
           }
         },
         "verified": true
@@ -1155,10 +2167,7 @@
         "resultVisibility": "json",
         "result": {
           "value": "fixture",
-          "listResult": [
-            1,
-            3
-          ],
+          "listResult": [1, 3],
           "textResult": "fixturexyx",
           "nullResult": null,
           "encoded": "Zml4dHVyZQ=="
@@ -1233,9 +2242,7 @@
           "validation": {
             "field": "$/value",
             "rule": "type",
-            "expected": [
-              "string"
-            ]
+            "expected": ["string"]
           }
         },
         "verified": true
@@ -1326,10 +2333,7 @@
       "resultVisibility": "json",
       "result": {
         "value": "fixture",
-        "listResult": [
-          1,
-          3
-        ],
+        "listResult": [1, 3],
         "textResult": "fixturexyx",
         "nullResult": null,
         "encoded": "Zml4dHVyZQ=="
@@ -1360,10 +2364,7 @@
       "resultVisibility": "json",
       "result": {
         "value": "fixture",
-        "listResult": [
-          1,
-          3
-        ],
+        "listResult": [1, 3],
         "textResult": "fixturexyx",
         "nullResult": null,
         "encoded": "Zml4dHVyZQ=="
@@ -1453,11 +2454,7 @@
           "files": 0
         }
       ],
-      "temporaryPortsClosed": [
-        18768,
-        18769,
-        18770
-      ],
+      "temporaryPortsClosed": [18768, 18769, 18770],
       "auditReceiptsPreserved": true,
       "finalHealth": {
         "n8nHealthy": true,
@@ -1523,9 +2520,7 @@
         "fullClientPackage": "client packaging maintainer",
         "releaseScopeAndExceptions": "PR maintainer"
       },
-      "outsideScope": [
-        "npm publication and ongoing release maintenance"
-      ]
+      "outsideScope": ["npm publication and ongoing release maintenance"]
     },
     "fixtureCorrections": [
       "Initial data assertion omitted the existing input echo field; corrected expectation and replayed original business key with unchanged executionId/runId. No duplicate start."
@@ -1943,13 +2938,7 @@
         "regularN8nHealthy": true,
         "clientIdle": true,
         "temporaryPortsClosed": [
-          15678,
-          15679,
-          15680,
-          15681,
-          15432,
-          16379,
-          18767
+          15678, 15679, 15680, 15681, 15432, 16379, 18767
         ]
       },
       "manualLocalCleanupCompleted": true,
@@ -1969,18 +2958,9 @@
       "External alert delivery; no monitoring receivers changed"
     ]
   },
-  "browserServiceConflictReview": {
+  "browserServiceMetadataValidation": {
     "date": "2026-10-20",
-    "originalHead": "4e26f0790cdaf65f0249be43ca7a15487cd05fd0",
-    "mainBase": "59b576ed4fd22bf44bbe81ff1265cd2a75f9cb08",
-    "rebasedCommitsHead": "c47d5cddd5205140341606a949b4262ad4fd0d3f",
-    "scope": "Resolve conflicts with main, adapt browser metadata localization and current component inventory, align validation and PR acceptance claims",
-    "conflictResolution": [
-      "Keep main locale-based metadata builder and removal of tracked browser metadata and legacy meta_json.py",
-      "Move browser activate_window labels to en_US/zh_CN locale; preserve default True and explicit False for reviewed reads",
-      "Keep main Engine dependency versions while retaining database dependency and optional driver extras",
-      "Keep current metadata README workflow and links to compatibility guidance in FAQ"
-    ],
+    "scope": "Browser metadata localization, default activation compatibility and current component inventory; local targeted regression only",
     "componentInventory": {
       "components": 26,
       "newMainComponent": "astronverse-control",
@@ -2015,10 +2995,7 @@
       "nodeLint": true,
       "nodeBuild": true,
       "nodePrettier": "passed with --end-of-line auto",
-      "actionlint": [
-        "main-ci.yml",
-        "integration-regression.yml"
-      ],
+      "actionlint": ["main-ci.yml", "integration-regression.yml"],
       "ruff": "runner and changed browser test passed check and format with Engine configuration",
       "gitDiffCheck": true
     },
@@ -2029,7 +3006,7 @@
       "openapi": 284,
       "engine": 45,
       "n8n": 36,
-      "appliesToRebasedHead": false
+      "appliesToTestedCommit": false
     },
     "historicalLiveValidation": [
       {
@@ -2039,7 +3016,7 @@
       },
       {
         "date": "2026-10-10",
-        "evidenceKey": "browserServiceRebaseReview",
+        "evidenceKey": "browserServiceRegressionValidation",
         "reportedOperations": 19
       }
     ],
@@ -2055,7 +3032,9 @@
         "HTTP, SQLite, FTP, email and shared-variable reads with MCP and explicitly admitted REST",
         "Original execution identity, idempotency, cancellation, timeout and resource cleanup",
         "Execution receipts, actual operation coverage and explicit untested boundaries for maintainer review"
-      ]
+      ],
+      "statusAsOf": "2026-10-20",
+      "laterEvidence": "See subsequent dated records; no claim that all requested operations were rerun on the latest candidate"
     },
     "notValidated": [
       "Current live Windows GUI/browser/plugin and n8n/server/client integration",
@@ -2070,7 +3049,14 @@
       "noDeploymentChanges": true,
       "noGuiOperations": true,
       "noCredentialExports": true
-    }
+    },
+    "testedCommit": "c47d5cddd5205140341606a949b4262ad4fd0d3f",
+    "changes": [
+      "Use locale-based metadata generation without restoring legacy generated metadata files",
+      "Maintain en_US/zh_CN activate_window labels, default True and explicit False for reviewed reads",
+      "Retain current Engine dependency versions and database optional-driver extras",
+      "Document metadata generation and user-facing compatibility guidance"
+    ]
   },
   "ciRegressionReview": {
     "date": "2026-10-12",
@@ -2123,226 +3109,207 @@
     ],
     "cleanup": "Test environments, caches and reports use paths outside the repository; no new component lockfiles or production changes"
   },
-  "clientSupport": {
-    "supportedClient": "Repository-matched Windows client verified by source comparison and integration tests",
-    "desktopVersion": "1.1.8.0",
-    "requiredClientProtocol": 1,
-    "rejectsInsufficientCapabilities": true,
-    "silentFallback": false
-  },
-  "quality": {
-    "openapiTestsPassed": 203,
-    "nodeTestsPassed": 19,
-    "nodeBuildTypecheckLintFormat": "passed",
-    "makeVersion": "4.4.1",
-    "makeCheckCurrentExit": 2,
-    "makeCheckStoppingTarget": "makefiles/typescript.mk:62 check-typescript: frontend root has no tsconfig.json",
-    "makeCheckFullPass": false,
-    "makeCheckReferenceExit": 2,
-    "makeCheckComparison": "Unmodified source and changed source checked in independent snapshots with the same dependencies"
-  },
-  "cleanInstall": {
-    "case": "clean tarball installation and process restart",
-    "nodeAndCredentialsLoaded": true,
-    "executionIds": [
-      1,
-      2
-    ],
-    "statuses": [
-      "success",
-      "success"
-    ],
-    "workflowCounts": [
-      4,
-      4
-    ],
-    "mode": "n8n public CLI with fresh user-data directory; no source links"
-  },
-  "consistency": {
-    "openapiFiles": 44,
-    "openapiMismatches": [],
-    "installedDistFiles": 14,
-    "installedDistMismatches": [],
-    "tarballFiles": 17,
-    "installedTarballMismatches": [],
-    "tarballSha256": "e15d277304977299e927bdbd8bb679ccaa46300d605faa7b891a2cc9802c421e",
-    "client": [
+  "publicFrameworkValidation": {
+    "date": null,
+    "dateNote": "The original framework record did not specify a validation date",
+    "packageVersion": "0.1.0-dev.1",
+    "clientSupport": {
+      "supportedClient": "Repository-matched Windows client verified by source comparison and integration tests",
+      "desktopVersion": "1.1.8.0",
+      "requiredClientProtocol": 1,
+      "rejectsInsufficientCapabilities": true,
+      "silentFallback": false
+    },
+    "quality": {
+      "openapiTestsPassed": 203,
+      "nodeTestsPassed": 19,
+      "nodeBuildTypecheckLintFormat": "passed",
+      "makeVersion": "4.4.1",
+      "makeCheckCurrentExit": 2,
+      "makeCheckStoppingTarget": "makefiles/typescript.mk:62 check-typescript: frontend root has no tsconfig.json",
+      "makeCheckFullPass": false,
+      "makeCheckReferenceExit": 2,
+      "makeCheckComparison": "Unmodified source and changed source checked in independent snapshots with the same dependencies"
+    },
+    "cleanInstall": {
+      "case": "clean tarball installation and process restart",
+      "nodeAndCredentialsLoaded": true,
+      "executionIds": [1, 2],
+      "statuses": ["success", "success"],
+      "workflowCounts": [4, 4],
+      "mode": "n8n public CLI with fresh user-data directory; no source links"
+    },
+    "consistency": {
+      "openapiFiles": 44,
+      "openapiMismatches": [],
+      "installedDistFiles": 14,
+      "installedDistMismatches": [],
+      "tarballFiles": 17,
+      "installedTarballMismatches": [],
+      "tarballSha256": "e15d277304977299e927bdbd8bb679ccaa46300d605faa7b891a2cc9802c421e",
+      "client": [
+        {
+          "component": "scheduler",
+          "files": 64,
+          "mismatches": []
+        },
+        {
+          "component": "executor",
+          "files": 31,
+          "mismatches": []
+        }
+      ]
+    },
+    "clientReceipts": [
       {
-        "component": "scheduler",
-        "files": 64,
-        "mismatches": []
+        "case": "concurrent",
+        "executionId": "3248e5df-98a6-4288-8662-26c14b653062",
+        "receipts": 1,
+        "runId": "2100159487900938240",
+        "status": "succeeded"
       },
       {
-        "component": "executor",
-        "files": 31,
-        "mismatches": []
-      }
-    ]
-  },
-  "clientReceipts": [
-    {
-      "case": "concurrent",
-      "executionId": "3248e5df-98a6-4288-8662-26c14b653062",
-      "receipts": 1,
-      "runId": "2100159487900938240",
-      "status": "succeeded"
-    },
-    {
-      "case": "failed",
-      "executionId": "2b29fe13-1194-491b-8cb2-529c0f8ac310",
-      "receipts": 1,
-      "runId": "2100159590371979264",
-      "status": "failed"
-    },
-    {
-      "case": "newFailed",
-      "executionId": "cf2e6a61-acb0-4caa-827a-6726e274578b",
-      "receipts": 1,
-      "runId": "2100159666326630400",
-      "status": "failed"
-    },
-    {
-      "case": "preid",
-      "executionId": "1ea82841-ceb3-427a-8455-a48036530dc6",
-      "receipts": 1,
-      "runId": "2100160185287864320",
-      "status": "succeeded"
-    }
-  ],
-  "preidRestart": {
-    "n8nParent": "322",
-    "n8nChild": 323,
-    "originalDeadline": 1789552418684,
-    "restoredDeadlines": [
-      1789552418684
-    ],
-    "executions": [
+        "case": "failed",
+        "executionId": "2b29fe13-1194-491b-8cb2-529c0f8ac310",
+        "receipts": 1,
+        "runId": "2100159590371979264",
+        "status": "failed"
+      },
       {
-        "id": "1ea82841-ceb3-427a-8455-a48036530dc6",
+        "case": "newFailed",
+        "executionId": "cf2e6a61-acb0-4caa-827a-6726e274578b",
+        "receipts": 1,
+        "runId": "2100159666326630400",
+        "status": "failed"
+      },
+      {
+        "case": "preid",
+        "executionId": "1ea82841-ceb3-427a-8455-a48036530dc6",
+        "receipts": 1,
         "runId": "2100160185287864320",
-        "version": 3,
-        "status": "succeeded",
-        "pairedItem": {
-          "item": 0
-        }
+        "status": "succeeded"
       }
-    ]
-  },
-  "batchRestart": {
-    "n8nParent": "324",
-    "n8nChild": 325,
-    "originalDeadline": 1789552525642,
-    "restoredDeadlines": [
-      1789552525642
     ],
-    "executions": [
-      {
-        "id": "7757323d-8ff2-494a-923b-0e26d526ae72",
-        "runId": "2100160592483479552",
-        "version": 1,
-        "status": "succeeded",
-        "pairedItem": {
-          "item": 0
+    "preidRestart": {
+      "n8nParent": "322",
+      "n8nChild": 323,
+      "originalDeadline": 1789552418684,
+      "restoredDeadlines": [1789552418684],
+      "executions": [
+        {
+          "id": "1ea82841-ceb3-427a-8455-a48036530dc6",
+          "runId": "2100160185287864320",
+          "version": 3,
+          "status": "succeeded",
+          "pairedItem": {
+            "item": 0
+          }
         }
-      },
-      {
-        "id": "5fc054c1-2419-4b90-a31e-f3f0eb9e5c48",
-        "runId": "2100160634451685376",
-        "version": 3,
-        "status": "succeeded",
-        "pairedItem": {
-          "item": 1
-        }
-      },
-      {
-        "id": "0e7f2415-99e6-4d03-aa89-9cab4feca39e",
-        "runId": "2100160810352406528",
-        "version": 1,
-        "status": "succeeded",
-        "pairedItem": {
-          "item": 2
-        }
-      }
-    ]
-  },
-  "duplicateWake": {
-    "case": "duplicate and late wake",
-    "child": 329,
-    "parent": "328",
-    "executionId": "f5733986-a63c-42c2-9f3e-b2bdbd192a1c",
-    "deadline": 1789552640973,
-    "duplicateHTTP": [
-      500,
-      200
-    ],
-    "lateHTTP": 409,
-    "status": "succeeded",
-    "resultSource": "MCP"
-  },
-  "clientRestart": {
-    "queryN8n": 332,
-    "sameKeyWaitN8n": 333,
-    "executionId": "eb11d804-723e-4923-9350-41991014e07a",
-    "runId": "2100162066642923520",
-    "status": "unknown",
-    "code": "CLIENT_RESTARTED",
-    "waitError": "WAIT_BUDGET_EXPIRED",
-    "sameIdPreserved": true,
-    "automaticRerun": false
-  },
-  "designerPublication": {
-    "publicVersion": 4,
-    "declaredVersion": 4,
-    "draftAndPublishedContentHash": "9e8ed603ad37ebf22237de616f5d0569ee91f8085ee7ac7677867a21c7a70742",
-    "newReleaseInitiallyDenied": "PROFILE_UNKNOWN",
-    "version4PublishedAtUTC": "2026-09-16T10:01:21Z",
-    "oldExecutionFinishedAtUTC": "2026-09-16T10:00:59Z",
-    "runningDuringUIPublish": false,
-    "oldExecutionId": "4eb78bf3-da73-4223-8ec4-c1b12971687d",
-    "oldQueryCancelReplayN8n": [
-      339,
-      340,
-      341
-    ],
-    "finalSmokeN8n": 343,
-    "finalSmokeExecutionId": "a83cc3db-421e-4a42-81d5-f9164be69a4d",
-    "finalSmokeStatus": "succeeded"
-  },
-  "finalHealth": {
-    "n8nHealth": 200,
-    "clientState": "ready",
-    "testWorkflowsPublished": 0,
-    "testN8nExecutionsPending": 0,
-    "removedTestWebhookHTTP": 404,
-    "expectedUnknownClientReceipts": 1,
-    "expectedUnknownExecutionId": "eb11d804-723e-4923-9350-41991014e07a"
-  },
-  "cleanup": {
-    "testWebhooksUnpublished": true,
-    "isolatedN8nStopped": true,
-    "isolatedN8nDatabaseAndEncryptionConfigRemoved": true,
-    "plaintextTemporaryCredentialsRemoved": true,
-    "executionEvidencePreserved": true,
-    "realSecretsFoundInChangedRepositoryFiles": 0,
-    "n8nRestartedWithoutFaultHook": true
-  },
-  "incompleteChecks": [
-    {
-      "item": "entire make check succeeds",
-      "reason": "The unmodified source and changed source have the same frontend root TypeScript configuration failure; aggregate checks after the stopping target were not executed."
+      ]
     },
-    {
-      "item": "in-flight execution combined with full desktop UI publication",
-      "reason": "The controlled execution finished before publication; a desktop window targeting failure prevented completing the combined scenario. Running metadata changes and full UI publication were verified separately."
-    }
-  ],
+    "batchRestart": {
+      "n8nParent": "324",
+      "n8nChild": 325,
+      "originalDeadline": 1789552525642,
+      "restoredDeadlines": [1789552525642],
+      "executions": [
+        {
+          "id": "7757323d-8ff2-494a-923b-0e26d526ae72",
+          "runId": "2100160592483479552",
+          "version": 1,
+          "status": "succeeded",
+          "pairedItem": {
+            "item": 0
+          }
+        },
+        {
+          "id": "5fc054c1-2419-4b90-a31e-f3f0eb9e5c48",
+          "runId": "2100160634451685376",
+          "version": 3,
+          "status": "succeeded",
+          "pairedItem": {
+            "item": 1
+          }
+        },
+        {
+          "id": "0e7f2415-99e6-4d03-aa89-9cab4feca39e",
+          "runId": "2100160810352406528",
+          "version": 1,
+          "status": "succeeded",
+          "pairedItem": {
+            "item": 2
+          }
+        }
+      ]
+    },
+    "duplicateWake": {
+      "case": "duplicate and late wake",
+      "child": 329,
+      "parent": "328",
+      "executionId": "f5733986-a63c-42c2-9f3e-b2bdbd192a1c",
+      "deadline": 1789552640973,
+      "duplicateHTTP": [500, 200],
+      "lateHTTP": 409,
+      "status": "succeeded",
+      "resultSource": "MCP"
+    },
+    "clientRestart": {
+      "queryN8n": 332,
+      "sameKeyWaitN8n": 333,
+      "executionId": "eb11d804-723e-4923-9350-41991014e07a",
+      "runId": "2100162066642923520",
+      "status": "unknown",
+      "code": "CLIENT_RESTARTED",
+      "waitError": "WAIT_BUDGET_EXPIRED",
+      "sameIdPreserved": true,
+      "automaticRerun": false
+    },
+    "designerPublication": {
+      "publicVersion": 4,
+      "declaredVersion": 4,
+      "draftAndPublishedContentHash": "9e8ed603ad37ebf22237de616f5d0569ee91f8085ee7ac7677867a21c7a70742",
+      "newReleaseInitiallyDenied": "PROFILE_UNKNOWN",
+      "version4PublishedAtUTC": "2026-09-16T10:01:21Z",
+      "oldExecutionFinishedAtUTC": "2026-09-16T10:00:59Z",
+      "runningDuringUIPublish": false,
+      "oldExecutionId": "4eb78bf3-da73-4223-8ec4-c1b12971687d",
+      "oldQueryCancelReplayN8n": [339, 340, 341],
+      "finalSmokeN8n": 343,
+      "finalSmokeExecutionId": "a83cc3db-421e-4a42-81d5-f9164be69a4d",
+      "finalSmokeStatus": "succeeded"
+    },
+    "finalHealth": {
+      "n8nHealth": 200,
+      "clientState": "ready",
+      "testWorkflowsPublished": 0,
+      "testN8nExecutionsPending": 0,
+      "removedTestWebhookHTTP": 404,
+      "expectedUnknownClientReceipts": 1,
+      "expectedUnknownExecutionId": "eb11d804-723e-4923-9350-41991014e07a"
+    },
+    "cleanup": {
+      "testWebhooksUnpublished": true,
+      "isolatedN8nStopped": true,
+      "isolatedN8nDatabaseAndEncryptionConfigRemoved": true,
+      "plaintextTemporaryCredentialsRemoved": true,
+      "executionEvidencePreserved": true,
+      "realSecretsFoundInChangedRepositoryFiles": 0,
+      "n8nRestartedWithoutFaultHook": true
+    },
+    "incompleteChecks": [
+      {
+        "item": "entire make check succeeds",
+        "reason": "The unmodified source and changed source have the same frontend root TypeScript configuration failure; aggregate checks after the stopping target were not executed."
+      },
+      {
+        "item": "in-flight execution combined with full desktop UI publication",
+        "reason": "The controlled execution finished before publication; a desktop window targeting failure prevented completing the combined scenario. Running metadata changes and full UI publication were verified separately."
+      }
+    ]
+  },
   "jsonContractReview": {
     "date": "2026-10-08",
     "branch": "data-driven_flows",
-    "rebaseBase": "ea33dd5bfc599c208838763514db2bfca8d096b8",
-    "rebasedHead": "f957e50a",
-    "fixesCommitted": false,
-    "pushed": false,
     "environment": {
       "n8n": "2.40.7",
       "n8nWorkflow": "2.40.1",
@@ -2601,7 +3568,9 @@
       "clientExecutorRunning": false,
       "testNonterminalExecutions": 0,
       "executionAuditHistoryRetained": true
-    }
+    },
+    "baselineCommit": "ea33dd5bfc599c208838763514db2bfca8d096b8",
+    "testedCommit": "f957e50a"
   },
   "browserServiceValidation": {
     "date": "2026-09-20",
@@ -2636,12 +3605,8 @@
         "Database.query_sql",
         "Database.disconnect_database"
       ],
-      "astronverse-email": [
-        "Email.receive_email"
-      ],
-      "astronverse-enterprise": [
-        "Enterprise.get_shared_variable"
-      ],
+      "astronverse-email": ["Email.receive_email"],
+      "astronverse-enterprise": ["Enterprise.get_shared_variable"],
       "astronverse-network": [
         "Network.http_request",
         "Network.get_ftp_list",
@@ -2784,24 +3749,12 @@
     "repeatedOldCancellationDoesNotStopNewExecution": true,
     "mcpRestSnapshotsEqual": true,
     "crossTransportIdempotency": {
-      "n8nExecutions": [
-        357,
-        374
-      ],
+      "n8nExecutions": [357, 374],
       "executionId": "528d2c77-1d2f-4023-86f1-a15bfca61ed7",
       "sameRunId": true
     },
     "readSideEffects": {
-      "http": [
-        "GET",
-        "HEAD",
-        "GET",
-        "HEAD",
-        "GET",
-        "GET",
-        "GET",
-        "GET"
-      ],
+      "http": ["GET", "HEAD", "GET", "HEAD", "GET", "GET", "GET", "GET"],
       "imap": [
         "CAPABILITY",
         "LOGIN",
@@ -2873,9 +3826,7 @@
       "n8nTestExecutionsRemoved": 57,
       "n8nPendingExecutions": 0,
       "unrelatedExecutionsAndCredentialsPreserved": true,
-      "stoppedN8nProcessIds": [
-        20952
-      ],
+      "stoppedN8nProcessIds": [20952],
       "fixturesStopped": true,
       "testVenvsRemoved": 11,
       "temporaryCredentialsAndTlsKeyRemoved": true,
@@ -2901,9 +3852,9 @@
       "No local Docker CLI; complete Docker gateway shell test not run; direct Lua checks and deployed Nginx configuration check passed"
     ]
   },
-  "browserServiceRebaseReview": {
+  "browserServiceRegressionValidation": {
     "date": "2026-10-10",
-    "scope": "Rebase of browser-service onto merged public framework and JSON data contracts; controlled Windows integration regression",
+    "scope": "Controlled Windows browser/service integration regression with the shared execution framework and JSON contracts",
     "baseCommit": "79f8f6dbe5f7b9a076cc39f6712168ede075e151",
     "testedCommit": "434b5f4693241c017af577119f22ef037af8850e",
     "environment": {
@@ -2930,9 +3881,7 @@
         "BrowserElement.element_text",
         "BrowserElement.element_exist"
       ],
-      "http": [
-        "Network.http_request"
-      ],
+      "http": ["Network.http_request"],
       "database": [
         "Database.connect_database",
         "Database.query_sql",
@@ -2945,16 +3894,12 @@
         "Network.change_working_dir",
         "Network.ftp_close"
       ],
-      "mail": [
-        "Email.receive_email"
-      ],
-      "shared": [
-        "Enterprise.get_shared_variable"
-      ]
+      "mail": ["Email.receive_email"],
+      "shared": ["Enterprise.get_shared_variable"]
     },
     "liveOperationCount": 19,
     "bothTransportsPerScenario": true,
-    "historicalFullOperationCoverage": "browserServiceValidation (2026-09-20) retains the historical 29-operation record; neither this rebase review nor the CI regression review independently reran all 29 operations",
+    "historicalFullOperationCoverage": "browserServiceValidation (2026-09-20) retains the historical 29-operation record; this round covered 19 operations and the CI review did not independently rerun all 29",
     "successfulExecutions": [
       {
         "case": "http:mcp",
@@ -3049,10 +3994,7 @@
       }
     ],
     "crossTransportIdempotency": {
-      "n8nExecutions": [
-        441,
-        471
-      ],
+      "n8nExecutions": [441, 471],
       "executionId": "75eae7f5-767f-46a0-9664-98b28476192f",
       "runId": "2108828623187243008",
       "sameExecutionAndRun": true
@@ -3226,12 +4168,7 @@
           "mail-key.pem",
           "mail-cert.pem"
         ],
-        "testPortsClosed": [
-          18766,
-          18767,
-          18768,
-          5678
-        ],
+        "testPortsClosed": [18766, 18767, 18768, 5678],
         "clientExecutorRunning": false,
         "clientExecutionAuditRetained": true,
         "installedPackageTarballRetained": true
@@ -3248,17 +4185,14 @@
     "date": "2026-10-13",
     "baseCommit": "4e26f0790cdaf65f0249be43ca7a15487cd05fd0",
     "branch": "feat/office-file-workflows",
-    "workingTreeChanges": "Office/file capability, authorized binary transport, managed client file and Office lifecycle, bounded component fixes and regression coverage; not staged, committed or pushed",
+    "workingTreeChanges": "Office/file capability, authorized binary transport, managed client file and Office lifecycle, bounded component fixes and regression coverage",
     "environment": {
       "n8n": "2.40.7",
       "nodeJs": "24.18.0",
       "package": "n8n-nodes-astron-rpa@0.1.0-dev.2",
       "client": "Existing Windows desktop with repository-matched changed Python sources; no full EXE rebuild",
       "office": "WPS Office 2023 Professional",
-      "officeProviders": [
-        "Ket.Application",
-        "Kwps.Application"
-      ],
+      "officeProviders": ["Ket.Application", "Kwps.Application"],
       "managedProtocol": 1,
       "fileTransferVersion": 1,
       "tlsVerificationPassed": true,
@@ -3339,18 +4273,10 @@
     "ci": {
       "workflow": ".github/workflows/integration-regression.yml",
       "runner": ".github/scripts/run-integration-regression.py",
-      "newEngineGroups": [
-        "files",
-        "excel",
-        "word",
-        "system",
-        "datatable"
-      ],
+      "newEngineGroups": ["files", "excel", "word", "system", "datatable"],
       "mainCiAddsSchedulerExecutorTriggers": true,
       "hostedCiExecuted": false,
-      "otherExistingEngineGroupsRerunThisRound": [
-        "email"
-      ]
+      "otherExistingEngineGroupsRerunThisRound": ["email"]
     },
     "liveSuccessfulCases": [
       {
@@ -3688,7 +4614,7 @@
     "date": "2026-10-14",
     "baseCommit": "225914d15d328ec6193bbc790b52b4d00c2cc38e",
     "branch": "feat/office-file-workflows",
-    "workingTreeChanges": "Desktop/UI peer capability, reviewed frozen desktop contract, managed Windows session checks and dialogs, execution recovery fixes and bounded regression coverage; not staged, committed or pushed",
+    "workingTreeChanges": "Desktop/UI peer capability, reviewed frozen desktop contract, managed Windows session checks and dialogs, execution recovery fixes and bounded regression coverage",
     "environment": {
       "n8n": "2.40.7",
       "node": "24.18.0",
@@ -3793,11 +4719,7 @@
     },
     "ci": {
       "newOpenapiTest": "test_desktop_ui.py",
-      "newEngineGroups": [
-        "desktop",
-        "vision",
-        "dialog"
-      ],
+      "newEngineGroups": ["desktop", "vision", "dialog"],
       "existingFileRecoveryGroupExtended": true,
       "githubHostedRunCompleted": false
     },
@@ -4666,22 +5588,11 @@
       "Remote database and external agent products",
       "All mixed GUI workflows",
       "GitHub hosted CI"
-    ],
-    "noStageCommitPush": true
+    ]
   },
-  "stage4RebaseAudit": {
+  "capabilityInventoryReview": {
     "date": "2026-10-22",
     "branch": "feat/office-file-workflows",
-    "rebase": {
-      "beforeHead": "fa08450439b195d2535568f968683d03ba782191",
-      "afterHead": "e7e07c9fe6fa293719189be696c2aa7c61e0fd8b",
-      "upstream": "65e97b93e4adc262d1a98dfabb9a6450f20f0384",
-      "stash": "3d37c92a9d9cb4e7b0541f5b9ad6af1d63d0e711",
-      "exactFiles": 43,
-      "lineEndingOnlyFiles": [],
-      "unexpectedChanges": [],
-      "stashDisposition": "Dropped after byte-for-byte restoration was verified, at user request in the subsequent closure run; stash list empty"
-    },
     "scope": "Local static and regression audit of public framework and five peer capability groups; no deployed host operations",
     "fixes": [
       "JSON-data now rejects file/GUI/human requirements, non-low risk and declared side effects in server and node",
@@ -4728,10 +5639,7 @@
         "Process.terminate_process": "System.terminate_process"
       },
       "operationsOutsideExplicitLists": {
-        "astronverse-dialog": [
-          "Dialog.custom_box",
-          "Dialog.select_file_box"
-        ],
+        "astronverse-dialog": ["Dialog.custom_box", "Dialog.select_file_box"],
         "astronverse-excel": [
           "Excel.copy_excel",
           "Excel.get_excel",
@@ -4886,15 +5794,11 @@
       "encrypt": {
         "current": {
           "tests": 3,
-          "failures": [
-            "test_base64_encode"
-          ]
+          "failures": ["test_base64_encode"]
         },
         "main": {
           "tests": 3,
-          "failures": [
-            "test_base64_encode"
-          ]
+          "failures": ["test_base64_encode"]
         },
         "sameFailures": true
       }
@@ -4936,13 +5840,13 @@
       "Remote databases, all Office/GUI combinations and external providers",
       "Hosted GitHub CI"
     ],
-    "workspace": "Existing commits rebased; original 43 worktree files restored before bounded fixes; historical snapshot subsequently dropped at user request; worktree retained unstaged; no new feature commit or push"
+    "testedCommit": "e7e07c9fe6fa293719189be696c2aa7c61e0fd8b"
   },
-  "stage4ClosureValidation": {
+  "capabilityCompletionValidation": {
     "date": "2026-10-22",
     "branch": "feat/office-file-workflows",
     "head": "e7e07c9fe6fa293719189be696c2aa7c61e0fd8b",
-    "scope": "Bounded fixes from the prior full-category audit; targeted static regression and current three-host controlled validation; no commit/push",
+    "scope": "Bounded component fixes from the prior capability inventory review; targeted static regression and controlled three-host validation",
     "fixes": [
       "Normalize parsed multi-delete list indices before reverse deletion",
       "Use integer right-padding length",
@@ -5116,10 +6020,7 @@
         "Process.terminate_process": "System.terminate_process"
       },
       "operationsOutsideExplicitLists": {
-        "astronverse-dialog": [
-          "Dialog.custom_box",
-          "Dialog.select_file_box"
-        ],
+        "astronverse-dialog": ["Dialog.custom_box", "Dialog.select_file_box"],
         "astronverse-excel": [
           "Excel.copy_excel",
           "Excel.get_excel",
@@ -5169,9 +6070,7 @@
         "Window.set_size",
         "Window.top"
       ],
-      "service-http-read": [
-        "Network.http_request"
-      ],
+      "service-http-read": ["Network.http_request"],
       "service-database-read": [
         "Database.connect_database",
         "Database.disconnect_database",
@@ -5303,12 +6202,7 @@
     },
     "desktop": {
       "textVerified": true,
-      "rect": [
-        80,
-        80,
-        427,
-        300
-      ]
+      "rect": [80, 80, 427, 300]
     },
     "fileContentChecks": {
       "text": true,
@@ -5785,7 +6679,6 @@
       "runtimePathsRemoved": 28,
       "runtimePathsAbsent": true,
       "auditRetained": true,
-      "stashEmpty": true,
       "repositoryTestArtifacts": "outside repository"
     },
     "finalHealth": {
@@ -5842,9 +6735,7 @@
       "noPendingN8nExecutions": true,
       "testWorkflowsAbsent": true,
       "fixtureServicesStopped": true,
-      "auditPreserved": true,
-      "stashEmpty": true,
-      "indexEmpty": true
+      "auditPreserved": true
     },
     "unverified": [
       "Successful real-model inference (no usable provider configuration)",
@@ -5969,11 +6860,7 @@
         "HTTP 503",
         "actual 35-second read timeout"
       ],
-      "successScenarios": [
-        "chat choices",
-        "chat data.choices",
-        "prompt data"
-      ],
+      "successScenarios": ["chat choices", "chat data.choices", "prompt data"],
       "ordinaryFailureResult": null,
       "managedFailureCode": "EXECUTION_FAILED",
       "failedBusinessResultsPersisted": false,

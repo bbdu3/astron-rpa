@@ -304,12 +304,13 @@ function failure(
 
 export class AstronRpa implements INodeType {
   description: INodeTypeDescription = {
-    displayName: "AstronRPA",
+    displayName: "Astron-RPA",
     name: "astronRpa",
     group: ["transform"],
     version: 1,
-    description: "Control published AstronRPA workflows through MCP",
-    defaults: { name: "AstronRPA" },
+    description:
+      "Run approved data, browser/service, Office/file, desktop and AI workflows through Astron-RPA",
+    defaults: { name: "Astron-RPA" },
     inputs: ["main"],
     outputs: ["main"],
     webhooks: [

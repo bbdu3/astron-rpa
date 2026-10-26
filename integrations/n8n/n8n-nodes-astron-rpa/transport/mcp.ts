@@ -2,6 +2,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { AstronError, object } from "../mapping/contracts";
 import { observedFetch, type Correlation } from "./correlation";
+import { name, version } from "../package.json";
 
 export interface Connection {
   endpoint: string;
@@ -33,10 +34,7 @@ export function endpoint(raw: string): URL {
 }
 
 export class McpConnection {
-  private client = new Client({
-    name: "n8n-nodes-astron-rpa",
-    version: "0.1.0-dev.4",
-  });
+  private client = new Client({ name, version });
   private transport: StreamableHTTPClientTransport;
   constructor(
     connection: Connection,
