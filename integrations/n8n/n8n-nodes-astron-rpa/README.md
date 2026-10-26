@@ -5,7 +5,7 @@ Control published AstronRPA workflows through authenticated HTTPS MCP: discover 
 ## Scope and requirements
 
 - This development package provides the common execution framework for individually approved workflows with `supportScope: controlled-validation`. An approved workflow does not establish support for an entire RPA capability family.
-- The verified host configuration is self-hosted n8n `2.36.9`, Node.js `24+`, one OpenAPI connection owner and one Windows client matching the repository, with managed client protocol `1`. The package declares `n8n-workflow >=2.36.4 <3`; other host versions, queue mode, multiple replicas or terminals, n8n Cloud and older clients are not covered by this validation.
+- The verified configuration is self-hosted n8n `2.40.7` on Node.js `24.18.0`, in regular mode or queue mode with PostgreSQL `15.19` and Redis `7.0.15`, and one Windows client with managed protocol `1`. OpenAPI supports one process with local routing, or same-host replicas with Redis routing and shared persistent storage; a two-replica configuration has controlled validation. The package declares `n8n-workflow >=2.36.4 <3`. Multi-host file storage, multiple desktops, n8n Cloud and older clients are not covered; see the dated validation record for exact workflows and recovery checks.
 - OpenAPI must provide integration contract `1`, profile schema `1` and MCP `2025-11-25`. MCP is the primary channel. A published capability may explicitly allow the REST auxiliary transport; the node never switches transports after an uncertain start.
 - Capability declarations include a stable `capabilityClass`, `capabilities`, `componentOperations` and `allowedTransports`. The node has independent validators for `json-data`, reviewed service/browser reads, `office-file` and `desktop-ui`. A declaration describes a workflow; it does not add an adapter for unsupported Engine operations.
 - Control inputs and outputs use bounded JSON. Files use authorized handles and separate binary transfer for approved file workflows. Reviewed `desktop-ui` workflows can operate a reserved Windows session. Runtime objects and arbitrary local paths are not exposed. JSON limits are 1 MiB encoded JSON, depth 12, 200 object properties, 1,000 array items and 100,000 characters per string. The server profile is authoritative; the node rejects a mismatched limit contract.
@@ -38,6 +38,10 @@ TLS verification remains enabled. URL credentials, query strings and redirects a
 If your AstronRPA deployment exposes only HTTP, such as `http://IP:32742`, configure TLS termination at the gateway or a reverse proxy first and use its HTTPS `/mcp/` endpoint. The certificate must be trusted by the n8n runtime; an HTTP endpoint cannot be used directly. See the repository's [HTTPS deployment guide](../../../docker/HTTPS_DEPLOYMENT.md).
 
 Start the Windows client through its desktop application. Starting Scheduler separately can leave desktop-dependent workflows unable to run.
+
+For package upgrades, queue workers, shared OpenAPI routing, TLS/proxy checks, correlation IDs and private monitoring, see the repository's [operations guide](../OPERATIONS.md). Its deployment options must be matched against the dated [validation record](../VALIDATION.md) before expanding a host's supported topology.
+
+Use the [compatibility matrix](../COMPATIBILITY.md) to distinguish tested package/runtime combinations from dependency ranges and historical results. Keep installed tarballs in a durable package directory; an npm `file:` dependency pointing into a temporary test folder cannot support a later reinstall.
 
 ## Run a workflow
 
@@ -208,6 +212,8 @@ Waiting checkpoints can resume after an n8n restart. Resumption may be delayed b
 An `unknown` state does not confirm that a task stopped. Recover through the original ID or original request/business key; do not switch transports or create a new key solely because a response was lost.
 
 Execute failures follow Stop/Continue/error-output settings. Query and Cancel return snapshots as data. On the error branch, `$json.error` contains a JSON envelope with the safe execution identity; read a known ID with `JSON.parse($json.error).executionId`. Errors before acceptance may have no ID.
+
+`INVALID_ARGUMENTS` may include `callerError.validation` with a public-schema field path, violated rule and expected JSON types. For example, `$/rows/*/count`, `type`, `["integer"]` identifies the input to correct without showing its value. Unknown dictionary keys use `*`; enum values and raw validator messages are omitted. Correct the input before executing again. Network/TLS diagnostics in the n8n log include a target hostname, error category and request trace ID; they do not change the original request's uncertainty or retry rules.
 
 Ordinary republication preserves management of accepted executions. Workflow deletion, ownership changes, external-access disablement and API key revocation still deny access.
 

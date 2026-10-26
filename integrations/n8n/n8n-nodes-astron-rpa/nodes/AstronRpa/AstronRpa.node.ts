@@ -408,10 +408,17 @@ export class AstronRpa implements INodeType {
         return [inputs];
       }
       if (operation === "_step") {
-        const connection = (await this.getCredentials(
-          "astronRpaApi",
-        )) as unknown as Connection;
+        const connection = {
+          ...((await this.getCredentials(
+            "astronRpaApi",
+          )) as unknown as Connection),
+        };
         const transport = requests[state.cursor].transport ?? "mcp";
+        connection.correlation = {
+          n8nExecutionId: requests[state.cursor].parentExecutionId,
+          itemIndex: requests[state.cursor].itemIndex,
+          report: (event) => this.logger?.warn(JSON.stringify(event)),
+        };
         let next;
         try {
           const run = (client: Parameters<typeof step>[2]) =>
@@ -486,13 +493,18 @@ export class AstronRpa implements INodeType {
       }
       throw new AstronError("INVALID_OPERATION");
     }
-    const connection = (await this.getCredentials(
-      "astronRpaApi",
-    )) as unknown as Connection;
+    const connection = {
+      ...((await this.getCredentials("astronRpaApi")) as unknown as Connection),
+    };
     const output: INodeExecutionData[] = [];
     const requests: Prepared[] = [];
     for (let i = 0; i < inputs.length; i++) {
       let knownExecutionId: string | undefined;
+      connection.correlation = {
+        n8nExecutionId: this.getExecutionId(),
+        itemIndex: i,
+        report: (event) => this.logger?.warn(JSON.stringify(event)),
+      };
       try {
         if (operation === "getExecution" || operation === "cancelExecution") {
           const value = this.getNodeParameter("executionId", i);

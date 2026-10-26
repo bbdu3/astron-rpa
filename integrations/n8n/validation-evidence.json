@@ -1,5 +1,1974 @@
 {
-  "scope": "n8n MCP community node public framework; controlled single-instance validation",
+  "scope": "n8n MCP community node; dated controlled validation of the framework, capabilities and same-host deployment topologies",
+  "releaseGateValidation": {
+    "date": "2026-10-23",
+    "branch": "feature/n8n-production-hardening",
+    "baseCommit": "c96c40cbaeb3f9a45690737a1c93f8c5b8b84c54",
+    "scope": "Full Windows candidate installation, dev.4 queue/regular, WPS Office, existing remote database types and AI log hygiene; controlled workflows only",
+    "uncommitted": true,
+    "preExistingIndexPreserved": true,
+    "environment": {
+      "n8n": "2.40.7",
+      "node": "24.18.0",
+      "package": "0.1.0-dev.4",
+      "queuePostgres": "17.11",
+      "queueRedis": "7.0.15",
+      "queueBinaryData": "default: inline base64 persisted in PostgreSQL execution data",
+      "client": "full locally built 1.1.8 installer",
+      "python": "3.13.14",
+      "office": "WPS Office 12.8.2.21555 via Excel/Word COM components",
+      "mysql": "8.4",
+      "postgres": "14",
+      "sqlserver": "2019 Developer",
+      "oracle": "21c XE",
+      "databaseDrivers": {
+        "sourceFiles": 304,
+        "drivers": {
+          "pymysql": true,
+          "psycopg2": true,
+          "pyodbc": true,
+          "cx_Oracle": true
+        },
+        "odbcDrivers": [
+          "SQL Server"
+        ]
+      }
+    },
+    "tests": {
+      "openapiPassed": 403,
+      "openapiWarnings": 4,
+      "realRedisTestsIncluded": 3,
+      "aiOfflinePassed": 68,
+      "newAiLoggingTests": 4,
+      "aiRuff": "4 changed Python files passed check and format",
+      "actionlint": "passed for main-ci and integration-regression",
+      "frontend": "isolated frozen dependency install, typecheck, renderer/main build, full Engine wheel/dependency/metadata build, NSIS package and 7z checks passed",
+      "nodeRegressionBaseline": {
+        "passed": 71,
+        "sourceChangedThisSupplement": false
+      },
+      "engineRegressionBaseline": {
+        "passed": 403,
+        "windowsInapplicableSkipped": 1,
+        "sourceChangedThisSupplement": false
+      },
+      "hostedCi": "not run: no commit/push",
+      "wholeRepositoryCheck": "previous Windows enumeration timeout retained; no claim of full-repository pass"
+    },
+    "package": {
+      "installer": "C:\\Users\\bbdu3\\AppData\\Local\\Temp\\astron-release-gates-20261023\\client-source\\frontend\\packages\\electron-app\\dist\\星辰RPA-1.1.8-x64.exe",
+      "installerBytes": 314586183,
+      "installerSha256": "29262fbfafce2d1ead45d5a5ac4965a615b81fc6aeda92ca5abeca23cd87a0ec",
+      "engineArchiveSha256": "59bf378026308d2ed9e67d6f4c7fa5e4fcecb3d613ed742daef5597bb10c248b",
+      "engineSourceFilesVerified": 304,
+      "frontendBuild": true,
+      "metadataBuild": true,
+      "packageTool": "electron-builder 24.13.3 with flat npm tool path (NSIS path length workaround)",
+      "installed": true,
+      "backup": "D:\\software\\astron-rpa-backups\\full-release-gates-20261023",
+      "installedPath": "D:\\software\\astron-rpa",
+      "permanentInstaller": "D:\\software\\astron-rpa-packages\\release-gates-20261023\\星辰RPA-1.1.8-x64.exe",
+      "deploymentOrigin": "https://rpa.854271.xyz:30998/",
+      "configurationVerified": true
+    },
+    "deploymentConfigFix": {
+      "cause": "Full installer copied repository loopback remote_addr over deployment HTTPS origin",
+      "resolution": "Corrected isolated build configuration, rebuilt and installed candidate; verified installed origin, authenticated Client ready and real executions",
+      "repositoryDefaultChanged": false,
+      "certificateVerificationDisabled": false,
+      "firstReinstallAttempt": "120-second harness timeout; subsequent installation completed with a 300-second bound",
+      "userConfirmedLoginAndWorkflowList": true
+    },
+    "sourceConsistency": {
+      "serverFiles": 65,
+      "clientSourceFiles": 304,
+      "node": {
+        "tarballSha256": "e46682608da82ddbeed0eba3f7bdc7ade4eb82804a349eb65585926c170b0a76",
+        "installations": [
+          {
+            "mode": "regular",
+            "matchedFiles": 47
+          },
+          {
+            "mode": "queue",
+            "matchedFiles": 47
+          }
+        ]
+      }
+    },
+    "representativeExecutions": [
+      {
+        "mode": "regular",
+        "transport": "mcp",
+        "name": "data",
+        "status": "succeeded",
+        "executionId": "aff6005f-de1f-413b-8408-e3876e052326",
+        "runId": "2113586092971159552"
+      },
+      {
+        "mode": "regular",
+        "transport": "mcp",
+        "name": "office",
+        "status": "succeeded",
+        "executionId": "093a1556-bfbd-4182-bae4-02b8c8338a1d",
+        "runId": "2113586146771496960"
+      },
+      {
+        "mode": "regular",
+        "transport": "mcp",
+        "name": "excel",
+        "status": "succeeded",
+        "executionId": "03e1d0c7-043b-4337-80f7-6d16c6f3c5db",
+        "runId": "2113586211787403264"
+      },
+      {
+        "mode": "regular",
+        "transport": "mcp",
+        "name": "word",
+        "status": "succeeded",
+        "executionId": "bde484d0-b0df-4510-b786-adbbd11bdd65",
+        "runId": "2113586283157680128"
+      },
+      {
+        "mode": "regular",
+        "transport": "rest",
+        "name": "data",
+        "status": "succeeded",
+        "executionId": "d2bda88a-6516-44e8-89da-aa60ea996ebe",
+        "runId": "2113586359745671168"
+      },
+      {
+        "mode": "regular",
+        "transport": "rest",
+        "name": "office",
+        "status": "succeeded",
+        "executionId": "024e39c2-a3f9-495c-91bd-15ad0124aebd",
+        "runId": "2113586405434224640"
+      },
+      {
+        "mode": "regular",
+        "transport": "rest",
+        "name": "excel",
+        "status": "succeeded",
+        "executionId": "4eb1353c-a2ea-4e41-bc72-66066532c430",
+        "runId": "2113586461763727360"
+      },
+      {
+        "mode": "regular",
+        "transport": "rest",
+        "name": "word",
+        "status": "succeeded",
+        "executionId": "59ca60d3-2378-4102-93e6-d6e8d81145bb",
+        "runId": "2113586520148439040"
+      },
+      {
+        "mode": "queue",
+        "transport": "mcp",
+        "name": "data",
+        "status": "succeeded",
+        "executionId": "6f0c7785-2339-45ee-97f7-d63b195ad0c6",
+        "runId": "2113586614528667648"
+      },
+      {
+        "mode": "queue",
+        "transport": "mcp",
+        "name": "office",
+        "status": "succeeded",
+        "executionId": "a596d5a5-3769-4d44-b57e-fe421d115bb3",
+        "runId": "2113586696426647552"
+      },
+      {
+        "mode": "queue",
+        "transport": "mcp",
+        "name": "excel",
+        "status": "succeeded",
+        "executionId": "782243c8-3051-4dca-827a-fb78171c167d",
+        "runId": "2113586763300630528"
+      },
+      {
+        "mode": "queue",
+        "transport": "mcp",
+        "name": "word",
+        "status": "succeeded",
+        "executionId": "918b4b0d-b822-4ba0-adeb-216fea0a796a",
+        "runId": "2113586841834778624"
+      },
+      {
+        "mode": "queue",
+        "transport": "rest",
+        "name": "data",
+        "status": "succeeded",
+        "executionId": "37e4d185-236b-40d9-9ac6-cf1b34b4ae6f",
+        "runId": "2113586906955542528"
+      },
+      {
+        "mode": "queue",
+        "transport": "rest",
+        "name": "office",
+        "status": "succeeded",
+        "executionId": "8992e245-8208-40bd-89e0-f4cb1b00d1c5",
+        "runId": "2113586957295579136"
+      },
+      {
+        "mode": "queue",
+        "transport": "rest",
+        "name": "excel",
+        "status": "succeeded",
+        "executionId": "052710c1-e456-40a1-bac1-fca4f2a0beca",
+        "runId": "2113587026082164736"
+      },
+      {
+        "mode": "queue",
+        "transport": "rest",
+        "name": "word",
+        "status": "succeeded",
+        "executionId": "0aebcdde-ad80-4a47-8893-53f5035b7598",
+        "runId": "2113587080268378112"
+      }
+    ],
+    "earlierRunBoundary": "Earlier 16 successful representative runs used previous shell and PostgreSQL 15; they are separate from the full-client/PostgreSQL 17 results. One early CLIENT_OFFLINE attempt was not accepted and was not counted as success.",
+    "officeOutputContent": [
+      {
+        "mode": "regular",
+        "transport": "mcp",
+        "name": "excel",
+        "contentVerified": true
+      },
+      {
+        "mode": "regular",
+        "transport": "mcp",
+        "name": "word",
+        "contentVerified": true
+      },
+      {
+        "mode": "regular",
+        "transport": "rest",
+        "name": "excel",
+        "contentVerified": true
+      },
+      {
+        "mode": "regular",
+        "transport": "rest",
+        "name": "word",
+        "contentVerified": true
+      },
+      {
+        "mode": "queue",
+        "transport": "mcp",
+        "name": "excel",
+        "contentVerified": true
+      },
+      {
+        "mode": "queue",
+        "transport": "mcp",
+        "name": "word",
+        "contentVerified": true
+      },
+      {
+        "mode": "queue",
+        "transport": "rest",
+        "name": "excel",
+        "contentVerified": true
+      },
+      {
+        "mode": "queue",
+        "transport": "rest",
+        "name": "word",
+        "contentVerified": true
+      }
+    ],
+    "nodeBinary": [
+      {
+        "mode": "regular",
+        "n8nExecutionId": 1017,
+        "storage": "filesystem",
+        "bytes": 28,
+        "sha256": "e661c308d501a7aadeab512ea2f58faa88cd69ca9c06aa81715239148883ca0b"
+      },
+      {
+        "mode": "queue",
+        "n8nExecutionId": 33,
+        "storage": "execution-inline",
+        "bytes": 28,
+        "sha256": "e661c308d501a7aadeab512ea2f58faa88cd69ca9c06aa81715239148883ca0b"
+      }
+    ],
+    "queueRecovery": {
+      "checkpointId": 37,
+      "n8nExecutionId": 36,
+      "status": "succeeded",
+      "executionId": "56853b81-c23a-4c7f-b372-e07aa93cb545",
+      "runId": "2113588625600966656",
+      "checkpointStatus": "accepted",
+      "checkpointRunId": null,
+      "workerRestarted": true,
+      "originalAssertionCorrection": "Accepted receipt may have null runId before client dispatch; executionId remains unchanged"
+    },
+    "databaseExecutions": [
+      {
+        "name": "mysql",
+        "transport": "mcp",
+        "status": "succeeded",
+        "executionId": "6e9c29ae-a208-4c1d-9810-c9d1e6a3cc44",
+        "runId": "2113589123578097664"
+      },
+      {
+        "name": "mysql",
+        "transport": "rest",
+        "status": "succeeded",
+        "executionId": "4f6f2f87-bb16-4136-8a4e-17d1b8c66005",
+        "runId": "2113589171367997440"
+      },
+      {
+        "name": "postgres",
+        "transport": "mcp",
+        "status": "succeeded",
+        "executionId": "0a57c524-1969-49bf-bffa-c9b7f19905b9",
+        "runId": "2113589219413749760"
+      },
+      {
+        "name": "postgres",
+        "transport": "rest",
+        "status": "succeeded",
+        "executionId": "9aa2a834-1ea5-4ebe-8c09-4adbc320ac58",
+        "runId": "2113589268814262272"
+      },
+      {
+        "name": "sqlserver",
+        "transport": "mcp",
+        "status": "succeeded",
+        "executionId": "1c67af88-604f-4595-b66c-810a057bdabe",
+        "runId": "2113589326091677696"
+      },
+      {
+        "name": "sqlserver",
+        "transport": "rest",
+        "status": "succeeded",
+        "executionId": "300cfe8f-b965-4f5e-8754-a51637243c88",
+        "runId": "2113589381234192384"
+      },
+      {
+        "name": "oracle",
+        "transport": "mcp",
+        "status": "succeeded",
+        "executionId": "d3225fcc-42dc-4e53-af4f-cd647b7cb548",
+        "runId": "2113589442940792832"
+      },
+      {
+        "name": "oracle",
+        "transport": "rest",
+        "status": "succeeded",
+        "executionId": "9c3ec42c-af8d-4ae1-af1d-e1cc883ebbf3",
+        "runId": "2113589493939335168"
+      }
+    ],
+    "databaseReadOnly": [
+      {
+        "name": "mysql",
+        "writeDenied": true,
+        "readVerified": true,
+        "connectionClosed": true
+      },
+      {
+        "name": "postgres",
+        "writeDenied": true,
+        "readVerified": true,
+        "connectionClosed": true
+      },
+      {
+        "name": "sqlserver",
+        "writeDenied": true,
+        "readVerified": true,
+        "connectionClosed": true
+      },
+      {
+        "name": "oracle",
+        "writeDenied": true,
+        "readVerified": true,
+        "connectionClosed": true
+      }
+    ],
+    "temporaryForwarding": {
+      "seconds": 109.9,
+      "closed": true,
+      "heartbeatEnabled": false
+    },
+    "databaseEnvironmentCorrections": [
+      "SQL Server 2022 failed to start reliably on host kernel 3.10; stopped and validated SQL Server 2019 instead",
+      "Oracle faststart seed data copied into the source-scoped bind directory; synthetic passwords adjusted to the database-supported length; Oracle 21c then passed"
+    ],
+    "lifecycle": [
+      {
+        "name": "cancel",
+        "executionId": "d7322044-11c4-4ed6-a65f-fb816817049d",
+        "runId": "2113589954872373248",
+        "status": "cancelled"
+      },
+      {
+        "name": "timeout",
+        "executionId": "8d9672ab-910d-4b3d-b860-c63194047c58",
+        "runId": "2113590011180904448",
+        "status": "timeout"
+      }
+    ],
+    "allRoundReceipts": {
+      "count": 44,
+      "statuses": {
+        "COMPLETED": 42,
+        "TIMEOUT": 1,
+        "CANCELLED": 1
+      },
+      "clientServerMatched": true,
+      "nonterminal": 0,
+      "testExecutorProcesses": 0
+    },
+    "cleanup": {
+      "server": {
+        "fileHandlesRemoved": 26,
+        "unrelatedFileHandlesPreserved": 0,
+        "testDeclarationsRemoved": 9,
+        "originalPolicyEquivalent": true,
+        "workflowRowsRemoved": 9,
+        "nonterminalExecutions": 0,
+        "executionAuditRetained": true,
+        "featureStorageConfigurationRetained": true
+      },
+      "clientRobots": {
+        "temporaryRobotsRemoved": 9
+      },
+      "regularN8n": {
+        "testWorkflowsRemoved": 4,
+        "testExecutionsRemoved": 67,
+        "unrelatedDataPreserved": true,
+        "pendingExecutions": 0
+      },
+      "queue": {
+        "queueProcessesStopped": 2,
+        "isolatedDependencyContainerRemoved": true,
+        "regularN8nPreserved": true
+      },
+      "remoteDatabases": {
+        "testContainersRemoved": [
+          {
+            "name": "astron-gates-mysql-20261023",
+            "image": "mysql:8.4",
+            "imageId": "sha256:0320de35118bb355866609d2895c07d8d1696e0aa373c5a9a4a4525c99c3224d"
+          },
+          {
+            "name": "astron-gates-postgres-20261023",
+            "image": "postgres:14",
+            "imageId": "sha256:a9bc466f3831a4ba264534ff36932b268f529348750b4618558f71943b343d85"
+          },
+          {
+            "name": "astron-gates-sqlserver-20261023",
+            "image": "mcr.microsoft.com/mssql/server:2022-latest",
+            "imageId": "sha256:7fb2139341715e8a71843cfc2f02bab6e95f1c52c0fa9f9a6b2e7b761f060780"
+          },
+          {
+            "name": "astron-gates-sql2019-20261023",
+            "image": "mcr.microsoft.com/mssql/server:2019-latest",
+            "imageId": "sha256:d47c3524cdcabc59024d5cca4f9888e4eff01d7efc5ceedd0f4e383cc72a8366"
+          },
+          {
+            "name": "astron-gates-oracle-20261023",
+            "image": "gvenzl/oracle-xe:21-slim-faststart",
+            "imageId": "sha256:c3406edbfaa13e8cae189cfaf67c8967420a64fb3630cc1f62a3034ca2c6a8ed"
+          },
+          {
+            "name": "astron-gates-oracle-ready-20261023",
+            "image": "gvenzl/oracle-xe:21-slim-faststart",
+            "imageId": "sha256:c3406edbfaa13e8cae189cfaf67c8967420a64fb3630cc1f62a3034ca2c6a8ed"
+          },
+          {
+            "name": "astron-gates-oracle-seed-20261023",
+            "image": "gvenzl/oracle-xe:21-slim-faststart",
+            "imageId": "sha256:c3406edbfaa13e8cae189cfaf67c8967420a64fb3630cc1f62a3034ca2c6a8ed"
+          }
+        ],
+        "testDataDirectoriesRemoved": 6,
+        "testEnvironmentFilesRemoved": true,
+        "newTestImages": [
+          {
+            "name": "mcr.microsoft.com/mssql/server:2022-latest",
+            "removed": true
+          },
+          {
+            "name": "mcr.microsoft.com/mssql/server:2019-latest",
+            "removed": true
+          },
+          {
+            "name": "gvenzl/oracle-xe:21-slim-faststart",
+            "removed": true
+          }
+        ],
+        "permanentAiBackup": "/root/astron-rpa-deploy/source/docker/data/integration-deployment/backups/release-gates-20261023/ai",
+        "permanentSourceFiles": 65
+      },
+      "localCache": "User confirmed manual cleanup; 9 Client directories and 4 temporary queue/database paths absent; previous Binary directory empty, no cache files. Permanent installer, rollback backup, original credentials and execution audit retained.",
+      "originalCredentialsAndExecutionAudit": "retained"
+    },
+    "finalHealth": {
+      "n8nHealthy": true,
+      "clientIdle": true,
+      "clientState": "ready",
+      "mcpConnected": true,
+      "monitoring": {
+        "targetsUp": 1,
+        "ready": true,
+        "rules": 6,
+        "bind": "127.0.0.1:19090",
+        "restart": "unless-stopped",
+        "serverFiles": 65,
+        "openapi": [
+          "astron-rpa-user-openapi-service-2"
+        ]
+      },
+      "observedDuring": "2026-10-23 after REST desktop cleanup, before the later interruption"
+    },
+    "remainingGates": {
+      "desktopGui": "Controlled full-package MCP and REST window/mouse/keyboard/UIA/screenshot paths passed. Other GUI operations or host combinations require their own support-scope acceptance; no blanket claim.",
+      "microsoftOffice": "WPS COM verified; native Microsoft Excel/Word not tested",
+      "access": "Original type retained; installed ODBC drivers contain only SQL Server, no Access driver",
+      "realModel": "Existing local/server AICHAT_BASE_URL and AICHAT_API_KEY empty; skipped per user instruction",
+      "maintainer": "Final support scope, P0/P1 acceptance, external alert recipient and hosted CI remain operator/maintainer gates; no publishing performed"
+    },
+    "desktopValidation": {
+      "date": "2026-10-23",
+      "clientPackageSha256": "29262fbfafce2d1ead45d5a5ac4965a615b81fc6aeda92ca5abeca23cd87a0ec",
+      "physicalResolution": {
+        "width": 1920,
+        "height": 1200
+      },
+      "fixtureLogicalResolution": {
+        "width": 1280,
+        "height": 800
+      },
+      "mcp": {
+        "status": "succeeded",
+        "executionId": "d47e2fae-dba4-4ad9-a110-2b6edf971ee8",
+        "runId": "2113593149124276224",
+        "operations": [
+          "Window.exist",
+          "Window.top",
+          "Window.set_size",
+          "GuiMouse.mouse_move",
+          "GuiMouse.mouse",
+          "GuiKeyBoard.keyboard",
+          "WinEle.get_element_text",
+          "System.screen_shot"
+        ],
+        "fixture": {
+          "textVerified": true,
+          "rect": [
+            80,
+            80,
+            427,
+            300
+          ],
+          "resolution": {
+            "width": 1280,
+            "height": 800
+          }
+        },
+        "binary": {
+          "bytes": 14552,
+          "sha256": "fdb41bdb711028029bdf0b2d644a10cb58eed30e3855a0d1e17c20069c06ef1a",
+          "width": 501,
+          "height": 280
+        },
+        "screenshotVisuallyVerified": true
+      },
+      "resolutionDenial": {
+        "executionId": "39c4c047-41cb-4f1d-9b1a-11f25f9d5694",
+        "code": "DESKTOP_RESOLUTION_MISMATCH",
+        "runId": null,
+        "componentActionsStarted": false
+      },
+      "rest": {
+        "date": "2026-10-23",
+        "recordReviewedOn": "2026-10-24",
+        "status": "succeeded",
+        "executionId": "1f5e65df-11e5-4756-b3e7-2d14aa3837b1",
+        "runId": "2113598218045517824",
+        "n8nExecutionId": 1053,
+        "acceptedAt": "2026-10-23T11:47:38+00:00",
+        "finishedAt": "2026-10-23T11:47:48+00:00",
+        "operations": [
+          "Window.exist",
+          "Window.top",
+          "Window.set_size",
+          "GuiMouse.mouse_move",
+          "GuiMouse.mouse",
+          "GuiKeyBoard.keyboard",
+          "WinEle.get_element_text",
+          "System.screen_shot"
+        ],
+        "fixture": {
+          "textVerified": true,
+          "rect": [
+            80,
+            80,
+            600,
+            410
+          ],
+          "resolution": {
+            "width": 1920,
+            "height": 1200
+          }
+        },
+        "binary": {
+          "bytes": 3540,
+          "sha256": "c7d04460477e23dad04f80dafa28d8dd2d71afa301b1f4a71ee0ced3c4aeb749",
+          "width": 500,
+          "height": 280
+        },
+        "screenshotVisuallyVerified": true,
+        "clientServerReceiptsMatched": true,
+        "countedAsSuccessfulDesktopAcceptance": true,
+        "fixtureChanges": "Physical DPI coordinates; exact edit control hit-test before clicking and HasKeyboardFocus plus foreground check before typing. Product code and admission boundaries unchanged.",
+        "initialRestFailureCause": "Not established; initial failure remains separate and is not reclassified as success.",
+        "hostStartupAttempt": "One HTTP 404 before temporary webhook registration completed; not dispatched to RPA. Registration verified before successful request.",
+        "cleanup": {
+          "windowClosed": true,
+          "server": {
+            "fileHandlesRemoved": 1,
+            "unrelatedFileHandlesPreserved": 0,
+            "testDeclarationsRemoved": 1,
+            "originalPolicyEquivalent": true,
+            "workflowRowsRemoved": 1,
+            "nonterminalExecutions": 0,
+            "executionAuditRetained": true,
+            "featureStorageConfigurationRetained": true
+          },
+          "n8n": {
+            "testWorkflowsRemoved": 4,
+            "testExecutionsRemoved": 3,
+            "unrelatedDataPreserved": true,
+            "pendingExecutions": 0
+          },
+          "clientRobot": {
+            "temporaryRobotsRemoved": 1
+          },
+          "localCache": "User confirmed intentional Client user-directory cleanup; the new Client cache is absent. The new n8n Binary directory remains (2 files); its automatic deletion was rejected and manual cleanup is still pending."
+        }
+      },
+      "receipts": [
+        {
+          "executionId": "06f0b23b-6825-4d9e-b4d7-ee48ee6cbe91",
+          "projectId": "2113592658956939264",
+          "status": "FAILED",
+          "runId": "2113593213020303360",
+          "error": "EXECUTION_FAILED",
+          "resultSuppressed": false
+        },
+        {
+          "executionId": "39c4c047-41cb-4f1d-9b1a-11f25f9d5694",
+          "projectId": "2113592658956939264",
+          "status": "FAILED",
+          "runId": null,
+          "error": "DESKTOP_RESOLUTION_MISMATCH",
+          "resultSuppressed": false
+        },
+        {
+          "executionId": "d47e2fae-dba4-4ad9-a110-2b6edf971ee8",
+          "projectId": "2113592658956939264",
+          "status": "COMPLETED",
+          "runId": "2113593149124276224",
+          "error": null,
+          "resultSuppressed": false
+        },
+        {
+          "executionId": "1f5e65df-11e5-4756-b3e7-2d14aa3837b1",
+          "projectId": "2113597866730614784",
+          "status": "COMPLETED",
+          "runId": "2113598218045517824",
+          "error": null,
+          "resultSuppressed": false
+        }
+      ],
+      "clientServerReceiptsMatched": true,
+      "cleanup": {
+        "windowClosed": true,
+        "server": {
+          "fileHandlesRemoved": 1,
+          "unrelatedFileHandlesPreserved": 0,
+          "testDeclarationsRemoved": 1,
+          "originalPolicyEquivalent": true,
+          "workflowRowsRemoved": 1,
+          "nonterminalExecutions": 0,
+          "executionAuditRetained": true,
+          "featureStorageConfigurationRetained": true
+        },
+        "n8n": {
+          "testWorkflowsRemoved": 4,
+          "testExecutionsRemoved": 7,
+          "unrelatedDataPreserved": true,
+          "pendingExecutions": 0
+        },
+        "localCache": "User confirmed intentional Client user-directory cleanup; the prior Client cache is absent. The prior n8n Binary directory remains (2 files); its automatic deletion was rejected and manual cleanup is still pending."
+      },
+      "boundary": "Controlled full-package MCP and REST window/mouse/keyboard/UIA/screenshot success established; initial failures retained. No blanket GUI-operation or host-combination coverage claim.",
+      "restInitialAttempt": {
+        "executionId": "06f0b23b-6825-4d9e-b4d7-ee48ee6cbe91",
+        "runId": "2113593213020303360",
+        "status": "failed",
+        "reason": "Fixture lost foreground before keyboard input; explicit fixture guard raised Fixture must own focus",
+        "countedAsSuccessfulDesktopAcceptance": false
+      }
+    },
+    "allRoundReceiptsIncludingDesktop": {
+      "count": 48,
+      "statuses": {
+        "COMPLETED": 44,
+        "FAILED": 2,
+        "CANCELLED": 1,
+        "TIMEOUT": 1
+      },
+      "clientServerMatched": true,
+      "nonterminal": 0
+    },
+    "postInterruptionObservation": {
+      "date": "2026-10-24",
+      "clientUserDirectoryPresent": false,
+      "n8nClientLocalPortsListening": false,
+      "note": "User confirmed intentional removal of the Client user directory. Completed desktop validation remains supported by saved receipts and screenshots; no rebuild is needed to preserve that result. The runtime is currently offline; rebuilding it would not restore deleted login state or local audit history.",
+      "userConfirmedIntentionalCleanup": true,
+      "rebuildRequiredForCompletedValidation": false,
+      "runtimeRestored": false,
+      "permanentInstallerHashVerified": true,
+      "originalProgramBackupPresent": true
+    }
+  },
+  "prereleaseValidation": {
+    "date": "2026-10-23",
+    "branch": "feature/n8n-production-hardening",
+    "baseCommit": "c96c40cbaeb3f9a45690737a1c93f8c5b8b84c54",
+    "workingTree": "uncommitted and unpushed; pre-existing staged content preserved",
+    "scope": "Permanent deployment, safe diagnostics, schema error hints, compatibility and prerelease gate audit; controlled-validation only",
+    "environment": {
+      "n8n": "2.40.7",
+      "node": "24.18.0",
+      "package": "0.1.0-dev.4",
+      "jsMcpSdk": "1.30.0",
+      "pythonMcpSdk": "1.26.0",
+      "clientShell": "1.1.8 with updated Engine startup archive",
+      "topology": "regular n8n, single OpenAPI/local routing, one Windows client"
+    },
+    "tests": {
+      "openapiPassed": 400,
+      "openapiWarnings": 4,
+      "n8nPassed": 71,
+      "checks": {
+        "typecheck": 0,
+        "lint": 0,
+        "format": 0,
+        "tests": 0
+      },
+      "python": {
+        "files": [
+          {
+            "file": ".github/scripts/run-integration-regression.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/config.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/dependencies/__init__.py",
+            "baselineDiagnostics": 11,
+            "currentDiagnostics": 11,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/logger.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/main.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/middlewares/tracing.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/routers/healthcheck.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/routers/streamable_mcp.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/routers/websocket.py",
+            "baselineDiagnostics": 2,
+            "currentDiagnostics": 1,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/routers/workflows.py",
+            "baselineDiagnostics": 10,
+            "currentDiagnostics": 10,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/security/integration_rate_limit.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/security/mcp_auth.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/security/workflow_authorization.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/services/execution.py",
+            "baselineDiagnostics": 2,
+            "currentDiagnostics": 2,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/services/execution_management.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/services/execution_routing.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/services/observability.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/services/websocket.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/services/websocket_manager.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/services/workflow_control.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/app/services/workflow_schema.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/tests/test_execution_management.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/tests/test_execution_routing.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/tests/test_execution_routing_redis.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/tests/test_integration_policy.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/tests/test_production_operations.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          },
+          {
+            "file": "backend/openapi-service/tests/test_workflow_schema.py",
+            "baselineDiagnostics": 0,
+            "currentDiagnostics": 0,
+            "newDiagnostics": 0
+          }
+        ],
+        "format": true,
+        "ast": true,
+        "newRuffDiagnostics": 0
+      },
+      "engine": "Unchanged source; same-day prior 403 pass / 1 Windows-inapplicable POSIX skip retained, not rerun here",
+      "realRedis": "Three tests from preceding dev.3 run retained, not rerun here",
+      "makeCheck": "Timed out after 35 seconds in pre-existing Windows frontend file enumeration; no result",
+      "hostedCI": "Not run; no push"
+    },
+    "permanentDeployment": {
+      "server": {
+        "targetsUp": 1,
+        "ready": true,
+        "rules": 6,
+        "bind": "127.0.0.1:19090",
+        "restart": "unless-stopped",
+        "serverFiles": 62,
+        "openapi": [
+          "astron-rpa-user-openapi-service-2"
+        ]
+      },
+      "host": {
+        "singleOpenapi": true,
+        "logFormat": "json",
+        "routing": "local",
+        "ratePerMinute": 600,
+        "privateTokenConfigured": true,
+        "sourceOnlyCompose": true,
+        "temporaryServerFilesAbsent": true
+      },
+      "client": {
+        "sha256": "5b85306d99236bda267a25dfc7e7e57d7d62a4670d44e5154a46a48fa9c05903",
+        "bytes": 131678904,
+        "sourceFilesVerified": 304,
+        "backup": "D:\\software\\astron-rpa-backups\\integration-20261023",
+        "installed": true,
+        "startedPid": 15920,
+        "awaitingBootstrap": false,
+        "bootstrapVerified": true,
+        "runtimeFilesMatched": 304
+      },
+      "node": {
+        "version": "0.1.0-dev.4",
+        "tarball": "D:\\n8n\\astron-rpa-packages\\n8n-nodes-astron-rpa-0.1.0-dev.4.tgz",
+        "sha256": "e46682608da82ddbeed0eba3f7bdc7ade4eb82804a349eb65585926c170b0a76",
+        "filesVerified": 47,
+        "distMatched": 40,
+        "stableDependency": "file:D:/n8n/astron-rpa-packages/n8n-nodes-astron-rpa-0.1.0-dev.4.tgz"
+      }
+    },
+    "executions": [
+      {
+        "executionId": "143991eb-7509-4df1-8921-5e18c19210fd",
+        "projectId": "2113519746698735616",
+        "status": "COMPLETED",
+        "runId": "2113520156318658560",
+        "error": null,
+        "resultSuppressed": false
+      },
+      {
+        "executionId": "1618bb9b-d838-45ea-a094-787301bbfac6",
+        "projectId": "2113519746698735616",
+        "status": "COMPLETED",
+        "runId": "2113522377068408832",
+        "error": null,
+        "resultSuppressed": false
+      },
+      {
+        "executionId": "7223674b-8b0d-4cfc-bd9a-3a7aea3a8f0b",
+        "projectId": "2113519746698735616",
+        "status": "COMPLETED",
+        "runId": "2113520456907649024",
+        "error": null,
+        "resultSuppressed": false
+      },
+      {
+        "executionId": "ad6d62a1-e34d-4fe2-a19a-2c494604195d",
+        "projectId": "2113519746698735616",
+        "status": "COMPLETED",
+        "runId": "2113522011702587392",
+        "error": null,
+        "resultSuppressed": false
+      },
+      {
+        "executionId": "120de21c-7ea3-4cd8-b2d6-b39ccfba556e",
+        "projectId": "2113519752855973888",
+        "status": "COMPLETED",
+        "runId": "2113520382316146688",
+        "error": null,
+        "resultSuppressed": false
+      },
+      {
+        "executionId": "fbe375af-0afc-412a-9df0-f3f442983d99",
+        "projectId": "2113519752855973888",
+        "status": "COMPLETED",
+        "runId": "2113520507369320448",
+        "error": null,
+        "resultSuppressed": false
+      }
+    ],
+    "nodeScenarios": [
+      {
+        "name": "data",
+        "transport": "mcp",
+        "n8nExecutionId": 955,
+        "executionId": "143991eb-7509-4df1-8921-5e18c19210fd",
+        "projectId": "2113519746698735616",
+        "version": 1,
+        "status": "succeeded",
+        "terminal": true,
+        "acceptedAt": "2026-10-23T06:37:27+00:00",
+        "startedAt": "2026-10-23T06:37:28+00:00",
+        "finishedAt": "2026-10-23T06:37:33+00:00",
+        "clientId": "549738d6-5ccc-4af2-9748-dc9511862e06",
+        "runId": "2113520156318658560",
+        "cancelRequested": false,
+        "error": null,
+        "supportsCancel": false,
+        "resultVisibility": "json",
+        "result": {
+          "value": "fixture",
+          "listResult": [
+            1,
+            3
+          ],
+          "textResult": "fixturexyx",
+          "nullResult": null,
+          "encoded": "Zml4dHVyZQ=="
+        },
+        "correlation": {
+          "n8nExecutionId": "955",
+          "itemIndex": 0,
+          "keyHash": "e803d9aa73d8b4e33c3d302750483d43d2c85e0f53951332cf1a4dc7ad69a5d8",
+          "requestFingerprint": "f4faa8a1bf2c8479b280cc26aedfd18bf65f13432b89b5cec4b904fc30a30a8d",
+          "profileRevision": "4d6a3ea685ca03143f91f3f4f1a08d970e0ecd759589ee4ce260e0369542761c"
+        },
+        "verified": true
+      },
+      {
+        "name": "office",
+        "transport": "mcp",
+        "n8nExecutionId": 958,
+        "executionId": "120de21c-7ea3-4cd8-b2d6-b39ccfba556e",
+        "projectId": "2113519752855973888",
+        "version": 1,
+        "status": "succeeded",
+        "terminal": true,
+        "acceptedAt": "2026-10-23T06:38:21+00:00",
+        "startedAt": "2026-10-23T06:38:21+00:00",
+        "finishedAt": "2026-10-23T06:38:26+00:00",
+        "clientId": "549738d6-5ccc-4af2-9748-dc9511862e06",
+        "runId": "2113520382316146688",
+        "cancelRequested": false,
+        "error": null,
+        "supportsCancel": false,
+        "resultVisibility": "json",
+        "result": {
+          "data": {
+            "result": "permanent-install-validation"
+          },
+          "files": {
+            "target": {
+              "fileId": "9e23ea05-6e58-48f0-81fd-3623e4843113",
+              "fileName": "office.txt",
+              "size": 28,
+              "sha256": "e661c308d501a7aadeab512ea2f58faa88cd69ca9c06aa81715239148883ca0b",
+              "expiresAt": 1792823900.7974052
+            }
+          }
+        },
+        "correlation": {
+          "n8nExecutionId": "958",
+          "itemIndex": 0,
+          "keyHash": "a5ac6f6d2d792ca9c481e361961655eb35f906a9dfe5d1f20b0e1cdf2fd0a471",
+          "requestFingerprint": "db7d4a34b4a961d0575b05c65c4a24f694a9ef15ff91cdb99fb2cdff1ab9e084",
+          "profileRevision": "c51454520e3275e9bbef64588aa3e36ffbb326549e4038a9e33bc203168049b7"
+        },
+        "verified": true
+      },
+      {
+        "name": "invalid",
+        "transport": "mcp",
+        "n8nExecutionId": 961,
+        "code": "INVALID_ARGUMENTS",
+        "projectId": "2113519746698735616",
+        "version": 1,
+        "correlation": {
+          "n8nExecutionId": "961",
+          "itemIndex": 0,
+          "keyHash": "d3191d649880968437f90bf49140145b83650799d2a8961022a973c8ef2f1c9c",
+          "requestFingerprint": "a853be1239e4fbc0ccda2942c52fd18eb722051ae5cc5183db98a3f73929dfc2",
+          "profileRevision": "4d6a3ea685ca03143f91f3f4f1a08d970e0ecd759589ee4ce260e0369542761c"
+        },
+        "callerError": {
+          "code": "INVALID_ARGUMENTS",
+          "message": "INVALID_ARGUMENTS",
+          "validation": {
+            "field": "$/value",
+            "rule": "type",
+            "expected": [
+              "string"
+            ]
+          }
+        },
+        "verified": true
+      },
+      {
+        "name": "data",
+        "transport": "rest",
+        "n8nExecutionId": 963,
+        "executionId": "7223674b-8b0d-4cfc-bd9a-3a7aea3a8f0b",
+        "projectId": "2113519746698735616",
+        "version": 1,
+        "status": "succeeded",
+        "terminal": true,
+        "acceptedAt": "2026-10-23T06:38:39+00:00",
+        "startedAt": "2026-10-23T06:38:39+00:00",
+        "finishedAt": "2026-10-23T06:38:42+00:00",
+        "clientId": "549738d6-5ccc-4af2-9748-dc9511862e06",
+        "runId": "2113520456907649024",
+        "cancelRequested": false,
+        "error": null,
+        "supportsCancel": false,
+        "resultVisibility": "json",
+        "result": {
+          "value": "fixture",
+          "listResult": [
+            1,
+            3
+          ],
+          "textResult": "fixturexyx",
+          "nullResult": null,
+          "encoded": "Zml4dHVyZQ=="
+        },
+        "correlation": {
+          "n8nExecutionId": "963",
+          "itemIndex": 0,
+          "keyHash": "927c000d6ebb947f0ed8c42fec206327ceca4ccd7558ffc276ac76923a8d326c",
+          "requestFingerprint": "e2d7f687301e1b33bea89b0af61f2d2b4e1844152b40ff94b9437d07f1573d1e",
+          "profileRevision": "4d6a3ea685ca03143f91f3f4f1a08d970e0ecd759589ee4ce260e0369542761c"
+        },
+        "verified": true
+      },
+      {
+        "name": "office",
+        "transport": "rest",
+        "n8nExecutionId": 966,
+        "executionId": "fbe375af-0afc-412a-9df0-f3f442983d99",
+        "projectId": "2113519752855973888",
+        "version": 1,
+        "status": "succeeded",
+        "terminal": true,
+        "acceptedAt": "2026-10-23T06:38:51+00:00",
+        "startedAt": "2026-10-23T06:38:51+00:00",
+        "finishedAt": "2026-10-23T06:38:54+00:00",
+        "clientId": "549738d6-5ccc-4af2-9748-dc9511862e06",
+        "runId": "2113520507369320448",
+        "cancelRequested": false,
+        "error": null,
+        "supportsCancel": false,
+        "resultVisibility": "json",
+        "result": {
+          "data": {
+            "result": "permanent-install-validation"
+          },
+          "files": {
+            "target": {
+              "fileId": "9cb38d8e-0f9d-4ab9-9b98-cc3089d28964",
+              "fileName": "office.txt",
+              "size": 28,
+              "sha256": "e661c308d501a7aadeab512ea2f58faa88cd69ca9c06aa81715239148883ca0b",
+              "expiresAt": 1792823930.7862236
+            }
+          }
+        },
+        "correlation": {
+          "n8nExecutionId": "966",
+          "itemIndex": 0,
+          "keyHash": "12b67751bf19f7d9e9b70ae102bbb10ae3b38bd86482bbcb11da869ba6ddd2d8",
+          "requestFingerprint": "4de4ed8a3dcece60fc45187fc5357e58ec44cc9ea7f3aac2aff6010e831b12fc",
+          "profileRevision": "c51454520e3275e9bbef64588aa3e36ffbb326549e4038a9e33bc203168049b7"
+        },
+        "verified": true
+      },
+      {
+        "name": "invalid",
+        "transport": "rest",
+        "n8nExecutionId": 969,
+        "code": "INVALID_ARGUMENTS",
+        "projectId": "2113519746698735616",
+        "version": 1,
+        "correlation": {
+          "n8nExecutionId": "969",
+          "itemIndex": 0,
+          "keyHash": "487e5a646065d3ffad7326cde445284ef140597eed3101c339624a6d1fe96169",
+          "requestFingerprint": "d5919ef24f06ee72d565ca0d31726392fd0f0928c114be0f20beb6832ddde594",
+          "profileRevision": "4d6a3ea685ca03143f91f3f4f1a08d970e0ecd759589ee4ce260e0369542761c"
+        },
+        "callerError": {
+          "code": "INVALID_ARGUMENTS",
+          "message": "INVALID_ARGUMENTS",
+          "validation": {
+            "field": "$/value",
+            "rule": "type",
+            "expected": [
+              "string"
+            ]
+          }
+        },
+        "verified": true
+      }
+    ],
+    "binary": [
+      {
+        "executionId": "120de21c-7ea3-4cd8-b2d6-b39ccfba556e",
+        "transport": "mcp",
+        "bytes": 28,
+        "sha256": "e661c308d501a7aadeab512ea2f58faa88cd69ca9c06aa81715239148883ca0b"
+      },
+      {
+        "executionId": "fbe375af-0afc-412a-9df0-f3f442983d99",
+        "transport": "rest",
+        "bytes": 28,
+        "sha256": "e661c308d501a7aadeab512ea2f58faa88cd69ca9c06aa81715239148883ca0b"
+      }
+    ],
+    "realTransportDiagnostics": [
+      {
+        "expected": "TLS_ERROR",
+        "events": [
+          {
+            "event": "astron_transport_failure",
+            "transport": "mcp",
+            "targetHost": "127.0.0.1",
+            "traceId": "073b821c-ee3d-4756-9243-edd1f505ff9f",
+            "errorType": "TLS_ERROR",
+            "n8nExecutionId": "prerelease-diagnostic",
+            "itemIndex": 0
+          }
+        ]
+      },
+      {
+        "expected": "NETWORK_ERROR",
+        "events": [
+          {
+            "event": "astron_transport_failure",
+            "transport": "mcp",
+            "targetHost": "127.0.0.1",
+            "traceId": "c05a120c-49ec-4a59-acaa-1940a8ef430b",
+            "errorType": "NETWORK_ERROR",
+            "n8nExecutionId": "prerelease-diagnostic",
+            "itemIndex": 0
+          }
+        ]
+      },
+      {
+        "expected": "TIMEOUT",
+        "events": [
+          {
+            "event": "astron_transport_failure",
+            "transport": "mcp",
+            "targetHost": "127.0.0.1",
+            "traceId": "d13e4a35-4ae8-49f3-bb6f-56b585c2aef0",
+            "errorType": "TIMEOUT",
+            "n8nExecutionId": "prerelease-diagnostic",
+            "itemIndex": 0
+          },
+          {
+            "event": "astron_transport_failure",
+            "transport": "mcp",
+            "targetHost": "127.0.0.1",
+            "traceId": "13435367-7ce4-46f6-8587-d0085234bbb8",
+            "errorType": "TIMEOUT",
+            "n8nExecutionId": "prerelease-diagnostic",
+            "itemIndex": 0
+          }
+        ]
+      }
+    ],
+    "rollback": {
+      "version": 1,
+      "n8nExecutionId": 973,
+      "executionId": "ad6d62a1-e34d-4fe2-a19a-2c494604195d",
+      "projectId": "2113519746698735616",
+      "status": "succeeded",
+      "terminal": true,
+      "acceptedAt": "2026-10-23T06:44:49+00:00",
+      "startedAt": "2026-10-23T06:44:50+00:00",
+      "finishedAt": "2026-10-23T06:44:54+00:00",
+      "clientId": "549738d6-5ccc-4af2-9748-dc9511862e06",
+      "runId": "2113522011702587392",
+      "cancelRequested": false,
+      "error": null,
+      "supportsCancel": false,
+      "resultVisibility": "json",
+      "result": {
+        "value": "fixture",
+        "listResult": [
+          1,
+          3
+        ],
+        "textResult": "fixturexyx",
+        "nullResult": null,
+        "encoded": "Zml4dHVyZQ=="
+      },
+      "correlation": {
+        "n8nExecutionId": "973",
+        "itemIndex": 0,
+        "keyHash": "e7296def31a03767ad1e9ad9dee0a5e5d5941e35db366a6663b3d7ce27a97240",
+        "requestFingerprint": "9d0a97ebb6795e53ee12e1d2f51b7179fe799c352808428aa934af9aa3dcde0e",
+        "profileRevision": "4d6a3ea685ca03143f91f3f4f1a08d970e0ecd759589ee4ce260e0369542761c"
+      }
+    },
+    "reupgrade": {
+      "version": 1,
+      "n8nExecutionId": 976,
+      "executionId": "1618bb9b-d838-45ea-a094-787301bbfac6",
+      "projectId": "2113519746698735616",
+      "status": "succeeded",
+      "terminal": true,
+      "acceptedAt": "2026-10-23T06:46:17+00:00",
+      "startedAt": "2026-10-23T06:46:17+00:00",
+      "finishedAt": "2026-10-23T06:46:20+00:00",
+      "clientId": "549738d6-5ccc-4af2-9748-dc9511862e06",
+      "runId": "2113522377068408832",
+      "cancelRequested": false,
+      "error": null,
+      "supportsCancel": false,
+      "resultVisibility": "json",
+      "result": {
+        "value": "fixture",
+        "listResult": [
+          1,
+          3
+        ],
+        "textResult": "fixturexyx",
+        "nullResult": null,
+        "encoded": "Zml4dHVyZQ=="
+      },
+      "correlation": {
+        "n8nExecutionId": "976",
+        "itemIndex": 0,
+        "keyHash": "faaaa9bc007c9cae0da5852ebc22fc61178027dc074925cb53c04fad325a65d0",
+        "requestFingerprint": "4802f2eb0f9f91a1fb1c164a784bdd9f7ee50129054b88633dfcfc46d9bd5578",
+        "profileRevision": "4d6a3ea685ca03143f91f3f4f1a08d970e0ecd759589ee4ce260e0369542761c"
+      }
+    },
+    "clientConsistency": {
+      "clientSourcesMatched": 304,
+      "clientReceipts": [
+        {
+          "executionId": "143991eb-7509-4df1-8921-5e18c19210fd",
+          "clientStatus": "succeeded",
+          "serverStatus": "COMPLETED"
+        },
+        {
+          "executionId": "120de21c-7ea3-4cd8-b2d6-b39ccfba556e",
+          "clientStatus": "succeeded",
+          "serverStatus": "COMPLETED"
+        },
+        {
+          "executionId": "7223674b-8b0d-4cfc-bd9a-3a7aea3a8f0b",
+          "clientStatus": "succeeded",
+          "serverStatus": "COMPLETED"
+        },
+        {
+          "executionId": "fbe375af-0afc-412a-9df0-f3f442983d99",
+          "clientStatus": "succeeded",
+          "serverStatus": "COMPLETED"
+        },
+        {
+          "executionId": "ad6d62a1-e34d-4fe2-a19a-2c494604195d",
+          "clientStatus": "succeeded",
+          "serverStatus": "COMPLETED"
+        },
+        {
+          "executionId": "1618bb9b-d838-45ea-a094-787301bbfac6",
+          "clientStatus": "succeeded",
+          "serverStatus": "COMPLETED"
+        }
+      ],
+      "riskAuditEvents": 0,
+      "auditEvents": {},
+      "sensitiveAuditValuesAbsent": true,
+      "testExecutorProcesses": 0,
+      "clientIdle": true
+    },
+    "cleanup": {
+      "robots": {
+        "temporaryRobotsRemoved": 2
+      },
+      "server": {
+        "fileHandlesRemoved": 2,
+        "unrelatedFileHandlesPreserved": 0,
+        "testDeclarationsRemoved": 2,
+        "originalPolicyEquivalent": true,
+        "workflowRowsRemoved": 2,
+        "nonterminalExecutions": 0,
+        "executionAuditRetained": true,
+        "featureStorageConfigurationRetained": true
+      },
+      "n8n": {
+        "testWorkflowsRemoved": 4,
+        "testExecutionsRemoved": 27,
+        "unrelatedDataPreserved": true,
+        "pendingExecutions": 0
+      },
+      "local": [
+        {
+          "path": "C:\\Users\\bbdu3\\AppData\\Roaming\\astron-rpa\\venvs\\2113519746698735616",
+          "exists": false,
+          "files": 0
+        },
+        {
+          "path": "C:\\Users\\bbdu3\\AppData\\Roaming\\astron-rpa\\venvs\\2113519752855973888",
+          "exists": false,
+          "files": 0
+        },
+        {
+          "path": "C:\\Users\\bbdu3\\.n8n\\storage\\workflows\\prerelease20261023downloadFile",
+          "exists": true,
+          "files": 0
+        }
+      ],
+      "temporaryPortsClosed": [
+        18768,
+        18769,
+        18770
+      ],
+      "auditReceiptsPreserved": true,
+      "finalHealth": {
+        "n8nHealthy": true,
+        "clientIdle": true,
+        "mcpConnected": true,
+        "integration": {
+          "contractVersion": 1,
+          "serviceVersion": "1.0.0+public-framework.1",
+          "profileSchemaVersion": 1,
+          "requiredClientProtocol": 1,
+          "durableIdempotency": true,
+          "operations": [
+            "workflow_list",
+            "workflow_get",
+            "workflow_execute",
+            "execution_get",
+            "execution_cancel"
+          ],
+          "capabilityClasses": [
+            "json-data",
+            "browser-read",
+            "service-http-read",
+            "service-database-read",
+            "service-mail-read",
+            "service-openapi-read",
+            "service-shared-read",
+            "office-file",
+            "desktop-ui",
+            "ai-dynamic-risk"
+          ],
+          "jsonLimits": {
+            "maxBytes": 1048576,
+            "maxDepth": 12,
+            "maxObjectProperties": 200,
+            "maxArrayItems": 1000,
+            "maxStringLength": 100000
+          },
+          "client": {
+            "state": "ready",
+            "protocol": 1,
+            "supportsCancel": true
+          },
+          "limitations": [
+            "single-openapi-owner",
+            "controlled-validation",
+            "secret-inputs-suppress-results"
+          ]
+        }
+      }
+    },
+    "releaseGate": {
+      "status": "pending environment acceptance and maintainer review; no automatic waiver",
+      "outstanding": [
+        "dev.4 queue host/worker acceptance",
+        "Current complete target Windows GUI/Office acceptance",
+        "Complete EXE packaging acceptance",
+        "Remote database and real model provider acceptance",
+        "Hosted CI after submission and repository-wide check result",
+        "Operator-approved alert notification receiver verification"
+      ],
+      "owners": {
+        "hostAcceptance": "bbdu3 / deployment operator",
+        "fullClientPackage": "client packaging maintainer",
+        "releaseScopeAndExceptions": "PR maintainer"
+      },
+      "outsideScope": [
+        "npm publication and ongoing release maintenance"
+      ]
+    },
+    "fixtureCorrections": [
+      "Initial data assertion omitted the existing input echo field; corrected expectation and replayed original business key with unchanged executionId/runId. No duplicate start."
+    ]
+  },
+  "productionHardeningValidation": {
+    "date": "2026-10-23",
+    "branch": "feature/n8n-production-hardening",
+    "baseCommit": "c96c40cbaeb3f9a45690737a1c93f8c5b8b84c54",
+    "workingTree": "uncommitted, not pushed",
+    "scope": "Production control path, installation/upgrade, correlation, monitoring, shared routing and bounded recovery; existing capability admission unchanged",
+    "environment": {
+      "client": "Windows, managed protocol 1, existing desktop application with synchronized Python sources",
+      "n8n": "2.40.7",
+      "node": "24.18.0",
+      "package": "0.1.0-dev.3",
+      "postgresql": "15.19",
+      "redis": "7.0.15",
+      "queueTopology": "one local main and worker, isolated PostgreSQL/Redis, database Binary Data",
+      "openapiTopology": "two same-host replicas with Redis routing and shared existing storage; original single replica restored"
+    },
+    "tests": {
+      "engine-ai": {
+        "passed": 42,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-browser": {
+        "passed": 6,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-database": {
+        "passed": 12,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-dataprocess": {
+        "passed": 217,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-datatable": {
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-desktop": {
+        "passed": 9,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-dialog": {
+        "passed": 6,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-email": {
+        "passed": 22,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-encrypt": {
+        "passed": 4,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-enterprise": {
+        "passed": 6,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-excel": {
+        "passed": 6,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-files": {
+        "passed": 39,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-network": {
+        "passed": 4,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-risk": {
+        "passed": 10,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-system": {
+        "passed": 12,
+        "skipped": 1,
+        "failed": 0
+      },
+      "engine-vision": {
+        "passed": 2,
+        "skipped": 0,
+        "failed": 0
+      },
+      "engine-word": {
+        "passed": 4,
+        "skipped": 0,
+        "failed": 0
+      },
+      "openapi": {
+        "passed": 399,
+        "skipped": 0,
+        "failed": 0
+      },
+      "n8n": {
+        "passed": 55,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    "static": {
+      "pythonFiles": 23,
+      "newRuffDiagnostics": 0,
+      "pythonFormat": true,
+      "nodeTypecheck": true,
+      "nodeLint": true,
+      "nodePrettier": "passed --end-of-line auto",
+      "nodeBuild": true,
+      "npmPack": true,
+      "actionlint": true,
+      "promtoolRules": 6,
+      "gitDiffCheck": true,
+      "hostedCiExecuted": false,
+      "fullRepositoryCheckExecuted": false
+    },
+    "live": {
+      "fiveCategoryRepresentatives": [
+        "JSON/data",
+        "HTTP GET",
+        "workspace file IO",
+        "Window.exist synthetic absent window",
+        "approved fixed Smart code"
+      ],
+      "regularNewExecutions": 10,
+      "queueNewExecutions": 10,
+      "finalSyncNewExecutions": 4,
+      "restoredSingleReplicaNewExecutions": 2,
+      "binaryRegular": [
+        {
+          "operation": "workflowOutputDownload",
+          "bytes": 19,
+          "sha256": "4b7e024e175b8576a31fd2524b7b8ec84be6ffac24ddf432cc63b8e30d2794b9"
+        },
+        {
+          "operation": "uploadDownloadDelete",
+          "bytes": 28,
+          "sha256": "49f6e3a33f71a2cca98c2d4c97d522a6b1f3be6b7d4bf42ed70131d49d492446"
+        }
+      ],
+      "binaryQueue": [
+        {
+          "operation": "workflowOutputDownload",
+          "bytes": 19,
+          "sha256": "4b7e024e175b8576a31fd2524b7b8ec84be6ffac24ddf432cc63b8e30d2794b9"
+        },
+        {
+          "operation": "uploadDownloadDelete",
+          "bytes": 28,
+          "sha256": "49f6e3a33f71a2cca98c2d4c97d522a6b1f3be6b7d4bf42ed70131d49d492446"
+        }
+      ],
+      "workerRestart": {
+        "checkpoint": {
+          "childId": 27,
+          "executionId": "679ff311-1b5a-4eb0-bb36-09cdf4b603cf",
+          "runId": null,
+          "status": "accepted"
+        },
+        "result": {
+          "n8nExecutionId": "26",
+          "n8nStatus": "success",
+          "executionId": "679ff311-1b5a-4eb0-bb36-09cdf4b603cf",
+          "projectId": "2113474308461326336",
+          "version": 1,
+          "status": "succeeded",
+          "terminal": true,
+          "acceptedAt": "2026-10-23T04:25:50+00:00",
+          "startedAt": "2026-10-23T04:25:51+00:00",
+          "finishedAt": "2026-10-23T04:26:27+00:00",
+          "clientId": "549738d6-5ccc-4af2-9748-dc9511862e06",
+          "runId": "2113487033719615488",
+          "cancelRequested": false,
+          "error": null,
+          "supportsCancel": false,
+          "resultVisibility": "json",
+          "result": {
+            "value": "fixture",
+            "result": {
+              "echo": "fixture"
+            }
+          },
+          "correlation": {
+            "n8nExecutionId": "26",
+            "itemIndex": 0,
+            "keyHash": "75ef4216e2634ecd37a9ea91e9c14382b54e94c88f5b2ce4e3b3c7af8abcc5be",
+            "requestFingerprint": "85a59f048ffed483b7e1fa7dab0d7b92c79a5317792047e14c9173ba6bcc18ac",
+            "profileRevision": "28880edec316f545248fe3f69fd577246bdfcd3f69e002ab98802aaa19f622ea"
+          }
+        }
+      },
+      "openapiRestart": {
+        "checkpoint": {
+          "childId": 943,
+          "executionId": "b77e1e22-3595-445b-8898-c404bc64381b",
+          "runId": null,
+          "status": "accepted"
+        },
+        "result": {
+          "n8nExecutionId": "942",
+          "n8nStatus": "success",
+          "executionId": "b77e1e22-3595-445b-8898-c404bc64381b",
+          "projectId": "2113474308461326336",
+          "version": 1,
+          "status": "succeeded",
+          "terminal": true,
+          "acceptedAt": "2026-10-23T04:28:02+00:00",
+          "startedAt": "2026-10-23T04:28:03+00:00",
+          "finishedAt": "2026-10-23T04:28:39+00:00",
+          "clientId": "549738d6-5ccc-4af2-9748-dc9511862e06",
+          "runId": "2113487588336627712",
+          "cancelRequested": false,
+          "error": null,
+          "supportsCancel": false,
+          "resultVisibility": "json",
+          "result": {
+            "value": "fixture",
+            "result": {
+              "echo": "fixture"
+            }
+          },
+          "correlation": {
+            "n8nExecutionId": "942",
+            "itemIndex": 0,
+            "keyHash": "58337419f5aeea451a28961a62335e2e480a655fd9551f332d7c2aeae6e17bef",
+            "requestFingerprint": "c33d3cb865c9602accb03f9e11bd43e353d30932f7ffb4212f946d17f18eceb4",
+            "profileRevision": "28880edec316f545248fe3f69fd577246bdfcd3f69e002ab98802aaa19f622ea"
+          }
+        }
+      },
+      "concurrency": {
+        "submitted": 4,
+        "succeeded": 1,
+        "clientBusy": 3,
+        "distinctExecutionIds": 4,
+        "replayDidNotDispatchAgain": true
+      },
+      "cancel": "cancelled",
+      "deadline": "timeout",
+      "protocols": {
+        "checks": [
+          {
+            "version": "2025-03-26",
+            "initialize": true,
+            "toolsList": true,
+            "toolsCall": true,
+            "requestScopedSse": true,
+            "session": false
+          },
+          {
+            "version": "2025-06-18",
+            "initialize": true,
+            "toolsList": true,
+            "toolsCall": true,
+            "requestScopedSse": true,
+            "session": false
+          },
+          {
+            "version": "2025-11-25",
+            "initialize": true,
+            "toolsList": true,
+            "toolsCall": true,
+            "requestScopedSse": true,
+            "session": false
+          },
+          {
+            "version": "2026-07-28",
+            "method": "server/discover",
+            "noSession": true,
+            "jsonResponse": true
+          },
+          {
+            "version": "2026-07-28",
+            "method": "tools/list",
+            "noSession": true,
+            "jsonResponse": true
+          },
+          {
+            "version": "2026-07-28",
+            "method": "tools/call",
+            "noSession": true,
+            "jsonResponse": true
+          }
+        ],
+        "mismatchRejected": true,
+        "modernInitializeRejected": true
+      },
+      "boundedCapacitySample": [
+        {
+          "concurrency": 1,
+          "requests": 8,
+          "successes": 8,
+          "seconds": 11.182,
+          "p50Ms": 1342,
+          "p95Ms": 2197
+        },
+        {
+          "concurrency": 2,
+          "requests": 8,
+          "successes": 8,
+          "seconds": 6.636,
+          "p50Ms": 1656,
+          "p95Ms": 2011
+        },
+        {
+          "concurrency": 4,
+          "requests": 8,
+          "successes": 8,
+          "seconds": 5.305,
+          "p50Ms": 2436,
+          "p95Ms": 2819
+        }
+      ],
+      "telemetryCheckpoint": {
+        "events": 1090,
+        "accepted": 29,
+        "linkedAcceptance": 29,
+        "linkedMcpResults": 19,
+        "terminalEvents": 29,
+        "replicas": 2
+      },
+      "certificate": {
+        "trusted": true,
+        "validFrom": "Sep 14 08:16:51 2026 GMT",
+        "validTo": "Dec 13 08:16:50 2026 GMT"
+      },
+      "allReceiptsTerminal": true,
+      "receiptCounts": {
+        "COMPLETED": 29,
+        "TIMEOUT": 1,
+        "FAILED": 4,
+        "CANCELLED": 1
+      },
+      "receiptCount": 35,
+      "failedPreparation": "One DESKTOP_RESOLUTION_MISMATCH due to DPI virtual size; physical 1920x1200 declaration passed. Initial declaration setup failures did not create RPA receipts. Initial discovery during rollout was unconfirmed; later ready checks and new executions passed."
+    },
+    "consistency": {
+      "serverSourcesMatched": 59,
+      "clientSourcesMatched": 304,
+      "clientIdle": true,
+      "testExecutorProcesses": 0,
+      "clientRunIdentitiesMatched": 31,
+      "serverReceipts": 35,
+      "installations": [
+        {
+          "host": "regular",
+          "installedFilesMatched": 47,
+          "compiledFilesMatched": 40
+        },
+        {
+          "host": "queue",
+          "installedFilesMatched": 47,
+          "compiledFilesMatched": 40
+        }
+      ],
+      "tarballSha256": "992b32cbc21092bf5e067105a2bd9fe9197bd58d05b12dac354fe7c26b0eb29d"
+    },
+    "cleanup": {
+      "robots": {
+        "temporaryRobotsRemoved": 6
+      },
+      "server": {
+        "fileHandlesRemoved": 4,
+        "unrelatedFileHandlesPreserved": 0,
+        "testDeclarationsRemoved": 6,
+        "originalPolicyEquivalent": true,
+        "workflowRowsRemoved": 6,
+        "nonterminalExecutions": 0,
+        "executionAuditRetained": true,
+        "featureStorageConfigurationRetained": true
+      },
+      "host": {
+        "temporaryHostResourcesRemoved": 3,
+        "singleReplica": true,
+        "routing": "local",
+        "monitoringTestTokenRemoved": true,
+        "sourcesMatched": 59
+      },
+      "n8n": {
+        "testWorkflowsRemoved": 6,
+        "testExecutionsRemoved": 47,
+        "unrelatedDataPreserved": true,
+        "pendingExecutions": 0
+      },
+      "services": {
+        "isolatedServicesContainerRemoved": true,
+        "providerProcessesStopped": 2
+      },
+      "manualLocalCleanupPending": false,
+      "manualLocalCleanup": [
+        "6 client venv directories identified by the current fixtures",
+        "2 production20261023 n8n Binary cache directories",
+        "temporary queue-home and queue-env.json"
+      ],
+      "reason": "User manually removed client caches and queue state; read-only recheck found both Binary directories empty. Prior policy denial respected; empty directories retained.",
+      "auditReceiptsPreserved": true,
+      "finalServices": {
+        "regularN8nHealthy": true,
+        "clientIdle": true,
+        "temporaryPortsClosed": [
+          15678,
+          15679,
+          15680,
+          15681,
+          15432,
+          16379,
+          18767
+        ]
+      },
+      "manualLocalCleanupCompleted": true,
+      "emptyDirectoriesRetained": [
+        "production20261023downloadFile",
+        "production20261023uploadFile"
+      ]
+    },
+    "notValidated": [
+      "All Engine operations independently in a current live environment",
+      "Interactive keyboard/mouse, browser plugin or real Office applications in this round",
+      "Full client EXE rebuild",
+      "Remote databases and real model inference",
+      "Multi-host file storage, multiple desktop terminals or n8n Cloud",
+      "Every enterprise proxy/firewall combination; no firewall modifications",
+      "Long-running stress/SLA",
+      "External alert delivery; no monitoring receivers changed"
+    ]
+  },
   "browserServiceConflictReview": {
     "date": "2026-10-20",
     "originalHead": "4e26f0790cdaf65f0249be43ca7a15487cd05fd0",

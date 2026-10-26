@@ -111,6 +111,7 @@ test("query/cancel reject arbitrary IDs without reflecting input; connection fai
             { json: { private: "synthetic-private-input" } },
           ],
           getCredentials: async () => ({}),
+          getExecutionId: () => "diagnostic-execution",
           getNode: () => ({ name: "AstronRPA" }),
           continueOnFail: () => true,
         };

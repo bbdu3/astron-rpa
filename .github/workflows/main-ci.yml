@@ -48,6 +48,7 @@ jobs:
               - '.github/workflows/main-ci.yml'
             integration:
               - 'backend/openapi-service/**'
+              - 'backend/ai-service/**'
               - 'integrations/n8n/**'
               - 'engine/shared/**'
               - 'engine/servers/astronverse-scheduler/**'
