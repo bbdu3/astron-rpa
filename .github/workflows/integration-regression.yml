@@ -115,6 +115,9 @@ jobs:
       - name: Test CI summary failure propagation
         working-directory: .
         run: python .github/scripts/test-ci-summary.py
+      - name: Test dependency audit policy
+        working-directory: .
+        run: node --test .github/scripts/test-n8n-audit.cjs
       - run: npm run typecheck
       - run: npm run lint
       - name: Check formatting (accept checkout line endings)
@@ -126,7 +129,7 @@ jobs:
         run: npm run test:package
       - name: Audit full dependency tree including development fixtures
         if: ${{ !cancelled() }}
-        run: npm audit --include=dev --audit-level=moderate --json > "${{ runner.temp }}/n8n-audit.json"
+        run: node ../../../.github/scripts/check-n8n-audit.cjs "${{ runner.temp }}/n8n-audit.json"
       - name: Upload test and dependency reports
         if: always()
         uses: actions/upload-artifact@v4

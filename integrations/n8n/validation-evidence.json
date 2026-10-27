@@ -1,6 +1,124 @@
 {
   "scope": "n8n MCP community node; dated controlled validation of the framework, capabilities and same-host deployment topologies",
   "recordConvention": "Dated controlled validation only. Historical counts, failures, pending cleanup and support limits apply to their recorded artifact/date, not automatically to a later candidate.",
+  "ciAuditPolicyValidation": {
+    "date": "2026-10-27",
+    "baselineCommit": "0424ffe82a7d111bddd7ade94e669d77f5ba3763",
+    "scope": "Regression CI audit policy correction; strict release and installed-host risk gates remain unchanged",
+    "reportedFailure": "User-provided hosted log: raw full audit exited 1 and the main CI summary propagated integration-regression failure; two errors share one cause",
+    "upstreamRecheck": {
+      "stable": {
+        "version": "2.44.2",
+        "peerDependencies": {
+          "zod": "3.25.76"
+        },
+        "dependencies.@n8n/expression-runtime": "0.35.0"
+      },
+      "beta": {
+        "version": "2.45.1",
+        "peerDependencies": {
+          "zod": "3.25.76"
+        },
+        "dependencies.@n8n/expression-runtime": "0.36.1"
+      },
+      "zodTags": {
+        "next": "3.25.0-beta.20250519T094321",
+        "alpha": "3.25.68-alpha.11",
+        "beta": "4.1.13-beta.0",
+        "canary": "4.5.0-canary.20260828T171753",
+        "latest": "4.6.7"
+      }
+    },
+    "policy": {
+      "scope": "Isolated synthetic regression CI only; not a release or host risk acceptance",
+      "advisory": "GHSA-mrhx-c7xc-m3w5",
+      "expiresAtUtc": "2026-11-11T00:00:00.000Z",
+      "owner": "bbdu3: re-evaluate compatible upstream repair before expiry",
+      "exactDevelopmentPackages": {
+        "node_modules/n8n-workflow": "2.36.4",
+        "node_modules/@n8n/expression-runtime": "0.27.1",
+        "node_modules/zod": "3.25.76"
+      },
+      "conditions": [
+        "Exact advisory and transitive chains",
+        "Exact affected-package set, paths, versions and dev=true lockfile flags",
+        "No new findings or severity changes",
+        "Valid report schema/counts matching npm exit status",
+        "No process, network or registry error"
+      ],
+      "visibility": "Raw full report retained; GitHub warning emitted for the three deferred findings",
+      "strictGatesUnchanged": [
+        "Production npm audit",
+        "Local release:check full audit",
+        "Automatic publication full audit"
+      ],
+      "dependencyVersionsChanged": false
+    },
+    "checks": {
+      "auditPolicyTests": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 0
+      },
+      "nodeTests": {
+        "passed": 73,
+        "failed": 0,
+        "skipped": 0
+      },
+      "ciSummaryTests": {
+        "passed": 3,
+        "schedulingCombinations": 28
+      },
+      "rawFullAuditExitCode": 1,
+      "rawFullAuditCounts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 3,
+        "critical": 0,
+        "total": 3
+      },
+      "regressionPolicyCommandExitCode": 0,
+      "regressionWarningEmitted": true,
+      "productionAuditExitCode": 0,
+      "workflowChecks": {
+        "yamlFiles": 3,
+        "bashSyntaxChecks": 22,
+        "strictProductionAudit": true,
+        "auditPolicyTestsScheduled": true,
+        "rawAuditRetained": true,
+        "changeDetectionIncludesPolicyAndTests": true,
+        "hostedCiRerun": false
+      }
+    },
+    "rawEvidence": {
+      "storage": "Outside repository: astron-ci-audit-20261027",
+      "files": [
+        {
+          "filename": "ci-audit.json",
+          "sha256": "f9534812686985ae078bae37ec2897d4cba2be2c97b9a270ea7ad2845db5ec98"
+        },
+        {
+          "filename": "full-audit.json",
+          "sha256": "f9534812686985ae078bae37ec2897d4cba2be2c97b9a270ea7ad2845db5ec98"
+        },
+        {
+          "filename": "audit-policy.xml",
+          "sha256": "d9b9b9ad1fbd9054d82f7ebf1633035eeb259bbd5e6eff47b30c20ada2778a01"
+        },
+        {
+          "filename": "workflow-checks.json",
+          "sha256": "24c5d881bdd1b0c92062a7c00b878dfe379e2b8c86820a3d37b39f1f68892bdf"
+        }
+      ]
+    },
+    "boundary": [
+      "No dependency or runtime implementation update",
+      "No commit, push, live upgrade or staged package approval",
+      "Current repair not yet rerun in hosted CI",
+      "Known development and host findings remain unresolved"
+    ]
+  },
   "dependencyRiskReview": {
     "date": "2026-10-27",
     "baselineCommit": "4ae4295fe0de1e86ff0333aa0f2eb7e6c6f63a7d",

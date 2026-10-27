@@ -59,6 +59,7 @@ jobs:
               - 'engine/uv.lock'
               - '.github/scripts/run-integration-regression.py'
               - '.github/scripts/test-ci-summary.py'
+              - '.github/scripts/*n8n-audit.cjs'
               - '.github/workflows/integration-regression.yml'
               - '.github/workflows/publish-n8n.yml'
               - '.github/workflows/main-ci.yml'
