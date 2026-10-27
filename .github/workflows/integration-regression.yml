@@ -124,11 +124,16 @@ jobs:
         run: node --test --test-reporter=junit --test-reporter-destination="${{ runner.temp }}/n8n.xml" tests/*.test.cjs
       - name: Verify published package installation and runtime dependencies
         run: npm run test:package
-      - name: Upload test report
+      - name: Audit full dependency tree including development fixtures
+        if: ${{ !cancelled() }}
+        run: npm audit --include=dev --audit-level=moderate --json > "${{ runner.temp }}/n8n-audit.json"
+      - name: Upload test and dependency reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: regression-n8n
-          path: ${{ runner.temp }}/n8n.xml
+          path: |
+            ${{ runner.temp }}/n8n.xml
+            ${{ runner.temp }}/n8n-audit.json
           if-no-files-found: warn
           retention-days: 7

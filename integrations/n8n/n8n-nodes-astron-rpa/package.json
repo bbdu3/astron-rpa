@@ -51,7 +51,7 @@
     "format:check": "prettier --check .",
     "test": "npm run build && node --test tests/*.test.cjs",
     "test:package": "npm run build && node tests/package.cjs",
-    "release:check": "npm run typecheck && npm run lint && npm run format:check -- --end-of-line auto && npm test && npm audit --omit=dev --audit-level=moderate && npm run test:package",
+    "release:check": "npm run typecheck && npm run lint && npm run format:check -- --end-of-line auto && npm test && npm audit --omit=dev --audit-level=moderate && npm run test:package && npm audit --include=dev --audit-level=moderate",
     "prepack": "npm run build"
   },
   "n8n": {

@@ -59,7 +59,16 @@ jobs:
           assert.equal(lock.packages[''].version, pkg.version);
           JS
       - run: npm ci
-      - run: npm audit --omit=dev --audit-level=moderate
+      - name: Audit full release dependency tree
+        run: npm audit --include=dev --audit-level=moderate --json > "${{ runner.temp }}/n8n-publish-audit.json"
+      - name: Preserve dependency audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: n8n-publish-audit-${{ github.ref_name }}
+          path: ${{ runner.temp }}/n8n-publish-audit.json
+          if-no-files-found: warn
+          retention-days: 30
       - name: Build release tarball
         run: npm pack --pack-destination "${{ runner.temp }}"
       - name: Preserve the release artifact

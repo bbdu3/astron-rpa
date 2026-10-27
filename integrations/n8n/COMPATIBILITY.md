@@ -16,6 +16,8 @@ The current package is `@iflytekopensource/n8n-nodes-astron-rpa@0.1.0`. Workflow
 | OpenAPI replicas | Redis routing on all replicas, same database/policy and file store                           | Two replicas on one host tested on 2026-10-23; mixed local/Redis routing and separate replica file stores unsupported                                                     |
 | File store       | Persistent local files and SQLite metadata with working locks                                | Same-host shared mount supported by the tested topology; multi-host network filesystems not tested                                                                        |
 
+The tested versions describe functional compatibility, not security clearance. The separate 2026-10-27 dependency audit found unresolved development and installed-host advisories; see [current findings and release gates](VALIDATION.md#当前验收范围与待办).
+
 The 2026-10-26 candidate tests cover representative JSON, HTTP, text-file and window-existence workflows, approved HTTP writes, lifecycle and persisted waiting recovery. The latest interactive GUI, WPS COM, remote database and full installer tests are dated 2026-10-23. A crash during an active node step can leave a child execution crashed and its parent waiting; use the [receipt-based recovery procedure](OPERATIONS.md#queue-mode).
 
 ## Capability prerequisites

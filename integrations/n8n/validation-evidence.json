@@ -1,6 +1,372 @@
 {
   "scope": "n8n MCP community node; dated controlled validation of the framework, capabilities and same-host deployment topologies",
   "recordConvention": "Dated controlled validation only. Historical counts, failures, pending cleanup and support limits apply to their recorded artifact/date, not automatically to a later candidate.",
+  "dependencyRiskReview": {
+    "date": "2026-10-27",
+    "baselineCommit": "4ae4295fe0de1e86ff0333aa0f2eb7e6c6f63a7d",
+    "scope": "Local whitespace cleanup, development dependency compatibility/risk review and independent installed-host inventories/audits; no live upgrade or exploit testing",
+    "toolchain": {
+      "node": "24.18.0",
+      "npm": "11.16.0"
+    },
+    "changes": [
+      "Removed one trailing blank line from docker/docker-compose.integration-ops.yml; retained one final newline",
+      "Added blocking full dependency audits after local functional/package checks, in integration CI and before automated release packaging",
+      "Retain CI JSON audit reports on failure; moderate/high/critical findings and audit errors fail the gate without an advisory exception",
+      "Updated repository operations, compatibility and validation documentation; packaged user README unchanged"
+    ],
+    "developmentDisposition": {
+      "status": "unresolved-upstream; release gate blocked, no risk acceptance recorded",
+      "advisory": "GHSA-mrhx-c7xc-m3w5",
+      "advisoryUrl": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 3,
+        "critical": 0,
+        "total": 3
+      },
+      "affectedPackages": ["zod", "@n8n/expression-runtime", "n8n-workflow"],
+      "fixtureVersions": {
+        "n8n-workflow": "2.36.4",
+        "@n8n/expression-runtime": "0.27.1",
+        "zod": "3.25.76"
+      },
+      "reachabilityLimit": "Zod 3.25.76 also ships the affected zod/v4 implementation used by n8n-workflow; no assertion that a v3 root import makes the package unaffected",
+      "upstreamAtReview": {
+        "stable": {
+          "version": "2.44.2",
+          "peerDependencies": {
+            "zod": "3.25.76"
+          },
+          "dependencies.@n8n/expression-runtime": "0.35.0"
+        },
+        "beta": {
+          "version": "2.45.1",
+          "peerDependencies": {
+            "zod": "3.25.76"
+          },
+          "dependencies.@n8n/expression-runtime": "0.36.1"
+        },
+        "highestStableZod3": "3.25.76"
+      },
+      "rejectedDowngrade": "npm suggests n8n-workflow 1.75.1, outside the required >=2.36.4 <3 peer range",
+      "rejectedOverride": {
+        "scope": "External candidate only: n8n-workflow dependency chain zod -> 4.6.7",
+        "auditCounts": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0,
+          "total": 0
+        },
+        "npmLsExitCode": 1,
+        "npmLsProblem": "ELSPROBLEMS: invalid overridden zod peer",
+        "callerSchemaComparison": [
+          {
+            "label": "current",
+            "zodVersion": "3.25.76",
+            "input": {
+              "type": "fromAi"
+            },
+            "success": true,
+            "issues": []
+          },
+          {
+            "label": "candidate",
+            "zodVersion": "4.6.7",
+            "input": {
+              "type": "fromAi"
+            },
+            "success": false,
+            "issues": [
+              {
+                "code": "invalid_type",
+                "expected": "nonoptional",
+                "path": ["defaultValue"],
+                "message": "Invalid input: expected nonoptional, received undefined"
+              }
+            ]
+          }
+        ],
+        "appliedToRepositoryOrHost": false
+      },
+      "exposureControl": "Keep finite synthetic fixture inputs in isolated development/CI environments without deployment credentials; not a vulnerability fix",
+      "followUpOwner": "PR author bbdu3: adopt a compatible upstream patch and repeat regression/full audits; release maintainer: verify the blocking gate"
+    },
+    "independentHostAudit": {
+      "method": "npm Arborist loadActual of installed trees; export exact names/versions/locations and dependency edges to external audit-only v3 lock snapshots; npm audit --omit=dev --json; no install or range re-resolution",
+      "countMeaning": "Affected package names including parent/metavulnerability propagation, not independently confirmed exploitable defects; installedPackageInstances counts locations",
+      "initialAttempt": "Direct programmatic Arborist AuditReport request encountered connection reset; successful results below came from npm CLI on exact installed snapshots",
+      "host": {
+        "installedPackageInstances": 2271,
+        "inventorySha256": "badd4b6d0108d232206e0b5eb8ab1160f913cd561ea49138180490a558c5d9c0",
+        "inventoryUnchangedAtEndOfReview": true,
+        "counts": {
+          "info": 0,
+          "low": 3,
+          "moderate": 95,
+          "high": 88,
+          "critical": 14,
+          "total": 200
+        },
+        "auditExitCode": 1,
+        "selectedInstalledVersions": {
+          "n8n": ["2.40.7"],
+          "n8n-workflow": ["2.40.1"],
+          "@n8n/expression-runtime": ["0.31.1"],
+          "zod": ["3.25.75", "3.25.76", "4.6.5"],
+          "axios": ["1.15.1", "1.18.0", "1.20.0"],
+          "follow-redirects": ["1.16.0"],
+          "vm2": ["3.11.6"],
+          "@simple-git/argv-parser": ["1.1.1"],
+          "@modelcontextprotocol/sdk": ["1.26.0"]
+        },
+        "criticalAffectedPackages": [
+          "@getzep/zep-cloud",
+          "@getzep/zep-js",
+          "@langchain/community",
+          "@n8n/n8n-nodes-langchain",
+          "@simple-git/argv-parser",
+          "expr-eval",
+          "fast-xml-parser",
+          "form-data",
+          "handlebars",
+          "n8n",
+          "shell-quote",
+          "simple-git",
+          "tar",
+          "vm2"
+        ]
+      },
+      "communityNodes": {
+        "installedPackageInstances": 225,
+        "inventorySha256": "b4c1a7e986a34f6b4eef4feb68754f722c10a60008f793a53207f5a1f7fd1060",
+        "inventoryUnchangedAtEndOfReview": true,
+        "counts": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 7,
+          "critical": 0,
+          "total": 7
+        },
+        "auditExitCode": 1,
+        "selectedInstalledVersions": {
+          "n8n-workflow": ["2.43.1"],
+          "@n8n/expression-runtime": ["0.34.0"],
+          "zod": ["3.25.76", "4.6.7"],
+          "axios": ["1.18.0"],
+          "follow-redirects": ["1.16.0"],
+          "@modelcontextprotocol/sdk": ["1.32.2"]
+        },
+        "criticalAffectedPackages": [],
+        "affectedPackages": [
+          "@iflytekopensource/n8n-nodes-astron-rpa",
+          "@iflytekopensource/n8n-nodes-iflytek-skills",
+          "@n8n/expression-runtime",
+          "axios",
+          "follow-redirects",
+          "n8n-workflow",
+          "zod"
+        ]
+      },
+      "selectedDirectFindings": [
+        {
+          "package": "vm2",
+          "installedVersion": "3.11.6",
+          "severity": "critical",
+          "advisory": "GHSA-qhwx-74w5-xhxq"
+        },
+        {
+          "package": "@simple-git/argv-parser",
+          "installedVersion": "1.1.1",
+          "severity": "critical",
+          "advisory": "GHSA-v5rq-49vh-5v5c",
+          "fixedRange": ">=2.0.1"
+        },
+        {
+          "package": "follow-redirects",
+          "installedVersion": "1.16.0",
+          "severity": "high",
+          "advisories": ["GHSA-q3jh-wrc6-jgq8", "GHSA-8r9p-f939-6h3c"],
+          "fixedRange": ">=1.16.1"
+        }
+      ],
+      "communityPropagation": "Both community-node packages are flagged via their shared n8n-workflow peer; the Astron bundled SDK/Zod production tree audits clean",
+      "candidateHost": {
+        "registryStable": {
+          "version": "2.44.7",
+          "engines": {
+            "node": ">=24.0.0"
+          }
+        },
+        "installedOrValidated": false,
+        "allFindingsResolved": false,
+        "n8nWorkflowDependency": "2.44.2"
+      },
+      "followUpOwner": "Deployment maintainer/operator: evaluate a maintained compatible host and community dependency set in isolation, repeat both audits plus execution/wait/recovery/queue acceptance before rollout",
+      "status": "audit completed; host remediation and residual-risk review pending",
+      "hostFilesOrServicesChanged": false
+    },
+    "checks": {
+      "typecheckLintFormatBuild": "passed",
+      "nodeTests": {
+        "passed": 73,
+        "failed": 0,
+        "skipped": 0
+      },
+      "packageConsumer": {
+        "result": "passed",
+        "projectFiles": 28,
+        "cleanInstallation": true,
+        "sdkSyntheticHandshake": true
+      },
+      "productionAudit": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "fullDevelopmentAuditExitCode": 1,
+      "releaseCheckExitCode": 1,
+      "releaseCheckDisposition": "blocked by the known three high development findings after functional, production audit and consumer checks passed",
+      "workflowChecks": {
+        "yamlFiles": 3,
+        "bashSyntaxChecks": 21,
+        "fullAuditFailurePropagation": "passed",
+        "reportsRetainedOnFailure": true,
+        "firstReleaseAutomaticPublicationStillDisabled": true,
+        "ciSummaryTests": 3,
+        "ciSchedulingCombinations": 28,
+        "hostedCiExecuted": false
+      },
+      "documentationLinksAndHistoricalEvidence": {
+        "documents": 8,
+        "localAndRepositoryLinks": 73,
+        "evidenceReferences": 19,
+        "xmlReportsMatched": 19,
+        "receiptIdentityChecks": 31,
+        "errors": []
+      },
+      "workingTreeDiffCheckAgainstMain": "passed",
+      "currentNpmLsZodExitCode": 0
+    },
+    "stagedArtifactBoundary": {
+      "stageId": "10da5296-c1c7-43b1-b67b-44d96247a549",
+      "sha256": "cf60c1d5f6ed9710bbadb926edd6e0cde4dbe63ff0e95ea155b7055580adaeba",
+      "lastRecordedStatus": "validating",
+      "statusObservedAtUtc": "2026-10-26T12:52:25.8080786Z",
+      "stageStatusRequeriedThisReview": false,
+      "replacedOrApprovedThisReview": false,
+      "currentManifestChangedFieldsComparedWithStaged": ["scripts"],
+      "runtimeJavaScriptFilesByteIdenticalToStaged": 20,
+      "currentGateIncludedInStagedPackage": false
+    },
+    "rawEvidence": {
+      "storage": "Outside repository: local release archive audits/20261027",
+      "files": [
+        {
+          "filename": "node-production.json",
+          "sha256": "624474b893c5a5a569c423dcc7ef3ee72e20373ea7cfafb6bc585da1c169af40"
+        },
+        {
+          "filename": "node-development.json",
+          "sha256": "f9534812686985ae078bae37ec2897d4cba2be2c97b9a270ea7ad2845db5ec98"
+        },
+        {
+          "filename": "n8n-host-audit.json",
+          "sha256": "a424081b60b1d62204406dc5dda9a62c4e83d1e04504f318f64fe82d530dbc97"
+        },
+        {
+          "filename": "n8n-community-audit.json",
+          "sha256": "320d12c4294248f8d66fef8755f7e5f9535af305bedd012298a7e68420ba62c4"
+        },
+        {
+          "filename": "n8n-host-inventory.json",
+          "sha256": "25da0729e91b94861fcdd6184834597fd40601134ae90eb29f0cbfeb37aea42a"
+        },
+        {
+          "filename": "n8n-community-inventory.json",
+          "sha256": "ade2f054ce722f44259d0149124f2e4d58e55a34ef95701df2b3128caa3b005e"
+        },
+        {
+          "filename": "workflow-stable.json",
+          "sha256": "500a73aca31335aa8c8fc19e52919363432450580835c4be8620a8ad0e794318"
+        },
+        {
+          "filename": "workflow-beta.json",
+          "sha256": "dfe8aefab6a1e41378082755716a23b6e7ecfbcee85988e9df7be49a45f29529"
+        },
+        {
+          "filename": "zod-versions.json",
+          "sha256": "950020fc96278c79ff9f8755b8542ae353c9bf26297860a65040adc733d2b022"
+        },
+        {
+          "filename": "host-stable.json",
+          "sha256": "69362864e73fa0f4f381c69ab1ab5056e9a5d3d6631b47db3564d6514550f455"
+        },
+        {
+          "filename": "dev-candidate-audit.json",
+          "sha256": "4b6ba02b065fd8e8861d5e5dfb58103bd4e1a1f4a535a0be9a0e5c1d3e0fffcd"
+        },
+        {
+          "filename": "candidate-dependency-tree.json",
+          "sha256": "880a3821ea74b24ca547e42c8b31e2be64a4fe1f0ae715588263c89102b5e953"
+        },
+        {
+          "filename": "candidate-compatibility.json",
+          "sha256": "651a299d44926f9beef1b7db58525736d17e878e4f0579ca67f5ec211692554c"
+        },
+        {
+          "filename": "release-check.log",
+          "sha256": "026a41246cf40caade47e562f3624a71a96a8e35c480f21a59814b274f910c81"
+        },
+        {
+          "filename": "gates-check.json",
+          "sha256": "7183cd0f1e4574996a84fc0c00ae38fee9556266ed9c7d5d7843bf9a43435cdf"
+        },
+        {
+          "filename": "snapshot-installed.cjs",
+          "sha256": "251cd8b795bb9b58bbc9fc6d0863be54fce3110a4772ab6b8c4df2f012fb0a0e"
+        },
+        {
+          "filename": "n8n-host-snapshot/package.json",
+          "sha256": "6b8c72f3bcfec5c81a542b2053d11be0c97e5cb41709f53fe55e80b827e8871a"
+        },
+        {
+          "filename": "n8n-host-snapshot/package-lock.json",
+          "sha256": "27130dd0fe8270268f75b3025528d09cf344870facfcf17a550f28e38a8c5b9f"
+        },
+        {
+          "filename": "n8n-host-snapshot/snapshot.json",
+          "sha256": "56532ae28af8f284392e05346a07bb15c6698b09d89c1bbea6e75ef7352d04d9"
+        },
+        {
+          "filename": "n8n-community-snapshot/package.json",
+          "sha256": "b9793b1d39f1b35f5477c1fd081313aea93ee7acdb47aa11eb1eff7b2fbd3ace"
+        },
+        {
+          "filename": "n8n-community-snapshot/package-lock.json",
+          "sha256": "72dafb1d97c8a6691c0613fea9220da33f15b320a74e251c4ca5f287e12d8bda"
+        },
+        {
+          "filename": "n8n-community-snapshot/snapshot.json",
+          "sha256": "cc7b6f9b57d747d5a8e8125fadfa2c9fc3aebcf2b67503eb6bef06fdf28f8986"
+        }
+      ]
+    },
+    "boundary": [
+      "No dependency versions or lockfile changed",
+      "No source runtime implementation changed",
+      "No commit, push, publication or staged approval",
+      "No live GUI/Office/database/model acceptance or hosted CI in this review"
+    ]
+  },
   "packageBoundaryReview": {
     "date": "2026-10-26",
     "baselineCommit": "9ed2e608",

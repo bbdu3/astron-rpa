@@ -25,4 +25,3 @@ services:
       - ./data/integration-monitoring:/prometheus
     networks:
       - rpa-opensource-network
-
